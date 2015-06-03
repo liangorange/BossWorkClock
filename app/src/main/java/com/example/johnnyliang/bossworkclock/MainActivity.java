@@ -10,6 +10,8 @@ public class MainActivity extends ActionBarActivity {
 
     // Johnny tried to get merge conflict
 
+//Jonathan was here
+//gerald
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
