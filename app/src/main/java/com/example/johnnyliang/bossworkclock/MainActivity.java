@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -41,11 +42,11 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void addPunchIn(View view) {
+    public void editPunchIn(View view) {
         Toast.makeText(MainActivity.this,"Added a Punched In", Toast.LENGTH_SHORT).show();
     }
 
-    public void addPunchOut(View view) {
+    public void editPunchOut(View view) {
         Toast.makeText(MainActivity.this,"Added a Punched Out", Toast.LENGTH_SHORT).show();
     }
 
@@ -54,6 +55,8 @@ public class MainActivity extends ActionBarActivity {
      * @param view
      */
     public void punchIn(View view){
+        String in = "Punched In";
+        //TextView textView = (in);
         //employee.getTimeTracker().getClockInLocation();
         //employee.getTimeTracker().clockIn();
         Toast.makeText(MainActivity.this,"Punched In", Toast.LENGTH_SHORT).show();
