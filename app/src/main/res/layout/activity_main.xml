@@ -5,37 +5,39 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
     android:accessibilityLiveRegion="polite"
-    android:background="@drawable/abc_list_longpressed_holo">
+    android:background="#ff0284ff">
 
     <Button
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Add Punch In "
+        android:text="Edit Punch In "
         android:id="@+id/button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
-        android:onClick="addPunchIn"/>
+        android:onClick="editPunchIn"/>
 
 
     <Button
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Add Punch Out"
+        android:text="Edit Punch Out"
         android:id="@+id/button2"
         android:layout_alignBottom="@+id/button"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="addPunchOut"/>
+        android:onClick="editPunchOut"/>
 
     <Button
         android:layout_width="160dp"
         android:layout_height="175dp"
-        android:text="Punch In"
+        android:text="Punch    In"
         android:id="@+id/button3"
         android:layout_below="@+id/button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="punchIn"/>
+        android:onClick="punchIn"
+        android:background="#ff14ff20"
+        android:textSize="@dimen/abc_text_size_display_1_material" />
 
     <Button
         android:layout_width="160dp"
@@ -45,7 +47,9 @@
         android:layout_alignTop="@+id/button3"
         android:layout_alignRight="@+id/button2"
         android:layout_alignEnd="@+id/button2"
-        android:onClick="punchOut"/>
+        android:onClick="punchOut"
+        android:background="#ffff2117"
+        android:textSize="@dimen/abc_text_size_display_1_material" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,6 +61,33 @@
         android:text="Status: "
         android:textSize="@dimen/abc_text_size_headline_material"
         style="@style/Base.TextAppearance.AppCompat.SearchResult.Title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/outStatus"
+        android:text=" Punched Out"
+        style="@style/Base.TextAppearance.AppCompat"
+        android:fontFamily="@string/abc_searchview_description_clear"
+        android:textColor="#ffff1410"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:layout_above="@+id/tableLayout"
+        android:layout_toRightOf="@+id/status"
+        android:layout_toEndOf="@+id/status" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/inStatus"
+        android:text=""
+        style="@style/Base.TextAppearance.AppCompat"
+        android:fontFamily="@string/abc_searchview_description_clear"
+        android:textColor="#ff18ff1a"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:layout_above="@+id/tableLayout"
+        android:layout_toRightOf="@+id/status"
+        android:layout_toEndOf="@+id/status" />
+
 
     <TableLayout
         android:layout_width="match_parent"
@@ -71,5 +102,7 @@
         android:id="@+id/tableLayout">
 
     </TableLayout>
+
+
 
 </RelativeLayout>
