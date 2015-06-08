@@ -55,14 +55,25 @@ public class MainActivity extends ActionBarActivity {
      * @param view
      */
     public void punchIn(View view){
-        String in = "Punched In";
-        //TextView textView = (in);
+        String out = "";
+        TextView textView = (TextView) findViewById(R.id.outStatus);
+        textView.setText(out);
+        String in = " Punched In";
+        TextView textView2 = (TextView) findViewById(R.id.inStatus);
+        textView2.setText(in);
+
         //employee.getTimeTracker().getClockInLocation();
         //employee.getTimeTracker().clockIn();
         Toast.makeText(MainActivity.this,"Punched In", Toast.LENGTH_SHORT).show();
     }
 
     public void punchOut(View view){
+        String out = " Punched Out";
+        TextView textView = (TextView) findViewById(R.id.outStatus);
+        textView.setText(out);
+        String in = "";
+        TextView textView2 = (TextView) findViewById(R.id.inStatus);
+        textView2.setText(in);
        // employee.getTimeTracker().getClockOutLocation();
         //employee.getTimeTracker().clockOut();
         Toast.makeText(MainActivity.this,"Punched Out", Toast.LENGTH_SHORT).show();
