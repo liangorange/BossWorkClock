@@ -54,7 +54,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/status"
+        android:id="@+id/statusLabel"
         android:layout_below="@+id/button3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -65,29 +65,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/outStatus"
+        android:id="@+id/status"
         android:text=" Punched Out"
         style="@style/Base.TextAppearance.AppCompat"
         android:fontFamily="@string/abc_searchview_description_clear"
         android:textColor="#ffff1410"
         android:textSize="@dimen/abc_text_size_large_material"
-        android:layout_above="@+id/tableLayout"
-        android:layout_toRightOf="@+id/status"
-        android:layout_toEndOf="@+id/status" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/inStatus"
-        android:text=""
-        style="@style/Base.TextAppearance.AppCompat"
-        android:fontFamily="@string/abc_searchview_description_clear"
-        android:textColor="#ff18ff1a"
-        android:textSize="@dimen/abc_text_size_large_material"
-        android:layout_above="@+id/tableLayout"
-        android:layout_toRightOf="@+id/status"
-        android:layout_toEndOf="@+id/status" />
-
+        android:layout_toRightOf="@+id/statusLabel"
+        android:layout_below="@+id/button3"/>
 
     <TableLayout
         android:layout_width="match_parent"
@@ -100,13 +85,6 @@
         android:background="@color/background_material_light"
         android:clickable="true"
         android:id="@+id/tableLayout">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/timeIn"
-            android:text="Punch-In time"
-            />
 
     </TableLayout>
 
