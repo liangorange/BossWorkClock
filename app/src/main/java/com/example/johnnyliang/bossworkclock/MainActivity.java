@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import java.sql.Time;
 
-
+//5 hrs
 public class MainActivity extends ActionBarActivity {
     private Employee employee;
 
@@ -57,40 +57,30 @@ public class MainActivity extends ActionBarActivity {
      * @param view
      */
     public void punchIn(View view){
-        String out = " Punched In";
-        TextView textView = (TextView) findViewById(R.id.outStatus);
-        textView.setTextColor(0xff18ff1a);
-        textView.setText(out);
-        //String in = " Punched In";
-        //TextView textView2 = (TextView) findViewById(R.id.inStatus);
-        //textView2.setText(in);
-
-        /*Time t1 = new Time();
+        Time t1 = new Time(0,0,0);
         t1 = employee.getTimeTracker().getClockInTime();
 
-        Time t2 = new Time();
+        Time t2 = new Time(0,0,0);
+        String status = "                Punched In";
+        String s = "Work start time: " + t1;
+        String s2 = "Time worked today: " ;//+ current time - t1;
+        String s3 = status + "\n" + s + "\n" + s2;
+        TextView textView = (TextView) findViewById(R.id.status);
+        textView.setTextColor(0xff18ff1a);
+        textView.setText(s3);
 
-        String s = "Work start time: " + t1);
-        String s2 = "Time worked today: " + employee.getTimeTracker().getClockinTime();
-        String s3 = s + "\n" + s2;
-        TextView textView3 = (TextView) findViewById(R.id.inTimeStatus);
-        textView3.setText(s3);
-*/
         //employee.getTimeTracker().getClockInLocation();
         //employee.getTimeTracker().clockIn();
-        Toast.makeText(MainActivity.this,"Punched In", Toast.LENGTH_SHORT).show();
+
     }
 
     public void punchOut(View view){
-        String out = " Punched Out";
-        TextView textView = (TextView) findViewById(R.id.outStatus);
-        textView.setText(out);
-        String in = "";
-        TextView textView2 = (TextView) findViewById(R.id.inStatus);
-        textView2.setText(in);
+        String status = "                Punched Out";
+        TextView textView = (TextView) findViewById(R.id.status);
+        textView.setTextColor(0xffff1410);
+        textView.setText(status);
 
-       // employee.getTimeTracker().getClockOutLocation();
+        // employee.getTimeTracker().getClockOutLocation();
         //employee.getTimeTracker().clockOut();
-        Toast.makeText(MainActivity.this,"Punched Out", Toast.LENGTH_SHORT).show();
     }
 }
