@@ -50,15 +50,21 @@ public class TimeTrackerTest extends InstrumentationTestCase {
     }
     public void testClockOutLocation() {
         TimeTracker tt = new TimeTracker();
+        GPSCoord coord = new GPSCoord();
+        coord.latitude = 3000;
+        coord.longitude = 7000;
 
-        tt.setClockOutLocation("Here");
-        assertEquals("Here", tt.getClockOutLocation());
+        tt.setClockOutLocation(coord);
+        assertEquals(coord, tt.getClockOutLocation());
 
-        tt.setClockOutLocation("There");
-        assertEquals("There", tt.getClockOutLocation());
+        //tt.setClockOutLocation("Here");
+        //assertEquals("Here", tt.getClockOutLocation());
 
-        tt.setClockOutLocation("No where");
-        assertEquals("No where", tt.getClockOutLocation());
+        //tt.setClockOutLocation("There");
+        //assertEquals("There", tt.getClockOutLocation());
+
+        //tt.setClockOutLocation("No where");
+        //assertEquals("No where", tt.getClockOutLocation());
     }
 
     
