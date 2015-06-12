@@ -36,7 +36,6 @@ public class TimeTrackerTest extends InstrumentationTestCase {
 
         tracker.setClockInTime(time);
         assertEquals(time,tracker.getClockInTime() );
-
     }
 
     public void testClockInLocation() {
