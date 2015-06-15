@@ -61,8 +61,10 @@ public class MainActivity extends ActionBarActivity {
         // Can't punch in if you already are punched in
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
+            employee.getTimeTracker().getClockInLocation();
+            employee.getTimeTracker().clockIn();
 
-            Time t1 = new Time(0, 0, 0);
+            String t1;// = new Time(0, 0, 0);
             t1 = employee.getTimeTracker().getClockInTime();
 
             Time t2 = new Time(0, 0, 0);
@@ -76,8 +78,7 @@ public class MainActivity extends ActionBarActivity {
             textView.setText(s3);
 
             Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
-            employee.getTimeTracker().getClockInLocation();
-            employee.getTimeTracker().clockIn();
+
         }
     }
 
