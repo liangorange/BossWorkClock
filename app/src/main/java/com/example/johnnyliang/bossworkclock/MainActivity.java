@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import java.sql.Time;
 
-//5 hrs
+
 public class MainActivity extends ActionBarActivity {
     private Employee employee;
 
@@ -57,30 +57,43 @@ public class MainActivity extends ActionBarActivity {
      * @param view
      */
     public void punchIn(View view){
-        Time t1 = new Time(0,0,0);
-        t1 = employee.getTimeTracker().getClockInTime();
 
-        Time t2 = new Time(0,0,0);
-        String status = "                Punched In";
-        String s = "Work start time: " + t1;
-        String s2 = "Time worked today: " ;//+ current time - t1;
-        String s3 = status + "\n" + s + "\n" + s2;
-        TextView textView = (TextView) findViewById(R.id.status);
-        textView.setTextColor(0xff18ff1a);
-        textView.setText(s3);
+        // Can't punch in if you already are punched in
+        if(!employee.getPunchedIn()) {
+            employee.setPunchedIn(true);
 
-        //employee.getTimeTracker().getClockInLocation();
-        //employee.getTimeTracker().clockIn();
+            Time t1 = new Time(0, 0, 0);
+            t1 = employee.getTimeTracker().getClockInTime();
 
+            Time t2 = new Time(0, 0, 0);
+
+            String status = "                Punched In";
+            String s = "Work start time: " + t1;
+            String s2 = "Time worked today: ";//+ current time - t1;
+            String s3 = status + "\n" + s + "\n" + s2;
+            TextView textView = (TextView) findViewById(R.id.status);
+            textView.setTextColor(0xff18ff1a);
+            textView.setText(s3);
+
+            Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
+            employee.getTimeTracker().getClockInLocation();
+            employee.getTimeTracker().clockIn();
+        }
     }
 
     public void punchOut(View view){
-        String status = "                Punched Out";
-        TextView textView = (TextView) findViewById(R.id.status);
-        textView.setTextColor(0xffff1410);
-        textView.setText(status);
+        // Can't punch out if you already are punched out
+        if(employee.getPunchedIn()) {
+            employee.setPunchedIn(false);
 
-        // employee.getTimeTracker().getClockOutLocation();
-        //employee.getTimeTracker().clockOut();
+            String status = "                Punched Out";
+            TextView textView = (TextView) findViewById(R.id.status);
+            textView.setTextColor(0xffff1410);
+            textView.setText(status);
+
+            Toast.makeText(MainActivity.this,"Punched out", Toast.LENGTH_SHORT).show();
+            employee.getTimeTracker().getClockOutLocation();
+            employee.getTimeTracker().clockOut();
+        }
     }
 }
