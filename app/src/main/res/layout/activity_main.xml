@@ -12,6 +12,7 @@
     <Button
         android:layout_width="160dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
         android:text="Edit Punch In "
         android:id="@+id/button"
         android:layout_alignParentLeft="true"
@@ -158,5 +159,17 @@
                 android:textColor="#ff000000" />
         </TableRow>
     </TableLayout>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Enter your name"
+        android:ems="10"
+        android:id="@+id/name"
+        android:focusable="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/status"
+        android:layout_alignEnd="@+id/status" />
 
 </RelativeLayout>
