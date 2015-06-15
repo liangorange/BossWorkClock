@@ -39,7 +39,7 @@ public class TimeTracker {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         setClockInTime(dateFormat.format(date)); //15:59
-       // System.out.println(dateFormat.format(date));
+       // System.out.println(dateFormat.format(date)); 
 
     }
 
