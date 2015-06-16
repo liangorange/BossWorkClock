@@ -2,6 +2,7 @@ package com.example.johnnyliang.bossworkclock;
 
 import android.os.Handler;
 import android.os.Message;
+
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,19 +11,25 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Time;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import android.content.DialogInterface.OnKeyListener;
 
-
+//5hrs
 public class MainActivity extends ActionBarActivity {
     private Employee employee;
+    private String filename = "name.txt";
 
     private String dateFormat;
 
     private Date startingDate;
+
     private TimeCount count = new TimeCount();
     private boolean punched;
 
@@ -43,6 +50,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         employee = new Employee();
+        this.readName();
 
         count.setActivity(this);
         count.setEmployeeActivity(employee);
@@ -115,6 +123,60 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * gerald
+     * @return
+     */
+    public String getName() {
+        //String name="";
+        setContentView(R.layout.activity_main);
+        //EditText theName = (EditText) findViewById(R.id.name);
+        //String name = theName.getText().toString();
+        TextView theName = (TextView) findViewById(R.id.name);
+        String name = theName.getText().toString();
+        theName.setText(name);
+        Toast.makeText(MainActivity.this,"here1", Toast.LENGTH_SHORT).show();
+        return name;
+    }
+    /**
+     *gerald
+     */
+    public void saveName(View view) {
+        String name = this.getName();
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+            Toast.makeText(MainActivity.this,"here2", Toast.LENGTH_SHORT).show();
+            out.write(name);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.readName();
+    }
+
+    /**
+     * gerald
+     */
+    public void readName() {
+        TextView textView = (TextView) findViewById(R.id.name);
+        String name ="";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            String line;
+            if ((line = reader.readLine()) == null)
+                name = "";
+            while ((line = reader.readLine()) != null) {
+                name += line;
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        textView.setText(name);
+    }
+
+
     public void editPunchIn(View view) {
         Toast.makeText(MainActivity.this,"Added a Punched In", Toast.LENGTH_SHORT).show();
     }
@@ -135,6 +197,12 @@ public class MainActivity extends ActionBarActivity {
         // Can't punch in if you already are punched in
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
+
+            startingDate = new Date();
+
+            Thread loadThread = new Thread(count);
+            loadThread.start();
+
             employee.getTimeTracker().getClockInLocation();
             employee.getTimeTracker().clockIn();
 
