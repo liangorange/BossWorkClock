@@ -44,51 +44,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TextView textView = (TextView) findViewById(R.id.status);
 
         employee = new Employee();
         this.readName();
 
         count.setActivity(this);
-    }
-
-
-    public void doWork() {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                try {
-                    System.out.println("For testing");
-                    TextView statusView = (TextView) findViewById(R.id.status);
-                    Date dt = new Date();
-                    long diff = dt.getTime() - startingDate.getTime();
-                    long seconds = diff / 1000 % 60;
-                    long minutes = diff / (60 * 1000) % 60;
-                    long hours = diff / (60 * 60 * 1000) % 60;
-
-                    String secondFormat = String.format("%02d", seconds);
-                    String minuteFormat = String.format("%02d", minutes);
-                    String hourFormat = String.format("%02d", hours);
-
-                    String curTime = hourFormat + ":" + minuteFormat + ":" + secondFormat;
-
-                    String status = "                Punched In";
-                    String s = "Work start time: " + getTimeString();
-                    String s2 = "Time worked today: " + curTime;
-
-                    String s3 = status + "\n" + s + "\n" + s2;
-                    statusView.setTextColor(0xff18ff1a);
-                    statusView.setText(s3);
-                } catch (Exception e) {
-                }
-            }
-        });
-    }
-
-    public String getTimeString() {
-      //  Date date = new Date();
-        DateFormat df = new SimpleDateFormat("HH:mm:ss");
-        //Calendar cal = Calendar.getInstance();
-        dateFormat = df.format(startingDate);
-        return dateFormat;
     }
 
     public void displayStartTotal() {
@@ -124,13 +85,14 @@ public class MainActivity extends ActionBarActivity {
      */
     public String getName() {
         //String name="";
-        setContentView(R.layout.activity_main);
+       //// setContentView(R.layout.activity_main);
         //EditText theName = (EditText) findViewById(R.id.name);
         //String name = theName.getText().toString();
         TextView theName = (TextView) findViewById(R.id.name);
         String name = theName.getText().toString();
+        System.out.println(name);
         theName.setText(name);
-        Toast.makeText(MainActivity.this,"here1", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "here1", Toast.LENGTH_SHORT).show();
         return name;
     }
     /**
@@ -170,6 +132,44 @@ public class MainActivity extends ActionBarActivity {
         textView.setText(name);
     }
 
+
+
+    public void doWork() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                try {
+                    System.out.println("For testing");
+                    TextView statusView = (TextView) findViewById(R.id.status);
+                    Date dt = new Date();
+                    long diff = dt.getTime() - startingDate.getTime();
+                    long seconds = diff / 1000 % 60;
+                    long minutes = diff / (60 * 1000) % 60;
+                    long hours = diff / (60 * 60 * 1000) % 60;
+
+                    String secondFormat = String.format("%02d", seconds);
+                    String minuteFormat = String.format("%02d", minutes);
+                    String hourFormat = String.format("%02d", hours);
+
+                    String curTime = hourFormat + ":" + minuteFormat + ":" + secondFormat;
+
+                    String status = "                Punched In";
+                    String s = "Work start time: " + getTimeString();
+                    String s2 = "Time worked today: " + curTime;
+
+                    String s3 = status + "\n" + s + "\n" + s2;
+                    statusView.setTextColor(0xff18ff1a);
+                    statusView.setText(s3);
+                } catch (Exception e) {
+                }
+            }
+        });
+    }
+
+    public String getTimeString() {
+        DateFormat df = new SimpleDateFormat("HH:mm:ss");
+        dateFormat = df.format(startingDate);
+        return dateFormat;
+    }
 
     public void editPunchIn(View view) {
         Toast.makeText(MainActivity.this,"Added a Punched In", Toast.LENGTH_SHORT).show();
