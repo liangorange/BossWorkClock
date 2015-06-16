@@ -91,12 +91,6 @@ public class MainActivity extends ActionBarActivity {
         return dateFormat;
     }
 
-    /*
-    public void displayStart(String text) {
-        startView.setText(text);
-    }
-    */
-
     public void displayStartTotal() {
         startHandler.sendEmptyMessage(0);
     }
@@ -148,29 +142,7 @@ public class MainActivity extends ActionBarActivity {
             employee.setPunchedIn(true);
             employee.getTimeTracker().getClockInLocation();
             employee.getTimeTracker().clockIn();
-
-            /*
-            String t1;// = new Time(0, 0, 0);
-            t1 = employee.getTimeTracker().getClockInTime();
-
-            Time t2 = new Time(0, 0, 0);
-            */
-
-            /*
-            startingDate = new Date();
-
-            Thread loadThread = new Thread(count);
-            loadThread.start();
-            */
-            /*
-            String status = "                Punched In";
-            String s = "Work start time: " + t1;
-            String s2 = "Time worked today: ";//+ current time - t1;
-            String s3 = status + "\n" + s + "\n" + s2;
-            TextView textView = (TextView) findViewById(R.id.status);
-            textView.setTextColor(0xff18ff1a);
-            textView.setText(s3);
-            */
+            
             Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
 
         }
