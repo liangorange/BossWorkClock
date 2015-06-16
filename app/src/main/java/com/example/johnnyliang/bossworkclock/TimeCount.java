@@ -5,14 +5,19 @@ package com.example.johnnyliang.bossworkclock;
  */
 public class TimeCount implements Runnable {
     MainActivity activity;
+    Employee employee;
 
     public void setActivity(MainActivity myActivity) {
         activity = myActivity;
     }
 
+    public void setEmployeeActivity(Employee myEmployee) {
+        employee = myEmployee;
+    }
+
     @Override
     public void run() {
-        while(!Thread.currentThread().isInterrupted()){
+        while(!Thread.currentThread().isInterrupted() && employee.getPunchedIn()){
             try {
                 activity.doWork();
                 Thread.sleep(1000); // Pause of 1 Second

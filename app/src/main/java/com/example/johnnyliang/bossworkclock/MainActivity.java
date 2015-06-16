@@ -23,8 +23,8 @@ public class MainActivity extends ActionBarActivity {
     private String dateFormat;
 
     private Date startingDate;
-
     private TimeCount count = new TimeCount();
+    private boolean punched;
 
 
     Handler startHandler = new Handler() {
@@ -45,6 +45,9 @@ public class MainActivity extends ActionBarActivity {
         employee = new Employee();
 
         count.setActivity(this);
+        count.setEmployeeActivity(employee);
+        TextView statusView = (TextView) findViewById(R.id.status);
+
     }
 
 
@@ -52,7 +55,6 @@ public class MainActivity extends ActionBarActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 try {
-                    System.out.println("For testing");
                     TextView statusView = (TextView) findViewById(R.id.status);
                     Date dt = new Date();
                     long diff = dt.getTime() - startingDate.getTime();
@@ -80,11 +82,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public String getTimeString() {
-        Date date = new Date();
-
         DateFormat df = new SimpleDateFormat("HH:mm:ss");
-
-        Calendar cal = Calendar.getInstance();
 
         dateFormat = df.format(startingDate);
 
@@ -133,18 +131,17 @@ public class MainActivity extends ActionBarActivity {
 
         startingDate = new Date();
 
-        Thread loadThread = new Thread(count);
-        loadThread.start();
-
 
         // Can't punch in if you already are punched in
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
             employee.getTimeTracker().getClockInLocation();
             employee.getTimeTracker().clockIn();
-            
-            Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
 
+            Thread loadThread = new Thread(count);
+            loadThread.start();
+
+            Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
         }
     }
 
