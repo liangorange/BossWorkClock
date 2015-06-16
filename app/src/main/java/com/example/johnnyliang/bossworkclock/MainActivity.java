@@ -29,6 +29,7 @@ public class MainActivity extends ActionBarActivity {
     private String dateFormat;
     private Date startingDate;
     private TimeCount count = new TimeCount();
+    private boolean punched;
 
     Handler startHandler = new Handler() {
         @Override
@@ -50,6 +51,9 @@ public class MainActivity extends ActionBarActivity {
         this.readName();
 
         count.setActivity(this);
+        count.setEmployeeActivity(employee);
+        TextView statusView = (TextView) findViewById(R.id.status);
+
     }
 
     public void displayStartTotal() {
@@ -196,9 +200,11 @@ public class MainActivity extends ActionBarActivity {
 
             employee.getTimeTracker().getClockInLocation();
             employee.getTimeTracker().clockIn();
-            
-            Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
 
+            Thread loadThread = new Thread(count);
+            loadThread.start();
+
+            Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
         }
     }
 
