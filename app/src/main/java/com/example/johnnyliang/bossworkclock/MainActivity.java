@@ -1,5 +1,7 @@
 package com.example.johnnyliang.bossworkclock;
 
+import android.os.Handler;
+import android.os.Message;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
@@ -21,6 +23,10 @@ import java.io.FileWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import android.content.DialogInterface.OnKeyListener;
 
 public class MainActivity extends ActionBarActivity {
@@ -29,6 +35,23 @@ public class MainActivity extends ActionBarActivity {
     private PrintWriter out;
     private PrintStream in;
     private String filename = "name.txt";
+
+    private String dateFormat;
+
+    private Date startingDate;
+
+    private TimeCount count = new TimeCount();
+
+
+    Handler startHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            getTimeString();
+            //displayStart();
+            System.out.println("Call handler");
+        }
+    };
+
 
 
     @Override
@@ -40,6 +63,56 @@ public class MainActivity extends ActionBarActivity {
         this.readName();
 
 
+
+        count.setActivity(this);
+    }
+
+
+    public void doWork() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                try {
+                    System.out.println("For testing");
+                    TextView statusView = (TextView) findViewById(R.id.status);
+                    Date dt = new Date();
+                    long diff = dt.getTime() - startingDate.getTime();
+                    long seconds = diff / 1000 % 60;
+                    long minutes = diff / (60 * 1000) % 60;
+                    long hours = diff / (60 * 60 * 1000) % 60;
+
+                    String secondFormat = String.format("%02d", seconds);
+                    String minuteFormat = String.format("%02d", minutes);
+                    String hourFormat = String.format("%02d", hours);
+
+                    String curTime = hourFormat + ":" + minuteFormat + ":" + secondFormat;
+
+                    String status = "                Punched In";
+                    String s = "Work start time: " + getTimeString();
+                    String s2 = "Time worked today: " + curTime;
+
+                    String s3 = status + "\n" + s + "\n" + s2;
+                    statusView.setTextColor(0xff18ff1a);
+                    statusView.setText(s3);
+                } catch (Exception e) {
+                }
+            }
+        });
+    }
+
+    public String getTimeString() {
+        Date date = new Date();
+
+        DateFormat df = new SimpleDateFormat("HH:mm:ss");
+
+        Calendar cal = Calendar.getInstance();
+
+        dateFormat = df.format(startingDate);
+
+        return dateFormat;
+    }
+
+    public void displayStartTotal() {
+        startHandler.sendEmptyMessage(0);
     }
 
     @Override
@@ -125,25 +198,18 @@ public class MainActivity extends ActionBarActivity {
      */
     public void punchIn(View view){
 
+        startingDate = new Date();
+
+        Thread loadThread = new Thread(count);
+        loadThread.start();
+
+
         // Can't punch in if you already are punched in
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
             employee.getTimeTracker().getClockInLocation();
             employee.getTimeTracker().clockIn();
-
-            String t1;// = new Time(0, 0, 0);
-            t1 = employee.getTimeTracker().getClockInTime();
-
-            Time t2 = new Time(0, 0, 0);
-
-            String status = "                Punched In";
-            String s = "Work start time: " + t1;
-            String s2 = "Time worked today: ";//+ current time - t1;
-            String s3 = status + "\n" + s + "\n" + s2;
-            TextView textView = (TextView) findViewById(R.id.status);
-            textView.setTextColor(0xff18ff1a);
-            textView.setText(s3);
-
+            
             Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
 
         }
