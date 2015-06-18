@@ -8,16 +8,27 @@
     android:background="#ff0284ff"
     >
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit name in settings"
+        android:ems="10"
+        android:id="@+id/name"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/abc_text_size_display_1_material"
+        android:gravity="center"/>
+
 
     <Button
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/name"
         android:text="Edit Punch In "
         android:id="@+id/button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
-        android:onClick="editPunchIn"/>
+        android:onClick="editPunchIn"
+        android:layout_below="@+id/name"/>
 
 
     <Button
@@ -89,7 +100,8 @@
         android:background="@color/background_material_light"
         android:clickable="true"
         android:id="@+id/tableLayout"
-        android:layout_alignParentEnd="false">
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="false">
 
         <TableRow
             android:layout_width="match_parent"
@@ -160,16 +172,5 @@
         </TableRow>
     </TableLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Enter your name"
-        android:ems="10"
-        android:id="@+id/name"
-        android:focusable="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/status"
-        android:layout_alignEnd="@+id/status" />
 
 </RelativeLayout>

@@ -1,9 +1,7 @@
 package com.example.johnnyliang.bossworkclock;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 
@@ -35,11 +33,12 @@ public class TimeTracker {
     }
 
     public void clockIn() {
+
         //keep track of time
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         setClockInTime(dateFormat.format(date)); //15:59
-       // System.out.println(dateFormat.format(date)); 
+       // System.out.println(dateFormat.format(date));
 
     }
 
