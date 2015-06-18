@@ -12,6 +12,7 @@ public class Employee {
     private Time monthlyTotal;
     private TimeTracker timeTracker;
     private boolean punchedIn;
+    private double totalHour = 0;
 
     //Getters and setters
     public String getName()             { return name;         }
@@ -20,6 +21,10 @@ public class Employee {
     public Time getMonthlyTotal()       { return monthlyTotal; }
     public TimeTracker getTimeTracker() { return timeTracker;  }
     public boolean getPunchedIn()       { return punchedIn;    }
+    public double getTotalHour() {
+        return totalHour;
+    }
+
 
     public void setName(String name)                    { this.name = name;                 }
     public void setDailyTotal(Time dailyTotal)          { this.dailyTotal = dailyTotal;     }
@@ -27,6 +32,11 @@ public class Employee {
     public void setMonthlyTotal(Time monthlyTotal)      { this.monthlyTotal = monthlyTotal; }
     public void setTimeTracker(TimeTracker timeTracker) { this.timeTracker = timeTracker;   }
     public void setPunchedIn(boolean punchedIn)         { this.punchedIn = punchedIn;       }
+
+    public void setTotalHour(double hour) {
+        totalHour += hour;
+    }
+
 
     public Employee() { name = ""; dailyTotal = new Time(0,0,0); weeklyTotal = new Time(0,0,0);
                         monthlyTotal = new Time(0,0,0); timeTracker = new TimeTracker(); punchedIn = false; }
