@@ -2,6 +2,7 @@ package com.example.johnnyliang.bossworkclock;
 
 import java.sql.Time;
 
+
 /**
  * Created by Gerald on 6/5/2015.
  */
@@ -15,7 +16,6 @@ public class Employee {
     private double totalHour = 0;
 
     //Getters and setters
-    public String getName()             { return name;         }
     public Time getDailyTotal()         { return dailyTotal;   }
     public Time getWeeklyTotal()        { return weeklyTotal;  }
     public Time getMonthlyTotal()       { return monthlyTotal; }
@@ -40,6 +40,16 @@ public class Employee {
 
     public Employee() { name = ""; dailyTotal = new Time(0,0,0); weeklyTotal = new Time(0,0,0);
                         monthlyTotal = new Time(0,0,0); timeTracker = new TimeTracker(); punchedIn = false; }
+
+
+
+    public String getName() {
+
+        //setContentView(R.layout.activity_main);
+        //EditText theName = (EditText) findViewById(R.id.name);
+      //  String name = theName.getText().toString();
+        return name;
+    }
 
     public void sendUpdate() {
 
