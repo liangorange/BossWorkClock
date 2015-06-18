@@ -46,20 +46,21 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //use the employee class
+        employee = new Employee();
         TextView textView = (TextView) findViewById(R.id.status);
+        TextView statusView = (TextView) findViewById(R.id.status);
 
         //for name
         name = (TextView) findViewById(R.id.name);
         setting = getSharedPreferences(fileName, 0);
         theName = setting.getString("Name" , "Enter your name");
         name.setText(theName);
-
-        employee = new Employee();
-
+        employee.setName(theName);
 
         count.setActivity(this);
         count.setEmployeeActivity(employee);
-        TextView statusView = (TextView) findViewById(R.id.status);
 
     }
 
@@ -70,6 +71,11 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * This is where we can add settings
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -191,8 +197,7 @@ public class MainActivity extends ActionBarActivity {
             loadThread.start();
 
             employee.getTimeTracker().getClockInLocation();
-            employee.getTimeTracker().clockIn();
-            Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
+            //employee.getTimeTracker().clockIn();
         }
     }
 
@@ -206,9 +211,8 @@ public class MainActivity extends ActionBarActivity {
             textView.setTextColor(0xffff1410);
             textView.setText(status);
 
-            Toast.makeText(MainActivity.this,"Punched out", Toast.LENGTH_SHORT).show();
             employee.getTimeTracker().getClockOutLocation();
-            employee.getTimeTracker().clockOut();
+            //employee.getTimeTracker().clockOut();
         }
     }
 }
