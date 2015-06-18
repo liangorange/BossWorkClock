@@ -33,6 +33,11 @@ public class MainActivity extends ActionBarActivity {
     private TimeCount count = new TimeCount();
     private boolean punched;
 
+    // TextViews
+    TextView todayHour;
+    TextView weekHour;
+    TextView monthHour;
+
 
     Handler startHandler = new Handler() {
         @Override
@@ -55,6 +60,10 @@ public class MainActivity extends ActionBarActivity {
         count.setActivity(this);
         count.setEmployeeActivity(employee);
         TextView statusView = (TextView) findViewById(R.id.status);
+
+        todayHour = (TextView) findViewById(R.id.todaysHours);
+        weekHour = (TextView) findViewById(R.id.thisWeeksHours);
+        monthHour = (TextView) findViewById(R.id.thisMonthsHours);
 
     }
 
@@ -96,6 +105,12 @@ public class MainActivity extends ActionBarActivity {
 
         return dateFormat;
     }
+
+    /*
+    public String getDateString() {
+        DateFormat df = new SimpleDateFormat("")
+    }
+    */
 
     public void displayStartTotal() {
         startHandler.sendEmptyMessage(0);
@@ -200,9 +215,6 @@ public class MainActivity extends ActionBarActivity {
 
             startingDate = new Date();
 
-            Thread loadThread = new Thread(count);
-            loadThread.start();
-
             employee.getTimeTracker().getClockInLocation();
             employee.getTimeTracker().clockIn();
 
@@ -222,6 +234,10 @@ public class MainActivity extends ActionBarActivity {
             TextView textView = (TextView) findViewById(R.id.status);
             textView.setTextColor(0xffff1410);
             textView.setText(status);
+
+            todayHour.setText("Today:       " + String.format("%.2f", employee.getTotalHour()));
+            weekHour.setText("This Week:   " + String.format("%.2f", employee.getTotalHour()));
+            monthHour.setText("This Month:  " + String.format("%.2f", employee.getTotalHour()));
 
             Toast.makeText(MainActivity.this,"Punched out", Toast.LENGTH_SHORT).show();
             employee.getTimeTracker().getClockOutLocation();
