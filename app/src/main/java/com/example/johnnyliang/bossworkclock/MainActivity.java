@@ -1,35 +1,37 @@
 package com.example.johnnyliang.bossworkclock;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import android.content.DialogInterface.OnKeyListener;
 
-//5hrs
+
+
+//8hrs
 public class MainActivity extends ActionBarActivity {
     private Employee employee;
-    private String filename = "name.txt";
 
     private String dateFormat;
     private Date startingDate;
     private TimeCount count = new TimeCount();
-    private boolean punched;
+
+    private TextView name;
+    private String theName;
+    private SharedPreferences setting;
+    public static final String fileName = "nameFile";
 
     Handler startHandler = new Handler() {
         @Override
@@ -40,24 +42,25 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TextView textView = (TextView) findViewById(R.id.status);
 
+        //for name
+        name = (TextView) findViewById(R.id.name);
+        setting = getSharedPreferences(fileName, 0);
+        theName = setting.getString("Name" , "Enter your name");
+        name.setText(theName);
+
         employee = new Employee();
-        this.readName();
+
 
         count.setActivity(this);
         count.setEmployeeActivity(employee);
         TextView statusView = (TextView) findViewById(R.id.status);
 
-    }
-
-    public void displayStartTotal() {
-        startHandler.sendEmptyMessage(0);
     }
 
     @Override
@@ -74,70 +77,56 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        //for editing employee's name
+        if (id == R.id.setName) {
+            Toast.makeText(MainActivity.this,"WHoa!!!", Toast.LENGTH_SHORT).show();
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("Edit Name");
+            alert.setMessage("Enter your name");
+
+            // Set an EditText view to get user input
+            final EditText input = new EditText(this);
+            alert.setView(input);
+
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    theName = input.getText().toString();
+                    name.setText(theName);
+
+                    SharedPreferences.Editor editor = setting.edit();
+                    editor.putString("Name", theName);
+
+                    // Commit edit
+                    editor.apply();
+                }
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                }
+            });
+
+            alert.show();
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-
     /**
-     * gerald
-     * @return
+     * Johnny
      */
-    public String getName() {
-        //String name="";
-       //// setContentView(R.layout.activity_main);
-        //EditText theName = (EditText) findViewById(R.id.name);
-        //String name = theName.getText().toString();
-        TextView theName = (TextView) findViewById(R.id.name);
-        String name = theName.getText().toString();
-        System.out.println(name);
-        theName.setText(name);
-        Toast.makeText(MainActivity.this, "here1", Toast.LENGTH_SHORT).show();
-        return name;
-    }
-    /**
-     *gerald
-     */
-    public void saveName(View view) {
-        String name = this.getName();
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(filename));
-            Toast.makeText(MainActivity.this,"here2", Toast.LENGTH_SHORT).show();
-            out.write(name);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.readName();
+    public void displayStartTotal() {
+        startHandler.sendEmptyMessage(0);
     }
 
     /**
-     * gerald
+     * Johnny
      */
-    public void readName() {
-        TextView textView = (TextView) findViewById(R.id.name);
-        String name ="";
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
-            String line;
-            if ((line = reader.readLine()) == null)
-                name = "";
-            while ((line = reader.readLine()) != null) {
-                name += line;
-            }
-            reader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        textView.setText(name);
-    }
-
-
-
     public void doWork() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -169,6 +158,9 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * Johnny
+     */
     public String getTimeString() {
         DateFormat df = new SimpleDateFormat("HH:mm:ss");
         dateFormat = df.format(startingDate);
@@ -200,10 +192,6 @@ public class MainActivity extends ActionBarActivity {
 
             employee.getTimeTracker().getClockInLocation();
             employee.getTimeTracker().clockIn();
-
-            Thread loadThread = new Thread(count);
-            loadThread.start();
-
             Toast.makeText(MainActivity.this,"Punched in", Toast.LENGTH_SHORT).show();
         }
     }
