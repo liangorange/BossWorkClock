@@ -14,6 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -135,13 +139,6 @@ public class MainActivity extends ActionBarActivity {
     /**
      * Johnny
      */
-    public void displayStartTotal() {
-        startHandler.sendEmptyMessage(0);
-    }
-
-    /**
-     * Johnny
-     */
     public void doWork() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -192,28 +189,6 @@ public class MainActivity extends ActionBarActivity {
         startHandler.sendEmptyMessage(0);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 
     /**
      * gerald
@@ -236,7 +211,7 @@ public class MainActivity extends ActionBarActivity {
     public void saveName(View view) {
         String name = this.getName();
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+            BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
             Toast.makeText(MainActivity.this,"here2", Toast.LENGTH_SHORT).show();
             out.write(name);
             out.close();
@@ -253,7 +228,7 @@ public class MainActivity extends ActionBarActivity {
         TextView textView = (TextView) findViewById(R.id.name);
         String name ="";
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
             if ((line = reader.readLine()) == null)
                 name = "";
@@ -289,7 +264,7 @@ public class MainActivity extends ActionBarActivity {
             startingDate = new Date();
 
             employee.getTimeTracker().getClockInLocation();
-            //employee.getTimeTracker().clockIn();
+
         }
     }
 
