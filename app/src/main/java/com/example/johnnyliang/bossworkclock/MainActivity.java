@@ -14,14 +14,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 
 
 //8hrs
@@ -96,10 +91,9 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //change to case statement if more options are added
         //for editing employee's name
         if (id == R.id.setName) {
-            Toast.makeText(MainActivity.this,"WHoa!!!", Toast.LENGTH_SHORT).show();
-
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
             alert.setTitle("Edit Name");
@@ -134,6 +128,13 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Johnny
+     */
+    public void displayStartTotal() {
+        startHandler.sendEmptyMessage(0);
     }
 
     /**
@@ -185,63 +186,6 @@ public class MainActivity extends ActionBarActivity {
     }
     */
 
-    public void displayStartTotal() {
-        startHandler.sendEmptyMessage(0);
-    }
-
-
-    /**
-     * gerald
-     * @return
-     */
-    public String getName() {
-        //String name="";
-        setContentView(R.layout.activity_main);
-        //EditText theName = (EditText) findViewById(R.id.name);
-        //String name = theName.getText().toString();
-        TextView theName = (TextView) findViewById(R.id.name);
-        String name = theName.getText().toString();
-        theName.setText(name);
-        Toast.makeText(MainActivity.this,"here1", Toast.LENGTH_SHORT).show();
-        return name;
-    }
-    /**
-     *gerald
-     */
-    public void saveName(View view) {
-        String name = this.getName();
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
-            Toast.makeText(MainActivity.this,"here2", Toast.LENGTH_SHORT).show();
-            out.write(name);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.readName();
-    }
-
-    /**
-     * gerald
-     */
-    public void readName() {
-        TextView textView = (TextView) findViewById(R.id.name);
-        String name ="";
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
-            String line;
-            if ((line = reader.readLine()) == null)
-                name = "";
-            while ((line = reader.readLine()) != null) {
-                name += line;
-            }
-            reader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        textView.setText(name);
-    }
-
 
     public void editPunchIn(View view) {
         Toast.makeText(MainActivity.this,"Added a Punched In", Toast.LENGTH_SHORT).show();
@@ -256,15 +200,17 @@ public class MainActivity extends ActionBarActivity {
      * @param view
      */
     public void punchIn(View view){
-
         // Can't punch in if you already are punched in
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
 
             startingDate = new Date();
+            
+            Thread loadThread = new Thread(count);
+            loadThread.start();
 
             employee.getTimeTracker().getClockInLocation();
-
+            employee.getTimeTracker().clockIn();
         }
     }
 
@@ -283,7 +229,7 @@ public class MainActivity extends ActionBarActivity {
             monthHour.setText("This Month:  " + String.format("%.2f", employee.getTotalHour()));
 
             employee.getTimeTracker().getClockOutLocation();
-            //employee.getTimeTracker().clockOut();
+            employee.getTimeTracker().clockOut();
         }
     }
 }
