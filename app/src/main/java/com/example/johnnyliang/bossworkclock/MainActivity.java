@@ -32,6 +32,11 @@ public class MainActivity extends ActionBarActivity {
     private String theName;
     private SharedPreferences setting;
     public static final String fileName = "nameFile";
+    // TextViews
+    TextView todayHour;
+    TextView weekHour;
+    TextView monthHour;
+
 
     Handler startHandler = new Handler() {
         @Override
@@ -61,6 +66,10 @@ public class MainActivity extends ActionBarActivity {
 
         count.setActivity(this);
         count.setEmployeeActivity(employee);
+
+        todayHour = (TextView) findViewById(R.id.todaysHours);
+        weekHour = (TextView) findViewById(R.id.thisWeeksHours);
+        monthHour = (TextView) findViewById(R.id.thisMonthsHours);
 
     }
 
@@ -173,6 +182,92 @@ public class MainActivity extends ActionBarActivity {
         return dateFormat;
     }
 
+    /*
+    public String getDateString() {
+        DateFormat df = new SimpleDateFormat("")
+    }
+    */
+
+    public void displayStartTotal() {
+        startHandler.sendEmptyMessage(0);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     * gerald
+     * @return
+     */
+    public String getName() {
+        //String name="";
+        setContentView(R.layout.activity_main);
+        //EditText theName = (EditText) findViewById(R.id.name);
+        //String name = theName.getText().toString();
+        TextView theName = (TextView) findViewById(R.id.name);
+        String name = theName.getText().toString();
+        theName.setText(name);
+        Toast.makeText(MainActivity.this,"here1", Toast.LENGTH_SHORT).show();
+        return name;
+    }
+    /**
+     *gerald
+     */
+    public void saveName(View view) {
+        String name = this.getName();
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+            Toast.makeText(MainActivity.this,"here2", Toast.LENGTH_SHORT).show();
+            out.write(name);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.readName();
+    }
+
+    /**
+     * gerald
+     */
+    public void readName() {
+        TextView textView = (TextView) findViewById(R.id.name);
+        String name ="";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            String line;
+            if ((line = reader.readLine()) == null)
+                name = "";
+            while ((line = reader.readLine()) != null) {
+                name += line;
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        textView.setText(name);
+    }
+
+
     public void editPunchIn(View view) {
         Toast.makeText(MainActivity.this,"Added a Punched In", Toast.LENGTH_SHORT).show();
     }
@@ -193,9 +288,6 @@ public class MainActivity extends ActionBarActivity {
 
             startingDate = new Date();
 
-            Thread loadThread = new Thread(count);
-            loadThread.start();
-
             employee.getTimeTracker().getClockInLocation();
             //employee.getTimeTracker().clockIn();
         }
@@ -210,6 +302,10 @@ public class MainActivity extends ActionBarActivity {
             TextView textView = (TextView) findViewById(R.id.status);
             textView.setTextColor(0xffff1410);
             textView.setText(status);
+
+            todayHour.setText("Today:       " + String.format("%.2f", employee.getTotalHour()));
+            weekHour.setText("This Week:   " + String.format("%.2f", employee.getTotalHour()));
+            monthHour.setText("This Month:  " + String.format("%.2f", employee.getTotalHour()));
 
             employee.getTimeTracker().getClockOutLocation();
             //employee.getTimeTracker().clockOut();
