@@ -205,12 +205,12 @@ public class MainActivity extends ActionBarActivity {
             employee.setPunchedIn(true);
 
             startingDate = new Date();
-            
+
             Thread loadThread = new Thread(count);
             loadThread.start();
 
-            employee.getTimeTracker().getClockInLocation();
-            employee.getTimeTracker().clockIn();
+            employee.getClockInLocation();
+            employee.clockIn();
         }
     }
 
@@ -228,8 +228,8 @@ public class MainActivity extends ActionBarActivity {
             weekHour.setText("This Week:   " + String.format("%.2f", employee.getTotalHour()));
             monthHour.setText("This Month:  " + String.format("%.2f", employee.getTotalHour()));
 
-            employee.getTimeTracker().getClockOutLocation();
-            employee.getTimeTracker().clockOut();
+            employee.getClockOutLocation();
+            employee.clockOut();
         }
     }
 }
