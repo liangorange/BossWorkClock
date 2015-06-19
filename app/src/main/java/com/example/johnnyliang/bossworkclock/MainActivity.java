@@ -19,18 +19,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-//8hrs
+//9hrs
 public class MainActivity extends ActionBarActivity {
     private Employee employee;
-
     private String dateFormat;
     private Date startingDate;
     private TimeCount count = new TimeCount();
 
+    // For the name
     private TextView name;
     private String theName;
     private SharedPreferences setting;
     public static final String fileName = "nameFile";
+
     // TextViews
     TextView todayHour;
     TextView weekHour;
@@ -53,15 +54,16 @@ public class MainActivity extends ActionBarActivity {
 
         //use the employee class
         employee = new Employee();
-        TextView textView = (TextView) findViewById(R.id.status);
-        TextView statusView = (TextView) findViewById(R.id.status);
 
         //for name
         name = (TextView) findViewById(R.id.name);
         setting = getSharedPreferences(fileName, 0);
-        theName = setting.getString("Name" , "Enter your name");
+        theName = setting.getString("Name" , "");
         name.setText(theName);
         employee.setName(theName);
+        if(theName.equals("")) {
+            setName();
+        }
 
         count.setActivity(this);
         count.setEmployeeActivity(employee);
@@ -89,45 +91,54 @@ public class MainActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //change to case statement if more options are added
-        //for editing employee's name
-        if (id == R.id.setName) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-            alert.setTitle("Edit Name");
-            alert.setMessage("Enter your name");
-
-            // Set an EditText view to get user input
-            final EditText input = new EditText(this);
-            alert.setView(input);
-
-            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    theName = input.getText().toString();
-                    name.setText(theName);
-
-                    SharedPreferences.Editor editor = setting.edit();
-                    editor.putString("Name", theName);
-
-                    // Commit edit
-                    editor.apply();
-                }
-            });
-
-            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // Canceled.
-                }
-            });
-
-            alert.show();
-
-            return true;
+        switch (item.getItemId()) {
+            case R.id.TwentyFourHour:
+                //set bool 24HourTime to false
+                return true;
+            case R.id.trackServices:
+                //trackService()
+                return true;
+            default:
+                return false;
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    /**
+     * setName
+     * This method gets and sets the employees name the first time the
+     * app is used.
+     */
+    public void setName() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Employee Name");
+        alert.setMessage("Enter your name");
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                theName = input.getText().toString();
+                name.setText(theName);
+
+                SharedPreferences.Editor editor = setting.edit();
+                editor.putString("Name", theName);
+
+                // Commit edit
+                editor.apply();
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
     }
 
     /**
@@ -180,22 +191,30 @@ public class MainActivity extends ActionBarActivity {
         return dateFormat;
     }
 
-    /*
+    /* //im going to delete this next time....
     public String getDateString() {
         DateFormat df = new SimpleDateFormat("")
     }
     */
 
-
+    /**
+     * Kwok
+     * @param view
+     */
     public void editPunchIn(View view) {
-        Toast.makeText(MainActivity.this,"Added a Punched In", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Added a Punched In", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Kwok
+     * @param view
+     */
     public void editPunchOut(View view) {
         Toast.makeText(MainActivity.this,"Added a Punched Out", Toast.LENGTH_SHORT).show();
     }
 
     /**
+     * punchIn
      *
      * @param view
      */
@@ -214,6 +233,11 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * puchOut
+     *
+     * @param view
+     */
     public void punchOut(View view){
         // Can't punch out if you already are punched out
         if(employee.getPunchedIn()) {
