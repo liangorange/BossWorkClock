@@ -1,6 +1,9 @@
 package com.example.johnnyliang.bossworkclock;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,12 +13,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -37,6 +44,22 @@ public class MainActivity extends ActionBarActivity {
     TextView weekHour;
     TextView monthHour;
 
+    //Jonathan's time/datepicker parts
+    private String time;
+    private String date;
+    private String resultIn;
+    private String resultOut;
+    private Button addInTime;
+    private Button addOutTime;
+    private int year;
+    private int month;
+    private int day;
+    private int hour;
+    private int minute;
+    private int second = 0;
+    static final int DATE_DIALOG_ID = 999;
+    static final int TIME_DIALOG_ID = 998;
+
 
     Handler startHandler = new Handler() {
         @Override
@@ -51,6 +74,10 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setCurrentTime();
+        setCurrentDate();
+        addListenerOnButton();
 
         //use the employee class
         employee = new Employee();
@@ -74,6 +101,88 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    public void setCurrentTime(){
+        final Calendar c = Calendar.getInstance();
+        hour = c.get(Calendar.HOUR_OF_DAY);
+        minute = c.get(Calendar.MINUTE);
+    }
+    public void setCurrentDate() {
+
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+    }
+
+
+    public void addListenerOnButton(){
+        addInTime = (Button)findViewById(R.id.button);
+        addInTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(TIME_DIALOG_ID);
+                showDialog(DATE_DIALOG_ID);
+            }
+        });
+
+        addOutTime = (Button)findViewById(R.id.button2);
+        addOutTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(TIME_DIALOG_ID);
+                showDialog(DATE_DIALOG_ID);
+            }
+        });
+    }
+
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DATE_DIALOG_ID:
+                // set date picker as current date
+                return new DatePickerDialog(this, datePickerListener,
+                        year, month,day);
+            case TIME_DIALOG_ID:
+                return new TimePickerDialog(this, timePickerListener,
+                        hour, minute, false);
+        }
+
+        return null;
+    }
+
+    private TimePickerDialog.OnTimeSetListener timePickerListener
+            = new TimePickerDialog.OnTimeSetListener() {
+        public void onTimeSet(TimePicker view, int selectedHour,
+                              int selectedMinute) {
+            hour = selectedHour;
+            minute = selectedMinute;
+
+            // set current time into textview
+            time = (pad(hour)) + (":") + (pad(minute)) + (":") + (pad(second));
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener datePickerListener
+            = new DatePickerDialog.OnDateSetListener() {
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+
+            // set selected date into textview
+            date = (month + 1) +  ("-") + (day) + ("-") + (year) + (" ");
+        }
+    };
+
+    private static String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
