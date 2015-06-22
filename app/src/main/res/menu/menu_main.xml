@@ -2,9 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
-    <item android:id="@+id/setName"
-        android:title="Edit Name"
-        android:orderInCategory="100"
+    <item android:id="@+id/TwentyFourHour"
+        android:checkable="true"
+        android:checked="true"
+        android:title="24 hour display"
+        android:orderInCategory="1"
         app:showAsAction="never" />
+
+    <item android:id="@+id/trackServices"
+        android:title="Track Services"
+        android:orderInCategory="2"
+         />
 
 </menu>
