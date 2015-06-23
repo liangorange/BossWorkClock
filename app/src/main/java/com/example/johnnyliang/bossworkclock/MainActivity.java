@@ -111,6 +111,92 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    /**
+     * This is where we can add settings
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch (item.getItemId()) {
+            case R.id.TwentyFourHour:
+                //set bool 24HourTime to false
+                return true;
+            case R.id.trackServices:
+                //trackService()
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * setName
+     * This method gets and sets the employees name the first time the
+     * app is used.
+     */
+    public void setName() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Employee Name");
+        alert.setMessage("Enter your name");
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                theName = input.getText().toString();
+                name.setText(theName);
+
+                SharedPreferences.Editor editor = setting.edit();
+                editor.putString("Name", theName);
+
+                // Commit edit
+                editor.apply();
+                employee.setName(theName);
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
+    }
+
+
+
+    /**
+     * Kwok
+     * @param view
+     */
+    public void editPunchIn(View view) {
+        Toast.makeText(MainActivity.this, "Edited a Punched In", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Kwok
+     * @param view
+     */
+    public void editPunchOut(View view) {
+        Toast.makeText(MainActivity.this,"Edited a Punched Out", Toast.LENGTH_SHORT).show();
+    }
+
     public void setCurrentTime(){
         final Calendar c = Calendar.getInstance();
         inHour = c.get(Calendar.HOUR_OF_DAY);
@@ -131,7 +217,6 @@ public class MainActivity extends ActionBarActivity {
         outDay = c.get(Calendar.DAY_OF_MONTH);
     }
 
-
     public void addListenerOnButton(){
         addInTime = (Button)findViewById(R.id.button);
         addInTime.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +236,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
     }
-
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -233,72 +317,9 @@ public class MainActivity extends ActionBarActivity {
         else
             return "0" + String.valueOf(c);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    /**
-     * This is where we can add settings
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
-        switch (item.getItemId()) {
-            case R.id.TwentyFourHour:
-                //set bool 24HourTime to false
-                return true;
-            case R.id.trackServices:
-                //trackService()
-                return true;
-            default:
-                return false;
-        }
-    }
 
-    /**
-     * setName
-     * This method gets and sets the employees name the first time the
-     * app is used.
-     */
-    public void setName() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-        alert.setTitle("Employee Name");
-        alert.setMessage("Enter your name");
-
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this);
-        alert.setView(input);
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                theName = input.getText().toString();
-                name.setText(theName);
-
-                SharedPreferences.Editor editor = setting.edit();
-                editor.putString("Name", theName);
-
-                // Commit edit
-                editor.apply();
-            }
-        });
-
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
-        });
-
-        alert.show();
-    }
 
     /**
      * Johnny
@@ -356,21 +377,6 @@ public class MainActivity extends ActionBarActivity {
     }
     */
 
-    /**
-     * Kwok
-     * @param view
-     */
-    public void editPunchIn(View view) {
-        Toast.makeText(MainActivity.this, "Added a Punched In", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Kwok
-     * @param view
-     */
-    public void editPunchOut(View view) {
-        Toast.makeText(MainActivity.this,"Added a Punched Out", Toast.LENGTH_SHORT).show();
-    }
 
     /**
      * punchIn
