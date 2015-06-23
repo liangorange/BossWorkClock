@@ -20,11 +20,12 @@ public class TimeCount implements Runnable {
         while(!Thread.currentThread().isInterrupted() && employee.getPunchedIn()){
             try {
                 activity.doWork();
+                employee.setTotalHour(0.01);
                 Thread.sleep(1000); // Pause of 1 Second
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }catch(Exception e){
             }
         }
-    }
+    }  
 }

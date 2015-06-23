@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit name in settings"
+        android:text=""
         android:ems="10"
         android:id="@+id/name"
         android:layout_alignParentTop="true"
