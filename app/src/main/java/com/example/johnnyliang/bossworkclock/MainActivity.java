@@ -45,20 +45,30 @@ public class MainActivity extends ActionBarActivity {
     TextView monthHour;
 
     //Jonathan's time/datepicker parts
-    private String time;
-    private String date;
+    private String inTime;
+    private String outTime;
+    private String inDate;
+    private String outDate;
     private String resultIn;
     private String resultOut;
     private Button addInTime;
     private Button addOutTime;
-    private int year;
-    private int month;
-    private int day;
-    private int hour;
-    private int minute;
-    private int second = 0;
-    static final int DATE_DIALOG_ID = 999;
-    static final int TIME_DIALOG_ID = 998;
+    private int inYear;
+    private int inMonth;
+    private int inDay;
+    private int inHour;
+    private int inMinute;
+    private int inSecond = 0;
+    private int outYear;
+    private int outMonth;
+    private int outDay;
+    private int outHour;
+    private int outMinute;
+    private int outSecond = 0;
+    static final int DATE_DIALOG_ID_IN = 999;
+    static final int TIME_DIALOG_ID_IN = 998;
+    static final int DATE_DIALOG_ID_OUT = 997;
+    static final int TIME_DIALOG_ID_OUT = 996;
 
 
     Handler startHandler = new Handler() {
@@ -103,15 +113,22 @@ public class MainActivity extends ActionBarActivity {
 
     public void setCurrentTime(){
         final Calendar c = Calendar.getInstance();
-        hour = c.get(Calendar.HOUR_OF_DAY);
-        minute = c.get(Calendar.MINUTE);
+        inHour = c.get(Calendar.HOUR_OF_DAY);
+        outHour = c.get(Calendar.HOUR_OF_DAY);
+        inMinute = c.get(Calendar.MINUTE);
+        outMinute = c.get(Calendar.MINUTE);
+        inSecond = c.get(Calendar.SECOND);
+        outSecond = c.get(Calendar.SECOND);
     }
     public void setCurrentDate() {
 
         final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
+        inYear = c.get(Calendar.YEAR);
+        inMonth = c.get(Calendar.MONTH);
+        inDay = c.get(Calendar.DAY_OF_MONTH);
+        outYear = c.get(Calendar.YEAR);
+        outMonth = c.get(Calendar.MONTH);
+        outDay = c.get(Calendar.DAY_OF_MONTH);
     }
 
 
@@ -120,8 +137,8 @@ public class MainActivity extends ActionBarActivity {
         addInTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(TIME_DIALOG_ID);
-                showDialog(DATE_DIALOG_ID);
+                showDialog(TIME_DIALOG_ID_IN);
+                showDialog(DATE_DIALOG_ID_IN);
             }
         });
 
@@ -129,8 +146,8 @@ public class MainActivity extends ActionBarActivity {
         addOutTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(TIME_DIALOG_ID);
-                showDialog(DATE_DIALOG_ID);
+                showDialog(TIME_DIALOG_ID_OUT);
+                showDialog(DATE_DIALOG_ID_OUT);
             }
         });
     }
@@ -139,41 +156,74 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-            case DATE_DIALOG_ID:
+            case DATE_DIALOG_ID_IN:
                 // set date picker as current date
-                return new DatePickerDialog(this, datePickerListener,
-                        year, month,day);
-            case TIME_DIALOG_ID:
-                return new TimePickerDialog(this, timePickerListener,
-                        hour, minute, false);
+                return new DatePickerDialog(this, datePickerListenerIn,
+                        inYear, inMonth,inDay);
+            case TIME_DIALOG_ID_IN:
+                return new TimePickerDialog(this, timePickerListenerIn,
+                        inHour, inMinute, false);
+            case DATE_DIALOG_ID_OUT:
+                // set date picker as current date
+                return new DatePickerDialog(this, datePickerListenerOut,
+                        outYear, outMonth,outDay);
+            case TIME_DIALOG_ID_OUT:
+                return new TimePickerDialog(this, timePickerListenerOut,
+                        outHour, outMinute, false);
         }
 
         return null;
     }
 
-    private TimePickerDialog.OnTimeSetListener timePickerListener
+    private TimePickerDialog.OnTimeSetListener timePickerListenerIn
             = new TimePickerDialog.OnTimeSetListener() {
         public void onTimeSet(TimePicker view, int selectedHour,
                               int selectedMinute) {
-            hour = selectedHour;
-            minute = selectedMinute;
+            inHour = selectedHour;
+            inMinute = selectedMinute;
 
             // set current time into textview
-            time = (pad(hour)) + (":") + (pad(minute)) + (":") + (pad(second));
+            inTime = (pad(inHour)) + (":") + (pad(inMinute)) + (":") + (pad(inSecond));
         }
     };
 
-    private DatePickerDialog.OnDateSetListener datePickerListener
+    private TimePickerDialog.OnTimeSetListener timePickerListenerOut
+            = new TimePickerDialog.OnTimeSetListener() {
+        public void onTimeSet(TimePicker view, int selectedHour,
+                              int selectedMinute) {
+            outHour = selectedHour;
+            outMinute = selectedMinute;
+
+            // set current time into textview
+            outTime = (pad(outHour)) + (":") + (pad(outMinute)) + (":") + (pad(outSecond));
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener datePickerListenerIn
             = new DatePickerDialog.OnDateSetListener() {
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
+            inYear = selectedYear;
+            inMonth = selectedMonth;
+            inDay = selectedDay;
 
             // set selected date into textview
-            date = (month + 1) +  ("-") + (day) + ("-") + (year) + (" ");
+            inDate = (inMonth + 1) +  ("-") + (inDay) + ("-") + (inYear) + (" ");
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener datePickerListenerOut
+            = new DatePickerDialog.OnDateSetListener() {
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            outYear = selectedYear;
+            outMonth = selectedMonth;
+            outDay = selectedDay;
+
+            // set selected date into textview
+            outDate = (outMonth + 1) +  ("-") + (outDay) + ("-") + (outYear) + (" ");
         }
     };
 
