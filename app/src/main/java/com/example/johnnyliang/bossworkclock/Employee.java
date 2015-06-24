@@ -19,6 +19,7 @@ public class Employee {
     private String clockOutTime;
     private GPSCoord clockInLocation;
     private GPSCoord clockOutLocation;
+    private Date editInDate;
 
     //Getters and setters
     public double getDailyTotal()         { return dailyTotal;       }
@@ -26,11 +27,11 @@ public class Employee {
     public double getMonthlyTotal()       { return monthlyTotal;     }
     public boolean getPunchedIn()         { return punchedIn;        }
     public double getTotalHour()          { return totalHour;        }
-    public String getClockInTime()        { return clockInTime;      }
-    public String getClockOutTime()       { return clockOutTime;     }
+    public String getClockInTime()        { return clockInTime;     }
+    public String getClockOutTime()       { return clockOutTime;    }
     public GPSCoord getClockInLocation()  { return clockInLocation;  }
     public GPSCoord getClockOutLocation() { return clockOutLocation; }
-
+    public Date getEditInDate()           { return  editInDate;       }
 
     public void setName(String name)                 { this.name = name;                 }
     public void setDailyTotal(double dailyTotal)     { this.dailyTotal = dailyTotal;     }
@@ -39,6 +40,7 @@ public class Employee {
     public void setPunchedIn(boolean punchedIn)      { this.punchedIn = punchedIn;       }
     public void setClockInTime(String clockInTime)   { this.clockInTime = clockInTime;   }
     public void setClockOutTime(String clockOutTime) { this.clockOutTime = clockOutTime; }
+    public void setEditInDate(Date in)               { this.editInDate = in;               }
 
     public void setClockInLocation(GPSCoord clockInLocation) {
         this.clockInLocation.latitude = clockInLocation.latitude;
@@ -79,7 +81,9 @@ public class Employee {
     }
 
     public void editClockIn() {
-
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        Date date = getEditInDate();
+        setClockInTime(dateFormat.format(date));
     }
 
     public void editClockOut() {

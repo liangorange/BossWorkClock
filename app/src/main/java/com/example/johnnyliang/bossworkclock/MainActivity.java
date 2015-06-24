@@ -85,10 +85,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setCurrentTime();
-        setCurrentDate();
-        addListenerOnButton();
-
         //use the employee class
         employee = new Employee();
 
@@ -186,7 +182,23 @@ public class MainActivity extends ActionBarActivity {
      * @param view
      */
     public void editPunchIn(View view) {
-        Toast.makeText(MainActivity.this, "Edited a Punched In", Toast.LENGTH_SHORT).show();
+        if(!employee.getPunchedIn()) {
+            employee.setPunchedIn(true);
+            Toast.makeText(MainActivity.this, "Editing a Punched In", Toast.LENGTH_SHORT).show();
+            setCurrentTime();
+            setCurrentDate();
+            showDialog(TIME_DIALOG_ID_IN);
+            showDialog(DATE_DIALOG_ID_IN);
+
+            //below are to be fixed
+            startingDate = new Date(inYear, inMonth, inDay, inHour, inMinute, inSecond);
+            employee.setEditInDate(startingDate);
+            Thread loadThread = new Thread(count);
+            loadThread.start();
+
+            employee.getClockInLocation();
+            employee.editClockIn();
+        }
     }
 
     /**
@@ -194,7 +206,27 @@ public class MainActivity extends ActionBarActivity {
      * @param view
      */
     public void editPunchOut(View view) {
-        Toast.makeText(MainActivity.this,"Edited a Punched Out", Toast.LENGTH_SHORT).show();
+        if(employee.getPunchedIn()) {
+            employee.setPunchedIn(false);
+            Toast.makeText(MainActivity.this, "Editing a Punched Out", Toast.LENGTH_SHORT).show();
+            setCurrentTime();
+            setCurrentDate();
+            showDialog(TIME_DIALOG_ID_OUT);
+            showDialog(DATE_DIALOG_ID_OUT);
+
+            //below are to be fixed
+            String status = "                Punched Out";
+            TextView textView = (TextView) findViewById(R.id.status);
+            textView.setTextColor(0xffff1410);
+            textView.setText(status);
+
+            todayHour.setText("Today:       " + String.format("%.2f", employee.getTotalHour()));
+            weekHour.setText("This Week:   " + String.format("%.2f", employee.getTotalHour()));
+            monthHour.setText("This Month:  " + String.format("%.2f", employee.getTotalHour()));
+
+            employee.getClockOutLocation();
+            employee.clockOut();
+        }
     }
 
     public void setCurrentTime(){
@@ -215,26 +247,6 @@ public class MainActivity extends ActionBarActivity {
         outYear = c.get(Calendar.YEAR);
         outMonth = c.get(Calendar.MONTH);
         outDay = c.get(Calendar.DAY_OF_MONTH);
-    }
-
-    public void addListenerOnButton(){
-        addInTime = (Button)findViewById(R.id.button);
-        addInTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(TIME_DIALOG_ID_IN);
-                showDialog(DATE_DIALOG_ID_IN);
-            }
-        });
-
-        addOutTime = (Button)findViewById(R.id.button2);
-        addOutTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(TIME_DIALOG_ID_OUT);
-                showDialog(DATE_DIALOG_ID_OUT);
-            }
-        });
     }
 
     @Override
