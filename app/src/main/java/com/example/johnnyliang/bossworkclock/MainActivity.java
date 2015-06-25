@@ -494,12 +494,6 @@ public class MainActivity extends ActionBarActivity {
         return dateFormat;
     }
 
-    /* //im going to delete this next time....
-    public String getDateString() {
-        DateFormat df = new SimpleDateFormat("")
-    }
-    */
-
 
     /**
      * punchIn
