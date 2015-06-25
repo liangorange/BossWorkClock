@@ -19,7 +19,6 @@
         android:textSize="@dimen/abc_text_size_display_1_material"
         android:gravity="center"/>
 
-
     <Button
         android:layout_width="160dp"
         android:layout_height="wrap_content"
@@ -29,7 +28,6 @@
         android:layout_alignParentStart="false"
         android:onClick="editPunchIn"
         android:layout_below="@+id/name"/>
-
 
     <Button
         android:layout_width="160dp"
