@@ -27,7 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-//6 1/2 hrs
+//9 3/4 hrs
 public class MainActivity extends ActionBarActivity {
     public final static String TAG2 = "MAIN_ACTIVITY";
     private Employee employee;
@@ -288,9 +288,9 @@ public class MainActivity extends ActionBarActivity {
             textView.setTextColor(0xffff1410);
             textView.setText(status);
 
-          //  todayHour.setText("Today:       " + String.format("%.2f", employee.getTotalHour()));
-           // weekHour.setText("This Week:   " + String.format("%.2f", employee.getTotalHour()));
-           // monthHour.setText("This Month:  " + String.format("%.2f", employee.getTotalHour()));
+            todayHour.setText("Today:       " + String.format("%.2f", employee.getDailyTotal()));
+            weekHour.setText("This Week:   " + String.format("%.2f", employee.getWeeklyTotal()));
+            monthHour.setText("This Month:  " + String.format("%.2f", employee.getMonthlyTotal()));
 
             employee.getClockOutLocation();
             employee.clockOut();
@@ -435,11 +435,11 @@ public class MainActivity extends ActionBarActivity {
                     long minutes = diff / (60 * 1000) % 60;
                     long hours = diff / (60 * 60 * 1000) % 60;
 
-                    String secondFormat = String.format("%02d", seconds);
+                   // String secondFormat = String.format("%02d", seconds);
                     String minuteFormat = String.format("%02d", minutes);
                     String hourFormat = String.format("%02d", hours);
 
-                    String curTime = hourFormat + ":" + minuteFormat + ":" + secondFormat;
+                    String curTime = hourFormat + ":" + minuteFormat;// + ":" + secondFormat;
 
                     String status = "                Punched In";
                     String s = "Work start time: " + getTimeString();
@@ -489,7 +489,7 @@ public class MainActivity extends ActionBarActivity {
      * Johnny
      */
     public String getTimeString() {
-        DateFormat df = new SimpleDateFormat("HH:mm:ss");
+        DateFormat df = new SimpleDateFormat("HH:mm");
         dateFormat = df.format(startingDate);
         return dateFormat;
     }

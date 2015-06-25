@@ -26,7 +26,7 @@ public class TimeCount implements Runnable {
                 employee.incDailyTotal(0.01);
                 employee.incWeeklyTotal(0.01);
                 employee.incMonthlyTotal(0.01);
-                Thread.sleep(1000); // Pause of 1 Second
+                Thread.sleep(36000); // Pause of 1 Second
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }catch(Exception e){
