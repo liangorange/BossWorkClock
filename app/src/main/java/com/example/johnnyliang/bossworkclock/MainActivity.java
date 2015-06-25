@@ -288,9 +288,9 @@ public class MainActivity extends ActionBarActivity {
             textView.setTextColor(0xffff1410);
             textView.setText(status);
 
-            todayHour.setText("Today:       " + String.format("%.2f", employee.getTotalHour()));
-            weekHour.setText("This Week:   " + String.format("%.2f", employee.getTotalHour()));
-            monthHour.setText("This Month:  " + String.format("%.2f", employee.getTotalHour()));
+          //  todayHour.setText("Today:       " + String.format("%.2f", employee.getTotalHour()));
+           // weekHour.setText("This Week:   " + String.format("%.2f", employee.getTotalHour()));
+           // monthHour.setText("This Month:  " + String.format("%.2f", employee.getTotalHour()));
 
             employee.getClockOutLocation();
             employee.clockOut();
