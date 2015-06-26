@@ -95,9 +95,10 @@ public class MainActivity extends ActionBarActivity {
         theName = setting.getString("Name" , "");
         name.setText(theName);
         employee.setName(theName);
-        //int nameCount = 0;
-       // do {
-        if(theName.equals("")) {
+       // int nameCount = 0;
+        //do {
+       if(theName.equals("")) {
+        //    nameCount++;
             System.out.println("here");
             setName();
             System.out.println("here2");
@@ -200,6 +201,9 @@ public class MainActivity extends ActionBarActivity {
         //Makes sure a name is entered
         //final boolean goodName = false;
         //do {
+        //final boolean goodName = false;
+        int i = 0;
+       // do {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
             alert.setTitle("Employee Name");
@@ -208,37 +212,43 @@ public class MainActivity extends ActionBarActivity {
             // Set an EditText view to get user input
             final EditText input = new EditText(this);
             alert.setView(input);
-            System.out.println("here5");
 
-            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    Log.i(TAG2, "Start processing OK button");
-                    theName = input.getText().toString();
-                    if (theName.equals("")) {
-                        Log.i(TAG2,"name = \"\" ");
-                        Toast.makeText(MainActivity.this, "Must enter a name", Toast.LENGTH_SHORT).show();
-                    } else {
-                        //goodName = true;
-                        name.setText(theName);
-                        Log.i(TAG2," name = " +  theName);
-                        SharedPreferences.Editor editor = setting.edit();
-                        editor.putString("Name", theName);
+                i++;
+           // if (alert.isShowing())
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Log.i(TAG2, "Start processing OK button");
 
-                        // Commit edit
-                        editor.apply();
-                        employee.setName(theName);
+                        theName = input.getText().toString();
+                        if (theName.equals("")) {
+                            Log.i(TAG2, "name = \"\" ");
+                            name.setText("I don't have a name");
+                            Toast.makeText(MainActivity.this, "Must enter a name", Toast.LENGTH_SHORT).show();
+                        } else {
+                            goodName = true;
+                            name.setText(theName);
+                            Log.i(TAG2, " name = " + theName);
+                        }
+                            SharedPreferences.Editor editor = setting.edit();
+                            editor.putString("Name", theName);
+
+                            // Commit edit
+                            editor.apply();
+                            employee.setName(theName);
+
+                        Log.i(TAG2, "End of Ok button");
                     }
-                    Log.i(TAG2, "End of Ok button");
-                }
 
-            });
-       // }while(theName.equals(""));
+                });
+
+
             // alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             //  public void onClick(DialogInterface dialog, int whichButton) {
             // Canceled.
             //  }
             //});
             alert.show();
+       // }while (!theName.equals(""));
         System.out.println("here9");
         //}while(theName.equals(""));
     }
@@ -293,7 +303,6 @@ public class MainActivity extends ActionBarActivity {
             monthHour.setText("This Month:  " + String.format("%.2f", employee.getMonthlyTotal()));
 
             employee.getClockOutLocation();
-            employee.clockOut();
         }
     }
 
@@ -511,7 +520,6 @@ public class MainActivity extends ActionBarActivity {
             loadThread.start();
 
             employee.getClockInLocation();
-            employee.clockIn();
         }
     }
 
@@ -532,7 +540,6 @@ public class MainActivity extends ActionBarActivity {
 
 
             employee.getClockOutLocation();
-            employee.clockOut();
         }
     }
 }
