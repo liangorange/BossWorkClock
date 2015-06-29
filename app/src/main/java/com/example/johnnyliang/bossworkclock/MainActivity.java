@@ -27,13 +27,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-//9 3/4 hrs
+//11 3/4 hrs
 public class MainActivity extends ActionBarActivity {
     public final static String TAG2 = "MAIN_ACTIVITY";
     private Employee employee;
     private String dateFormat;
     private Date startingDate;
     private TimeCount count = new TimeCount();
+    private boolean twelveHourFormat = false;
 
     // For the name
     private TextView name;
@@ -122,7 +123,8 @@ public class MainActivity extends ActionBarActivity {
         //gets day that we started keeping track of dayHours
         todaysDate = setting.getString("TodaysDate", "");
 
-        //is it still the same day that we started keeping track of dayHours
+       // System.out.println("date formate: " + dateFormat + " todays date"  + todaysDate );
+       // is it still the same day that we started keeping track of dayHours
         if (dateFormat.equals(todaysDate))//if same day keep adding on to dayHours
             dayHours = setting.getFloat("DayHours", 0);
         else//otherwise it is a new day so start back at 0
@@ -180,8 +182,14 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         switch (item.getItemId()) {
-            case R.id.TwentyFourHour:
-                //set bool 24HourTime to false
+            case R.id.TwelveHour:
+                if(item.isChecked()){
+                    item.setChecked(false);
+                    twelveHourFormat = false;
+                }else{
+                    item.setChecked(true);
+                    twelveHourFormat = true;
+                }
                 return true;
             case R.id.trackServices:
                 //trackService()
@@ -436,10 +444,10 @@ public class MainActivity extends ActionBarActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 try {
-                    System.out.println("For testing");
                     TextView statusView = (TextView) findViewById(R.id.status);
                     Date dt = new Date();
                     long diff = dt.getTime() - startingDate.getTime();
+
                     long seconds = diff / 1000 % 60;
                     long minutes = diff / (60 * 1000) % 60;
                     long hours = diff / (60 * 60 * 1000) % 60;
@@ -452,7 +460,7 @@ public class MainActivity extends ActionBarActivity {
 
                     String status = "                Punched In";
                     String s = "Work start time: " + getTimeString();
-                    String s2 = "Time worked today: " + curTime;
+                    String s2 = "Time since punch in: " + curTime;
 
                     String s3 = status + "\n" + s + "\n" + s2;
                     statusView.setTextColor(0xff18ff1a);
@@ -474,6 +482,7 @@ public class MainActivity extends ActionBarActivity {
                     DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
                     dateFormat = df.format(dayDate);
                     editor.putString("TodaysDate", dateFormat);
+                   //System.out.println("date formate22222: " + dateFormat );
 
                     //keeps track of which week it is
                     Calendar c = Calendar.getInstance();
@@ -498,8 +507,13 @@ public class MainActivity extends ActionBarActivity {
      * Johnny
      */
     public String getTimeString() {
-        DateFormat df = new SimpleDateFormat("HH:mm");
-        dateFormat = df.format(startingDate);
+        if (twelveHourFormat) {
+            DateFormat df = new SimpleDateFormat("K:mm");
+            dateFormat = df.format(startingDate);
+        } else {
+            DateFormat df = new SimpleDateFormat("HH:mm");
+            dateFormat = df.format(startingDate);
+        }
         return dateFormat;
     }
 
