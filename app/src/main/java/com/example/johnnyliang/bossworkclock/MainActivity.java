@@ -27,7 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-//11 3/4 hrs
+//1 hrs
 public class MainActivity extends ActionBarActivity {
     public final static String TAG2 = "MAIN_ACTIVITY";
     private Employee employee;
@@ -533,6 +533,7 @@ public class MainActivity extends ActionBarActivity {
             Thread loadThread = new Thread(count);
             loadThread.start();
 
+           // employee.setClockInLocation();
             employee.getClockInLocation();
         }
     }

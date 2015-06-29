@@ -2,12 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
-    <item android:id="@+id/TwentyFourHour"
-        android:checkable="true"
-        android:checked="true"
-        android:title="24 hour display"
+    <item android:id="@+id/TwelveHour"
+        android:title="12 hour display"
         android:orderInCategory="1"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="true"
+        android:checkable="true"/>
 
     <item android:id="@+id/trackServices"
         android:title="Track Services"

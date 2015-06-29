@@ -26,12 +26,12 @@ public class Employee {
     public float getWeeklyTotal()        { return weeklyTotal;      }
     public float getMonthlyTotal()       { return monthlyTotal;     }
 
-    public boolean getPunchedIn()        { return punchedIn;        }
+    public boolean getPunchedIn()         { return punchedIn;        }
     public String getClockInTime()        { return clockInTime;      }
     public String getClockOutTime()       { return clockOutTime;     }
     public GPSCoord getClockInLocation()  { return clockInLocation;  }
     public GPSCoord getClockOutLocation() { return clockOutLocation; }
-    public Date getEditInDate()           { return  editInDate;       }
+    public Date getEditInDate()           { return  editInDate;      }
 
 
     public void setName(String name)        { this.name = name;     }
@@ -71,21 +71,7 @@ public class Employee {
         return name;
     }
 
-    public void clockIn() {
 
-        //keep track of time
-      //  DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-       // Date date = new Date();
-        //setClockInTime(dateFormat.format(date)); //15:59
-        // System.out.println(dateFormat.format(date));
-
-    }
-
-    public void clockOut() {
-      //  DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-       // Date date = new Date();
-        //setClockOutTime(dateFormat.format(date));//15:59
-    }
 
     public void editClockIn() {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
