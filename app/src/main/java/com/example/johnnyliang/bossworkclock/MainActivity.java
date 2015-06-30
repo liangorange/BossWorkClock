@@ -277,6 +277,7 @@ public class MainActivity extends ActionBarActivity {
             showDialog(DATE_DIALOG_ID_IN);
 
             //below are to be fixed
+            System.out.println(inYear + ':' + inMonth + ':' + inDay + ':' + inHour + ':' + inMinute + ':' + inSecond);
             startingDate = new Date(inYear, inMonth, inDay, inHour, inMinute, inSecond);
             employee.setEditInDate(startingDate);
             Thread loadThread = new Thread(count);
@@ -352,7 +353,6 @@ public class MainActivity extends ActionBarActivity {
                 return new TimePickerDialog(this, timePickerListenerOut,
                         outHour, outMinute, false);
         }
-
         return null;
     }
 
