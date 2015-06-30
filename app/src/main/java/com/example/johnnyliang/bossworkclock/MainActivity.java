@@ -533,8 +533,8 @@ public class MainActivity extends ActionBarActivity {
             Thread loadThread = new Thread(count);
             loadThread.start();
 
-           // employee.setClockInLocation();
-            employee.getClockInLocation();
+            GPSCoord inLocation = new GPSCoord();
+            employee.setClockInLocation(inLocation);
         }
     }
 
@@ -553,8 +553,8 @@ public class MainActivity extends ActionBarActivity {
             textView.setTextColor(0xffff1410);
             textView.setText(status);
 
-
-            employee.getClockOutLocation();
+            GPSCoord outLocation = new GPSCoord();
+            employee.setClockInLocation(outLocation);
         }
     }
 }
