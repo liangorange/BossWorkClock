@@ -22,6 +22,7 @@ public class Employee {
     private Date editInDate;
 
     //Getters and setters
+
     public float getDailyTotal()         { return dailyTotal;       }
     public float getWeeklyTotal()        { return weeklyTotal;      }
     public float getMonthlyTotal()       { return monthlyTotal;     }
@@ -37,8 +38,22 @@ public class Employee {
     public void setName(String name)        { this.name = name;     }
 
 
+    /**
+     * This function will add the daily total hours by the hour passed as parameter
+     * @param hour
+     */
     public void incDailyTotal(double hour)   { dailyTotal += hour;   }
+
+    /**
+     * This function will add the weekly total hours by the hour passed as parameter
+     * @param hour
+     */
     public void incWeeklyTotal(double hour)  { weeklyTotal += hour;  }
+
+    /**
+     * This function will add the monthly total hours by the hour passed as parameter
+     * @param hour
+     */
     public void incMonthlyTotal(double hour) { monthlyTotal += hour; }
 
     public void setDailyTotal(double hour)   { dailyTotal += hour;   }
@@ -61,22 +76,12 @@ public class Employee {
         this.clockOutLocation.longitude = clockOutLocation.longitude;
     }
 
-
-
     public String getName() {
 
         //setContentView(R.layout.activity_main);
         //EditText theName = (EditText) findViewById(R.id.name);
       //  String name = theName.getText().toString();
         return name;
-    }
-
-
-
-    public void editClockIn() {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        Date date = getEditInDate();
-        setClockInTime(dateFormat.format(date));
     }
 
     public void editClockOut() {

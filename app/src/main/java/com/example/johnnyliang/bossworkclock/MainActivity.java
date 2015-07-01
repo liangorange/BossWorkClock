@@ -385,7 +385,7 @@ public class MainActivity extends ActionBarActivity {
             loadThread.start();
 
             employee.getClockInLocation();
-            employee.editClockIn();
+            // employee.editClockIn();
         }
     };
 
@@ -449,6 +449,9 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * Johnny
+     *
+     * This function will display the total hour format on the text view
+     * It will update every 36 seconds
      */
     public void displayStartTotal() {
         startHandler.sendEmptyMessage(0);
@@ -456,6 +459,10 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * Johnny
+     *
+     * do work funtion will get the current time, and calculate the time difference
+     * between current time and the time when user clocked in.
+     * Format the time difference, and convert to hours
      */
     public void doWork() {
         Log.i(TAG2, "doWork started");
@@ -523,6 +530,7 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * Johnny
+     * This function help to format the time correctly for display.
      */
     public String getTimeString() {
         if (twelveHourFormat) {
