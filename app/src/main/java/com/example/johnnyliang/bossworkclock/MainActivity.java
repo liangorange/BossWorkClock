@@ -27,7 +27,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-//1 hrs
+//6 1/2 hrs
+
+/**
+ * Main Activity where everything is tied together
+ *
+ * An employee object is created and its variables are set from various methods.
+ * This activity is used to tie all other classes in the app together.
+ */
 public class MainActivity extends ActionBarActivity {
     public final static String TAG2 = "MAIN_ACTIVITY";
     private Employee employee;
@@ -530,7 +537,10 @@ public class MainActivity extends ActionBarActivity {
 
 
     /**
-     * punchIn
+     * Method called when Punch In button is pressed.
+     *
+     * This method is connected to the Punch In button. It sets the employees punchedIn status
+     * to true and starts the loadThread which calls the TimeCount run function.
      *
      * @param view
      */
@@ -550,7 +560,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * puchOut
+     * Method called when Punch Out button is pressed.
+     *
+     * This method is connected to the Punch Out button. It sets the employees punchedIn status
+     * to false and sets the textviews for punched out status.
      *
      * @param view
      */
