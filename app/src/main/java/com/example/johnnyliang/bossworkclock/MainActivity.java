@@ -264,7 +264,7 @@ public class MainActivity extends ActionBarActivity {
 
 
     /**
-     * Kwok
+     * Kwok - This function response to the Edit Punch In button, and call the showDialog() functions
      * @param view
      */
     public void editPunchIn(View view) {
@@ -275,21 +275,11 @@ public class MainActivity extends ActionBarActivity {
             setCurrentDate();
             showDialog(TIME_DIALOG_ID_IN);
             showDialog(DATE_DIALOG_ID_IN);
-
-            //below are to be fixed
-            /*System.out.println(inYear + ':' + inMonth + ':' + inDay + ':' + inHour + ':' + inMinute + ':' + inSecond);
-            startingDate = new Date(inYear, inMonth, inDay, inHour, inMinute, inSecond);
-            employee.setEditInDate(startingDate);
-            Thread loadThread = new Thread(count);
-            loadThread.start();
-
-            employee.getClockInLocation();
-            employee.editClockIn();*/
         }
     }
 
     /**
-     * Kwok
+     * Kwok - editPunchOut() is still under construction, right now it acts like punchOut()
      * @param view
      */
     public void editPunchOut(View view) {
@@ -310,6 +300,9 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * setCurrentTime() should reset the time variables for the timePicker dialogs
+     */
     public void setCurrentTime(){
         Calendar c = Calendar.getInstance();
         inHour = c.get(Calendar.HOUR_OF_DAY);
@@ -320,6 +313,9 @@ public class MainActivity extends ActionBarActivity {
         outSecond = c.get(Calendar.SECOND);
     }
 
+    /**
+     * setCurrentDate() should reset the time variables for datePicker dialogs
+     */
     public void setCurrentDate() {
 
         Calendar c = Calendar.getInstance();
@@ -331,6 +327,11 @@ public class MainActivity extends ActionBarActivity {
         outDay = c.get(Calendar.DAY_OF_MONTH);
     }
 
+    /**
+     * This function takes the dialog id (999-996) and switch between dialogs to be showed and executed.
+     * @param id
+     * @return void
+     */
     @Override
     protected Dialog onCreateDialog(int id) {
         // set picker as current date and time
@@ -357,6 +358,10 @@ public class MainActivity extends ActionBarActivity {
         return null;
     }
 
+    /**
+     * This function takes the values the user picks from the dialog, and assign them to local time variables.
+     * Specifically this is the time part for Punch In. It will then execute the punch in process.
+     */
     private TimePickerDialog.OnTimeSetListener timePickerListenerIn
             = new TimePickerDialog.OnTimeSetListener() {
         public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
@@ -382,6 +387,10 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
+    /**
+     * This function takes the values the user picks from the dialog, and assign them to local time variables.
+     * Specifically this is the time part for Punch Out. Process will be added soon.
+     */
     private TimePickerDialog.OnTimeSetListener timePickerListenerOut
             = new TimePickerDialog.OnTimeSetListener() {
         public void onTimeSet(TimePicker view, int selectedHour,
@@ -394,6 +403,11 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
+    /**
+     * This function takes the values the user picks from the dialog, and assign them to local time variables.
+     * Specifically this is the date part for Punch In. The Date part will be selected before the time part,
+     * so the main processes can be found in the later time part.
+     */
     private DatePickerDialog.OnDateSetListener datePickerListenerIn
             = new DatePickerDialog.OnDateSetListener() {
         // when dialog box is closed, below method will be called.
@@ -408,6 +422,11 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
+    /**
+     * This function takes the values the user picks from the dialog, and assign them to local time variables.
+     * Specifically this is the date part for Punch Out. The Date part will be selected before the time part,
+     * so the main processes can be found in the later time part.
+     */
     private DatePickerDialog.OnDateSetListener datePickerListenerOut
             = new DatePickerDialog.OnDateSetListener() {
         // when dialog box is closed, below method will be called.
@@ -422,6 +441,12 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
+    /**
+     * pad() convert integers like date, minutes, or seconds which is below 10 to 2 digit,
+     * like 2 -> 02
+     * @param c
+     * @return (2 digit number in String)
+     */
     private static String pad(int c) {
         if (c >= 10)
             return String.valueOf(c);
