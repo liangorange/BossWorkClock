@@ -12,7 +12,7 @@ public class TimeCount implements Runnable {
 
     /**
      * This function assign the MainActivity class to the MainActivity class reference
-     * @param myActivity
+     * @param myActivity the class object from MainActivity
      */
     public void setActivity(MainActivity myActivity) {
         activity = myActivity;
@@ -20,7 +20,7 @@ public class TimeCount implements Runnable {
 
     /**
      * This function assign the Employee class to the Employee class reference
-     * @param myEmployee
+     * @param myEmployee the class object from Employee
      */
     public void setEmployeeActivity(Employee myEmployee) {
         employee = myEmployee;
