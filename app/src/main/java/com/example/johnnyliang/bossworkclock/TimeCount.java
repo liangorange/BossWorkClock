@@ -10,14 +10,26 @@ public class TimeCount implements Runnable {
     Employee employee;
     public final static String TAG = "TimeCount";
 
+    /**
+     * This function assign the MainActivity class to the MainActivity class reference
+     * @param myActivity
+     */
     public void setActivity(MainActivity myActivity) {
         activity = myActivity;
     }
 
+    /**
+     * This function assign the Employee class to the Employee class reference
+     * @param myEmployee
+     */
     public void setEmployeeActivity(Employee myEmployee) {
         employee = myEmployee;
     }
 
+    /**
+     * This function will run while the background thread is running
+     * It increases the dailyTotal, weeklyTotal, monthlyTotal by 0.01 every 36 seconds
+     */
     @Override
     public void run() {
         while(!Thread.currentThread().isInterrupted() && employee.getPunchedIn()){
