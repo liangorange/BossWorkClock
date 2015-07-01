@@ -277,14 +277,14 @@ public class MainActivity extends ActionBarActivity {
             showDialog(DATE_DIALOG_ID_IN);
 
             //below are to be fixed
-            System.out.println(inYear + ':' + inMonth + ':' + inDay + ':' + inHour + ':' + inMinute + ':' + inSecond);
+            /*System.out.println(inYear + ':' + inMonth + ':' + inDay + ':' + inHour + ':' + inMinute + ':' + inSecond);
             startingDate = new Date(inYear, inMonth, inDay, inHour, inMinute, inSecond);
             employee.setEditInDate(startingDate);
             Thread loadThread = new Thread(count);
             loadThread.start();
 
             employee.getClockInLocation();
-            employee.editClockIn();
+            employee.editClockIn();*/
         }
     }
 
@@ -296,27 +296,22 @@ public class MainActivity extends ActionBarActivity {
         if(employee.getPunchedIn()) {
             employee.setPunchedIn(false);
             Toast.makeText(MainActivity.this, "Editing a Punched Out", Toast.LENGTH_SHORT).show();
-            setCurrentTime();
-            setCurrentDate();
+
             showDialog(TIME_DIALOG_ID_OUT);
             showDialog(DATE_DIALOG_ID_OUT);
 
-            //below are to be fixed
             String status = "                Punched Out";
             TextView textView = (TextView) findViewById(R.id.status);
             textView.setTextColor(0xffff1410);
             textView.setText(status);
 
-            todayHour.setText("Today:       " + String.format("%.2f", employee.getDailyTotal()));
-            weekHour.setText("This Week:   " + String.format("%.2f", employee.getWeeklyTotal()));
-            monthHour.setText("This Month:  " + String.format("%.2f", employee.getMonthlyTotal()));
-
-            employee.getClockOutLocation();
+            //GPSCoord outLocation = new GPSCoord();
+            //employee.setClockInLocation(outLocation);
         }
     }
 
     public void setCurrentTime(){
-        final Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         inHour = c.get(Calendar.HOUR_OF_DAY);
         outHour = c.get(Calendar.HOUR_OF_DAY);
         inMinute = c.get(Calendar.MINUTE);
@@ -324,9 +319,10 @@ public class MainActivity extends ActionBarActivity {
         inSecond = c.get(Calendar.SECOND);
         outSecond = c.get(Calendar.SECOND);
     }
+
     public void setCurrentDate() {
 
-        final Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         inYear = c.get(Calendar.YEAR);
         inMonth = c.get(Calendar.MONTH);
         inDay = c.get(Calendar.DAY_OF_MONTH);
@@ -337,21 +333,26 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected Dialog onCreateDialog(int id) {
+        // set picker as current date and time
+        setCurrentDate();
+        setCurrentTime();
         switch (id) {
-            case DATE_DIALOG_ID_IN:
-                // set date picker as current date
+            case DATE_DIALOG_ID_IN: {
                 return new DatePickerDialog(this, datePickerListenerIn,
-                        inYear, inMonth,inDay);
-            case TIME_DIALOG_ID_IN:
+                        inYear, inMonth, inDay);
+            }
+            case TIME_DIALOG_ID_IN: {
                 return new TimePickerDialog(this, timePickerListenerIn,
                         inHour, inMinute, false);
-            case DATE_DIALOG_ID_OUT:
-                // set date picker as current date
+            }
+            case DATE_DIALOG_ID_OUT: {
                 return new DatePickerDialog(this, datePickerListenerOut,
-                        outYear, outMonth,outDay);
-            case TIME_DIALOG_ID_OUT:
+                        outYear, outMonth, outDay);
+            }
+            case TIME_DIALOG_ID_OUT: {
                 return new TimePickerDialog(this, timePickerListenerOut,
                         outHour, outMinute, false);
+            }
         }
         return null;
     }
@@ -368,6 +369,16 @@ public class MainActivity extends ActionBarActivity {
 
             // set current time into textview
             inTime = (pad(inHour)) + (":") + (pad(inMinute)) + (":") + (pad(inSecond));
+
+            //below are to be fixed
+            System.out.println(inYear + ':' + inMonth + ':' + inDay + ':' + inHour + ':' + inMinute + ':' + inSecond);
+            startingDate = new Date(inYear, inMonth, inDay, inHour, inMinute, inSecond);
+            employee.setEditInDate(startingDate);
+            Thread loadThread = new Thread(count);
+            loadThread.start();
+
+            employee.getClockInLocation();
+            employee.editClockIn();
         }
     };
 
@@ -533,8 +544,8 @@ public class MainActivity extends ActionBarActivity {
             Thread loadThread = new Thread(count);
             loadThread.start();
 
-            GPSCoord inLocation = new GPSCoord();
-            employee.setClockInLocation(inLocation);
+            //GPSCoord inLocation = new GPSCoord();
+            //employee.setClockInLocation(inLocation);
         }
     }
 
@@ -553,8 +564,8 @@ public class MainActivity extends ActionBarActivity {
             textView.setTextColor(0xffff1410);
             textView.setText(status);
 
-            GPSCoord outLocation = new GPSCoord();
-            employee.setClockInLocation(outLocation);
+            //GPSCoord outLocation = new GPSCoord();
+            //employee.setClockInLocation(outLocation);
         }
     }
 }
