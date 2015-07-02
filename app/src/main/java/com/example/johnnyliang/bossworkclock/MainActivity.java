@@ -27,7 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-//6 1/2 hrs
+//7 1/2 hrs
 
 /**
  * Main Activity where everything is tied together
@@ -130,38 +130,51 @@ public class MainActivity extends ActionBarActivity {
         //gets day that we started keeping track of dayHours
         todaysDate = setting.getString("TodaysDate", "");
 
-       // System.out.println("date formate: " + dateFormat + " todays date"  + todaysDate );
-       // is it still the same day that we started keeping track of dayHours
+       // Is it still the same day that we started keeping track of with dayHours
         if (dateFormat.equals(todaysDate))//if same day keep adding on to dayHours
             dayHours = setting.getFloat("DayHours", 0);
         else//otherwise it is a new day so start back at 0
             dayHours = 0;
 
-        //gets current week
+        // Gets current week
         Calendar c = Calendar.getInstance();
         c.setTime(dayDate);
         int week = c.get(Calendar.WEEK_OF_YEAR);
         todaysWeek = setting.getInt("TodaysWeek", 0);
 
+        // Is it still the same week
         if (week == todaysWeek)
             weekHours = setting.getFloat("WeekHours", 0);
         else
             weekHours = 0;
 
-        //gets current month
+        // Gets current month
         int month = c.get(Calendar.MONTH);
         todaysMonth = setting.getInt("TodaysMonth" , 0);
 
+        //Is it still the same month
         if(month == todaysMonth)
             monthHours = setting.getFloat("MonthHours", 0);
         else
             monthHours = 0;
 
+        // Is employee still punched in
+        //boolean pIn =
+        employee.setPunchedIn(setting.getBoolean("PunchedIn", false));
+
+        // If employee is still clocked in go to clock in screen
+        if (employee.getPunchedIn() == true) {
+          //  dateFormat = df.format(employee.getClockInTime());
+            //String inTime = setting.getString("PunchInTime", "");
+            Log.v(TAG2, "clock in time here:  " + employee.getClockInTime());
+            //I am doing stuff on this now.....tonight        ;
+        }
+
         employee.setDailyTotal(dayHours);
         employee.setWeeklyTotal(weekHours);
         employee.setMonthlyTotal(monthHours);
 
-        //I don't know why the Today string needs more spaces to align correctly
+        //I don't know why the Today string needs more spaces to align correctly...
         todayHour.setText("Today:         " + String.format("%.2f", employee.getDailyTotal()));
         weekHour.setText ("This Week:   " + String.format("%.2f", employee.getWeeklyTotal()));
         monthHour.setText("This Month:  " + String.format("%.2f", employee.getMonthlyTotal()));
@@ -179,8 +192,11 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * This is where we can add settings
+     *
+     * Any setting that we want to add on the settings menu are made here.
+     *
      * @param item
-     * @return
+     * @return boolean
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -207,7 +223,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * setName
+     * Sets the name
+     *
      * This method gets and sets the employees name the first time the
      * app is used.
      */
@@ -485,7 +502,7 @@ public class MainActivity extends ActionBarActivity {
     /**
      * Johnny
      *
-     * do work funtion will get the current time, and calculate the time difference
+     * do work function will get the current time, and calculate the time difference
      * between current time and the time when user clocked in.
      * Format the time difference, and convert to hours
      */
@@ -496,20 +513,22 @@ public class MainActivity extends ActionBarActivity {
                 try {
                     TextView statusView = (TextView) findViewById(R.id.status);
                     Date dt = new Date();
-                    long diff = dt.getTime() - startingDate.getTime();
+                    Date inDate = new Date();
+                    inDate = employee.getClockInTime();
+                    long diff = dt.getTime() - inDate.getTime();//Time since punch in// startingDate.getTime();
 
                     long seconds = diff / 1000 % 60;
                     long minutes = diff / (60 * 1000) % 60;
                     long hours = diff / (60 * 60 * 1000) % 60;
 
-                   // String secondFormat = String.format("%02d", seconds);
+                    String secondFormat = String.format("%02d", seconds);
                     String minuteFormat = String.format("%02d", minutes);
                     String hourFormat = String.format("%02d", hours);
 
                     String curTime = hourFormat + ":" + minuteFormat;// + ":" + secondFormat;
 
                     String status = "                Punched In";
-                    String s = "Work start time: " + getTimeString();
+                    String s = "Work start time: " + getTimeString();// employee.getClockInTime();
                     String s2 = "Time since punch in: " + curTime;
 
                     String s3 = status + "\n" + s + "\n" + s2;
@@ -526,6 +545,7 @@ public class MainActivity extends ActionBarActivity {
                     editor.putFloat("DayHours", employee.getDailyTotal());
                     editor.putFloat("WeekHours", employee.getWeeklyTotal());
                     editor.putFloat("MonthHours", employee.getMonthlyTotal());
+                    editor.putBoolean("PunchedIn", employee.getPunchedIn());
 
                     //keeps track of which day it is
                     Date dayDate = new Date();
@@ -543,6 +563,10 @@ public class MainActivity extends ActionBarActivity {
                     //keeps track of which month it is
                     int month = c.get(Calendar.MONTH);
                     editor.putInt("TodaysMonth", month);
+
+                    //keeps track of clockInTime
+                    dateFormat = df.format(employee.getClockInTime());
+                    editor.putString("PunchInTime" , "");
 
                     editor.apply();
 
@@ -583,6 +607,8 @@ public class MainActivity extends ActionBarActivity {
             employee.setPunchedIn(true);
 
             startingDate = new Date();
+            String startTime = getTimeString();
+            employee.setClockInTime(startingDate);
 
             Thread loadThread = new Thread(count);
             loadThread.start();
@@ -609,6 +635,10 @@ public class MainActivity extends ActionBarActivity {
             TextView textView = (TextView) findViewById(R.id.status);
             textView.setTextColor(0xffff1410);
             textView.setText(status);
+
+            SharedPreferences.Editor editor = setting.edit();
+            editor.putBoolean("PunchedIn", employee.getPunchedIn());
+            editor.apply();
 
             //GPSCoord outLocation = new GPSCoord();
             //employee.setClockInLocation(outLocation);
