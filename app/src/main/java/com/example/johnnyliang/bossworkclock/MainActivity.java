@@ -22,9 +22,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 //7 1/2 hrs
@@ -90,6 +92,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("0it is here: 1111111111111111111111111111");
         Log.i(TAG2, "Starting onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -157,15 +160,28 @@ public class MainActivity extends ActionBarActivity {
             monthHours = setting.getFloat("MonthHours", 0);
         else
             monthHours = 0;
-
+        System.out.println("0it is here:  adfdfdfdfdfdfsad" );
         // Is employee still punched in
         //boolean pIn =
         employee.setPunchedIn(setting.getBoolean("PunchedIn", false));
-
+System.out.println("0it is here:   " + employee.getPunchedIn());
         // If employee is still clocked in go to clock in screen
         if (employee.getPunchedIn() == true) {
-          //  dateFormat = df.format(employee.getClockInTime());
-            //String inTime = setting.getString("PunchInTime", "");
+            Date dt = new Date();
+            //dateFormat = dt.format(employee.getClockInTime());
+            String inTime = setting.getString("PunchInTime", "");
+           // String string = "January 2, 2010";
+           DateFormat format = new SimpleDateFormat("HH, MM", Locale.ENGLISH);//"MMMM d, yyyy", Locale.ENGLISH);
+            try {
+                Date date1 = format.parse(inTime);
+                employee.setClockInTime(date1);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            employee.setPunchedIn(false);
+            View v = null;
+            this.punchIn(v);
+            //System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
             Log.v(TAG2, "clock in time here:  " + employee.getClockInTime());
             //I am doing stuff on this now.....tonight        ;
         }
@@ -513,7 +529,7 @@ public class MainActivity extends ActionBarActivity {
                 try {
                     TextView statusView = (TextView) findViewById(R.id.status);
                     Date dt = new Date();
-                    Date inDate = new Date();
+                    Date inDate;// = new Date();
                     inDate = employee.getClockInTime();
                     long diff = dt.getTime() - inDate.getTime();//Time since punch in// startingDate.getTime();
 
@@ -528,12 +544,19 @@ public class MainActivity extends ActionBarActivity {
                     String curTime = hourFormat + ":" + minuteFormat;// + ":" + secondFormat;
 
                     String status = "                Punched In";
-                    String s = "Work start time: " + getTimeString();// employee.getClockInTime();
+                    String s = "Work start time: " + getTimeString();// employee.getClockInTime(); change to see actual time after app closed
                     String s2 = "Time since punch in: " + curTime;
 
                     String s3 = status + "\n" + s + "\n" + s2;
                     statusView.setTextColor(0xff18ff1a);
                     statusView.setText(s3);
+
+
+                    //if you close app it doesn't keep track of how long app was closed for
+                    //to fix this take employee.getClockInTime() and subtract it from current time
+                    // then set today hour to old value pluse this new one. or something close to this..
+                    //aslo update weekHours and monthHours
+                   //  employee.setDailyTotal();
 
                     //I don't know why the Today string needs more spaces to align correctly
                     todayHour.setText("Today:         " + String.format("%.2f", employee.getDailyTotal()));
@@ -549,8 +572,8 @@ public class MainActivity extends ActionBarActivity {
 
                     //keeps track of which day it is
                     Date dayDate = new Date();
-                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-                    dateFormat = df.format(dayDate);
+                    DateFormat dt2 = new SimpleDateFormat("MM/dd/yyyy");
+                    dateFormat = dt2.format(dayDate);
                     editor.putString("TodaysDate", dateFormat);
                    //System.out.println("date formate22222: " + dateFormat );
 
@@ -565,8 +588,7 @@ public class MainActivity extends ActionBarActivity {
                     editor.putInt("TodaysMonth", month);
 
                     //keeps track of clockInTime
-                    dateFormat = df.format(employee.getClockInTime());
-                    editor.putString("PunchInTime" , "");
+                    editor.putString("PunchInTime" , getTimeString());
 
                     editor.apply();
 
@@ -606,13 +628,14 @@ public class MainActivity extends ActionBarActivity {
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
 
+            // Gets current time
             startingDate = new Date();
-            String startTime = getTimeString();
+          //  String startTime = getTimeString();
             employee.setClockInTime(startingDate);
 
             Thread loadThread = new Thread(count);
             loadThread.start();
-
+            System.out.println("0it is here: 1222222222222222222222222222222222222n");
             //GPSCoord inLocation = new GPSCoord();
             //employee.setClockInLocation(inLocation);
         }
@@ -635,6 +658,11 @@ public class MainActivity extends ActionBarActivity {
             TextView textView = (TextView) findViewById(R.id.status);
             textView.setTextColor(0xffff1410);
             textView.setText(status);
+
+            // Gets current time
+            Date endingDate = new Date();
+            //String endTime = getTimeString();
+            employee.setClockOutTime(endingDate);
 
             SharedPreferences.Editor editor = setting.edit();
             editor.putBoolean("PunchedIn", employee.getPunchedIn());
