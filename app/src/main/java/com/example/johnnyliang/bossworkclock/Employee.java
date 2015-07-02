@@ -1,11 +1,14 @@
 package com.example.johnnyliang.bossworkclock;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 /**
+ * This class represents an employee.
+ *
+ * This is where we can store all the information about the employee. It is used together
+ * with the MainActivity to keep track of the employees work information.
+ *
  * Created by Gerald on 6/5/2015.
  */
 public class Employee {
