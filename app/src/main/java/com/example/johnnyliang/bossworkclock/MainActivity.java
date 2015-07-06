@@ -26,7 +26,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 
 //7 1/2 hrs
@@ -62,6 +61,7 @@ public class MainActivity extends ActionBarActivity {
     private float dayHours;
     private float weekHours;
     private float monthHours;
+    private boolean alreadyPunchedIn = false;
 
     //Jonathan's time/datepicker parts
     private String inTime;
@@ -92,7 +92,6 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("0it is here: 1111111111111111111111111111");
         Log.i(TAG2, "Starting onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -160,30 +159,29 @@ public class MainActivity extends ActionBarActivity {
             monthHours = setting.getFloat("MonthHours", 0);
         else
             monthHours = 0;
-        System.out.println("0it is here:  adfdfdfdfdfdfsad" );
+
         // Is employee still punched in
-        //boolean pIn =
         employee.setPunchedIn(setting.getBoolean("PunchedIn", false));
-System.out.println("0it is here:   " + employee.getPunchedIn());
+
         // If employee is still clocked in go to clock in screen
         if (employee.getPunchedIn() == true) {
-            Date dt = new Date();
-            //dateFormat = dt.format(employee.getClockInTime());
             String inTime = setting.getString("PunchInTime", "");
-           // String string = "January 2, 2010";
-           DateFormat format = new SimpleDateFormat("HH, MM", Locale.ENGLISH);//"MMMM d, yyyy", Locale.ENGLISH);
+           DateFormat format = new SimpleDateFormat("HH:mm");//"MMMM d, yyyy", Locale.ENGLISH)
             try {
-                Date date1 = format.parse(inTime);
+                Date date1 = format.parse(inTime);//I think this is right?
+                System.out.println("date1 =: " + date1);
                 employee.setClockInTime(date1);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            employee.setPunchedIn(false);
+            alreadyPunchedIn = true;
+            employee.setPunchedIn(false);//so that we can call punchIn method
+            //update day week and month hours......
+
             View v = null;
             this.punchIn(v);
             //System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
             Log.v(TAG2, "clock in time here:  " + employee.getClockInTime());
-            //I am doing stuff on this now.....tonight        ;
         }
 
         employee.setDailyTotal(dayHours);
@@ -527,12 +525,18 @@ System.out.println("0it is here:   " + employee.getPunchedIn());
         runOnUiThread(new Runnable() {
             public void run() {
                 try {
+                    //Toast.makeText(MainActivity.this, "in here", Toast.LENGTH_SHORT).show();
                     TextView statusView = (TextView) findViewById(R.id.status);
+                    //Toast.makeText(MainActivity.this, "in here2", Toast.LENGTH_SHORT).show();
                     Date dt = new Date();
-                    Date inDate;// = new Date();
+                    //Toast.makeText(MainActivity.this, "in here3", Toast.LENGTH_SHORT).show();
+                    Date inDate;
+                    //Toast.makeText(MainActivity.this, "in here4", Toast.LENGTH_SHORT).show();
                     inDate = employee.getClockInTime();
-                    long diff = dt.getTime() - inDate.getTime();//Time since punch in// startingDate.getTime();
 
+                    //Toast.makeText(MainActivity.this, "in here5", Toast.LENGTH_SHORT).show();
+                    long diff = dt.getTime() - inDate.getTime();//Time since punch in// startingDate.getTime();
+                    //Toast.makeText(MainActivity.this, "in here6", Toast.LENGTH_SHORT).show();
                     long seconds = diff / 1000 % 60;
                     long minutes = diff / (60 * 1000) % 60;
                     long hours = diff / (60 * 60 * 1000) % 60;
@@ -543,6 +547,7 @@ System.out.println("0it is here:   " + employee.getPunchedIn());
 
                     String curTime = hourFormat + ":" + minuteFormat;// + ":" + secondFormat;
 
+                  //  Toast.makeText(MainActivity.this, "in do work", Toast.LENGTH_SHORT).show();
                     String status = "                Punched In";
                     String s = "Work start time: " + getTimeString();// employee.getClockInTime(); change to see actual time after app closed
                     String s2 = "Time since punch in: " + curTime;
@@ -606,10 +611,10 @@ System.out.println("0it is here:   " + employee.getPunchedIn());
     public String getTimeString() {
         if (twelveHourFormat) {
             DateFormat df = new SimpleDateFormat("K:mm");
-            dateFormat = df.format(startingDate);
+            dateFormat = df.format(employee.getClockInTime());
         } else {
             DateFormat df = new SimpleDateFormat("HH:mm");
-            dateFormat = df.format(startingDate);
+            dateFormat = df.format(employee.getClockInTime());
         }
         return dateFormat;
     }
@@ -628,14 +633,15 @@ System.out.println("0it is here:   " + employee.getPunchedIn());
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
 
-            // Gets current time
-            startingDate = new Date();
-          //  String startTime = getTimeString();
-            employee.setClockInTime(startingDate);
-
+            // Gets current time if you weren't already clocked in before
+            if (!alreadyPunchedIn) {
+                startingDate = new Date();
+                employee.setClockInTime(startingDate);
+            }
+            Toast.makeText(MainActivity.this, "Punched in", Toast.LENGTH_SHORT).show();
             Thread loadThread = new Thread(count);
             loadThread.start();
-            System.out.println("0it is here: 1222222222222222222222222222222222222n");
+
             //GPSCoord inLocation = new GPSCoord();
             //employee.setClockInLocation(inLocation);
         }
@@ -653,6 +659,7 @@ System.out.println("0it is here:   " + employee.getPunchedIn());
         // Can't punch out if you already are punched out
         if(employee.getPunchedIn()) {
             employee.setPunchedIn(false);
+            alreadyPunchedIn = false;
 
             String status = "                Punched Out";
             TextView textView = (TextView) findViewById(R.id.status);
