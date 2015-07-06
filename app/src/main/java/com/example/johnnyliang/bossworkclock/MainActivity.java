@@ -414,7 +414,7 @@ public class MainActivity extends ActionBarActivity {
             inTime = (pad(inHour)) + (":") + (pad(inMinute)) + (":") + (pad(inSecond));
 
             //below are to be fixed
-            System.out.println(inYear + ':' + inMonth + ':' + inDay + ':' + inHour + ':' + inMinute + ':' + inSecond);
+            System.out.println(pad(inYear) + ':' + pad(inMonth) + ':' + pad(inDay) + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
             startingDate = new Date(inYear, inMonth, inDay, inHour, inMinute, inSecond);
             employee.setEditInDate(startingDate);
             Thread loadThread = new Thread(count);
