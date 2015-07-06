@@ -27,6 +27,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.parse.GetCallback;
+import com.parse.Parse;
+// import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
 
 //7 1/2 hrs
 
@@ -52,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
     public static final String fileName = "nameFile";
 
     // For time table
+    private int countNumber;                    // For counting Clock in time
     private TextView todayHour;
     private TextView weekHour;
     private TextView monthHour;
@@ -62,6 +70,11 @@ public class MainActivity extends ActionBarActivity {
     private float weekHours;
     private float monthHours;
     private boolean alreadyPunchedIn = false;
+    public String totalHourFormat;
+    private int dateTest;
+    private ParseObject timeTrack;              // For Parse object to store data online
+    private String hourFormat;
+    private double totalHour;
 
     //Jonathan's time/datepicker parts
     private String inTime;
@@ -95,6 +108,15 @@ public class MainActivity extends ActionBarActivity {
         Log.i(TAG2, "Starting onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dateTest = 0;
+
+
+        // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
+
+        Parse.initialize(this, "ovwOZZiEF5hVNnxP2W9UpZtcsPPm4rZJdmelkF3q", "LqEZAeaK4sVkTHOymW7MPKaxG2P3zLxkpqgFVGP4");
+
 
         //use the employee class
         employee = new Employee();
@@ -132,11 +154,17 @@ public class MainActivity extends ActionBarActivity {
         //gets day that we started keeping track of dayHours
         todaysDate = setting.getString("TodaysDate", "");
 
-       // Is it still the same day that we started keeping track of with dayHours
-        if (dateFormat.equals(todaysDate))//if same day keep adding on to dayHours
+        // Is it still the same day that we started keeping track of with dayHours
+        //if same day keep adding on to dayHours
+        if (dateFormat.equals(todaysDate)) {
             dayHours = setting.getFloat("DayHours", 0);
-        else//otherwise it is a new day so start back at 0
+            countNumber = setting.getInt("Count", 0);
+        }
+        //otherwise it is a new day so start back at 0
+        else {
             dayHours = 0;
+            countNumber = 0;
+        }
 
         // Gets current week
         Calendar c = Calendar.getInstance();
@@ -299,6 +327,59 @@ public class MainActivity extends ActionBarActivity {
         //}while(theName.equals(""));
     }
 
+
+    public void addTime(double timeSecond) {
+        // totalHour += timeSecond;
+
+        dayHours += timeSecond;
+
+        //System.out.println("Total Hour double: " + totalHour);
+        totalHourFormat = String.format("%.2f", dayHours);
+        System.out.println("Total Hour: " + totalHourFormat);
+
+        int parseDateTest = Integer.parseInt(getDateString());
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("BossTimeTracker");
+        // ParseQuery<ParseObject> query = ParseQuery.getQuery(theName);
+        query.whereEqualTo("Date", parseDateTest);
+        // System.out.println("Today's Date: " + parseDateTest);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+
+            MainActivity activity;
+
+            @Override
+            public void done(ParseObject parseObject, com.parse.ParseException e) {
+                if (parseObject == null) {
+                    Log.d("score", "The getFirst request failed");
+                } else {
+                    String objectID = parseObject.getObjectId().toString();
+
+                    ParseQuery<ParseObject> inQuery = ParseQuery.getQuery("BossTimeTracker");
+                    // ParseQuery<ParseObject> inQuery = ParseQuery.getQuery(theName);
+
+                    inQuery.getInBackground(objectID, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject parseObject, com.parse.ParseException e) {
+                            if (e == null) {
+                                // parseObject.increment("TotalHour", 0.01);
+                                parseObject.put("TotalHour", totalHourFormat);
+                                parseObject.saveInBackground();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+    public String getDateString() {
+        DateFormat df = new SimpleDateFormat("dd");
+
+        dateFormat = df.format(startingDate);
+
+        return dateFormat;
+    }
 
 
     /**
@@ -632,6 +713,43 @@ public class MainActivity extends ActionBarActivity {
         // Can't punch in if you already are punched in
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
+
+
+            DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat dfMonth = new SimpleDateFormat("MM");
+            startingDate = new Date();
+
+            dateTest = Integer.parseInt(getDateString());
+
+            if (todaysDate == "" || todaysDate != df.format(startingDate)) {
+                timeTrack = new ParseObject("BossTimeTracker");
+            }
+
+            // Shared preference editor
+            SharedPreferences.Editor editor = setting.edit();
+
+            todaysDate = df.format(startingDate);
+            editor.putString("TodaysDate", todaysDate);
+
+            hourFormat = String.format("%.2f", totalHour);
+
+
+            if (countNumber == 0) {
+                timeTrack.put("Name", theName);
+                // timeTrack.put("Month", monthTest);
+                timeTrack.put("Date", dateTest);
+                // timeTrack.put("TotalHour", Double.parseDouble(hourFormat));
+                timeTrack.put("TotalHour", "0");
+                timeTrack.saveInBackground();
+                // countNumber++;
+            }
+
+
+            countNumber++;
+            editor.putInt("Count", countNumber);
+            editor.commit();
+
+
 
             // Gets current time if you weren't already clocked in before
             if (!alreadyPunchedIn) {
