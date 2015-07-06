@@ -21,18 +21,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.parse.GetCallback;
-import com.parse.Parse;
 // import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 
 //7 1/2 hrs
@@ -49,7 +49,10 @@ public class MainActivity extends ActionBarActivity {
     private String dateFormat;
     private Date startingDate;
     private TimeCount count = new TimeCount();
+
+    // For the options menu
     private boolean twelveHourFormat = false;
+    private String curProject;
 
     // For the name
     private TextView name;
@@ -257,7 +260,7 @@ public class MainActivity extends ActionBarActivity {
                 }
                 return true;
             case R.id.trackServices:
-                //trackService()
+                trackService();
                 return true;
             default:
                 return false;
@@ -327,6 +330,36 @@ public class MainActivity extends ActionBarActivity {
         //}while(theName.equals(""));
     }
 
+    /**
+     *  This method allow the user to track their services/projects.
+     *
+     *  When clicked an alert will pop up and propt the user to enter in the name of their current
+     *  project. This name will then be saved and displayed on the screen untill a new project is
+     *  assigned.
+     */
+    void trackService () {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Current Project");
+        alert.setMessage("Enter your current project");
+
+        final EditText input = new EditText(this);
+        alert.setView(input);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(MainActivity.this, "Project not saved", Toast.LENGTH_SHORT).show();
+                // Set curProject here and display it to the screen (probably above Status and below
+                // Punch in and Punch out buttons
+            }
+
+        });
+         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int whichButton) {
+         //Canceled.
+          }
+        });
+        alert.show();
+    }
 
     public void addTime(double timeSecond) {
         // totalHour += timeSecond;
@@ -755,7 +788,7 @@ public class MainActivity extends ActionBarActivity {
                 startingDate = new Date();
                 employee.setClockInTime(startingDate);
             }
-            Toast.makeText(MainActivity.this, "Punched in", Toast.LENGTH_SHORT).show();
+
             Thread loadThread = new Thread(count);
             loadThread.start();
 
