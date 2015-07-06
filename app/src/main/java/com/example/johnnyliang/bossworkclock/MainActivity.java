@@ -198,9 +198,10 @@ public class MainActivity extends ActionBarActivity {
         if (employee.getPunchedIn() == true) {
             String inTime = setting.getString("PunchInTime", "");
            DateFormat format = new SimpleDateFormat("HH:mm");//"MMMM d, yyyy", Locale.ENGLISH)
-            try {  
+            try {
                 Date date1 = format.parse(inTime);//I think this is right?
-                System.out.println("date1 =: " + date1);
+                System.out.println("date1 = " + date1);
+                System.out.println("employee clock in time= " + employee.getClockInTime());
                 employee.setClockInTime(date1);
             } catch (ParseException e) {
                 e.printStackTrace();
