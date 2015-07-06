@@ -3,6 +3,8 @@ package com.example.johnnyliang.bossworkclock;
 import android.util.Log;
 
 /**
+ * This class keeps track of time.
+ *
  * Created by JohnnyLiang on 6/15/15.
  */
 public class TimeCount implements Runnable {
@@ -32,13 +34,18 @@ public class TimeCount implements Runnable {
      */
     @Override
     public void run() {
+       // Toast.makeText(TimeCount.this, "Punched in", Toast.LENGTH_SHORT).show();
+
+
         while(!Thread.currentThread().isInterrupted() && employee.getPunchedIn()){
             try {
                 activity.doWork();
+                //employee.setDailyTotal();
+                Thread.sleep(36000); // Pause of 1 Second
                 employee.incDailyTotal(0.01);
                 employee.incWeeklyTotal(0.01);
                 employee.incMonthlyTotal(0.01);
-                Thread.sleep(36000); // Pause of 1 Second
+
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }catch(Exception e){
