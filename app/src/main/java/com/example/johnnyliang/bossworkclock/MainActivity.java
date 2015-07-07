@@ -342,6 +342,7 @@ public class MainActivity extends ActionBarActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("BossTimeTracker");
         // ParseQuery<ParseObject> query = ParseQuery.getQuery(theName);
         query.whereEqualTo("Date", parseDateTest);
+        query.whereEqualTo("Name", theName);
         // System.out.println("Today's Date: " + parseDateTest);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
 
