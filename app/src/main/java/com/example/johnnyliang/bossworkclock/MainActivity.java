@@ -21,18 +21,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.parse.GetCallback;
-import com.parse.Parse;
 // import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 
 //7 1/2 hrs
@@ -414,7 +414,7 @@ public class MainActivity extends ActionBarActivity {
             textView.setTextColor(0xffff1410);
             textView.setText(status);
             //GPSCoord outLocation = new GPSCoord();
-            //employee.setClockInLocation(outLocation);
+            //employee.setClockInLocation(outLocation); //khlkjklj
         }
     }
 
