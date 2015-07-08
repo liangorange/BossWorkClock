@@ -160,12 +160,13 @@ public class MainActivity extends ActionBarActivity {
         // Is it still the same day that we started keeping track of with dayHours
         //if same day keep adding on to dayHours
         if (dateFormat.equals(todaysDate)) {
-            dayHours = setting.getLong("DayHours2", 0);
+            dayHours2 = setting.getLong("DayHours2", 0);
             dayHours = setting.getFloat("DayHours", 0);
             countNumber = setting.getInt("Count", 0);
         }
         //otherwise it is a new day so start back at 0
         else {
+            dayHours2 = 0;
             dayHours = 0;
             countNumber = 0;
         }
@@ -192,6 +193,10 @@ public class MainActivity extends ActionBarActivity {
         else
             monthHours = 0;
 
+        employee.setDailyTotal(dayHours);
+        employee.setWeeklyTotal(weekHours);
+        employee.setMonthlyTotal(monthHours);
+
         // Is employee still punched in
         employee.setPunchedIn(setting.getBoolean("PunchedIn", false));
 
@@ -200,16 +205,6 @@ public class MainActivity extends ActionBarActivity {
             Date myDate = new Date(setting.getLong("PunchInTime", 0));
             employee.setClockInTime(myDate);
 
-           /* String inTime = setting.getString("PunchInTime", "");
-           DateFormat format = new SimpleDateFormat("HH:mm");//"MMMM d, yyyy", Locale.ENGLISH)
-            try {
-                Date date1 = format.parse(inTime);//I think this is right?
-                System.out.println("date1 = " + date1);
-                System.out.println("employee clock in time= " + employee.getClockInTime());
-                employee.setClockInTime(date1);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }*/
             alreadyPunchedIn = true;
             employee.setPunchedIn(false);//so that we can call punchIn method
             //update day week and month hours......
@@ -219,10 +214,6 @@ public class MainActivity extends ActionBarActivity {
             //System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
             Log.v(TAG2, "clock in time here:  " + employee.getClockInTime());
         }
-
-        employee.setDailyTotal(dayHours);
-        employee.setWeeklyTotal(weekHours);
-        employee.setMonthlyTotal(monthHours);
 
         //I don't know why the Today string needs more spaces to align correctly...
         todayHour.setText("Today:         " + String.format("%.2f", employee.getDailyTotal()));
@@ -640,18 +631,12 @@ public class MainActivity extends ActionBarActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 try {
-                    //Toast.makeText(MainActivity.this, "in here", Toast.LENGTH_SHORT).show();
                     TextView statusView = (TextView) findViewById(R.id.status);
-                    //Toast.makeText(MainActivity.this, "in here2", Toast.LENGTH_SHORT).show();
                     Date dt = new Date();
-                    //Toast.makeText(MainActivity.this, "in here3", Toast.LENGTH_SHORT).show();
                     Date inDate;
-                    //Toast.makeText(MainActivity.this, "in here4", Toast.LENGTH_SHORT).show();
                     inDate = employee.getClockInTime();
 
-                    //Toast.makeText(MainActivity.this, "in here5", Toast.LENGTH_SHORT).show();
-                    long diff = dt.getTime() - inDate.getTime();//Time since punch in// startingDate.getTime();
-                    //Toast.makeText(MainActivity.this, "in here6", Toast.LENGTH_SHORT).show();
+                    long diff = dt.getTime() - inDate.getTime();
                     long seconds = diff / 1000 % 60;
                     long minutes = diff / (60 * 1000) % 60;
                     long hours = diff / (60 * 60 * 1000) % 60;
@@ -662,9 +647,8 @@ public class MainActivity extends ActionBarActivity {
 
                     String curTime = hourFormat + ":" + minuteFormat;// + ":" + secondFormat;
 
-                  //  Toast.makeText(MainActivity.this, "in do work", Toast.LENGTH_SHORT).show();
                     String status = "                Punched In";
-                    String s = "Work start time: " + getTimeString();// employee.getClockInTime(); change to see actual time after app closed
+                    String s = "Work start time: " + getTimeString();
                     String s2 = "Time since punch in: " + curTime;
 
                     String s3 = status + "\n" + s + "\n" + s2;
@@ -685,6 +669,7 @@ public class MainActivity extends ActionBarActivity {
 
                     //Save the stuff
                     SharedPreferences.Editor editor = setting.edit();
+                    //editor.putLong("DayHours2", employee.getDailyTotal());
                     editor.putFloat("DayHours", employee.getDailyTotal());
                     editor.putFloat("WeekHours", employee.getWeeklyTotal());
                     editor.putFloat("MonthHours", employee.getMonthlyTotal());
