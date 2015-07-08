@@ -363,21 +363,19 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void addTime(double timeSecond) {
-        // totalHour += timeSecond;
 
         dayHours += timeSecond;
 
-        //System.out.println("Total Hour double: " + totalHour);
         totalHourFormat = String.format("%.2f", dayHours);
         System.out.println("Total Hour: " + totalHourFormat);
 
         int parseDateTest = Integer.parseInt(getDateString());
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("BossTimeTracker");
-        // ParseQuery<ParseObject> query = ParseQuery.getQuery(theName);
-        query.whereEqualTo("Date", parseDateTest);
-        query.whereEqualTo("Name", theName);
-        // System.out.println("Today's Date: " + parseDateTest);
+
+        query.whereEqualTo("aName", theName);
+        query.whereEqualTo("dDate", parseDateTest);
+
         query.getFirstInBackground(new GetCallback<ParseObject>() {
 
             MainActivity activity;
@@ -390,14 +388,12 @@ public class MainActivity extends ActionBarActivity {
                     String objectID = parseObject.getObjectId().toString();
 
                     ParseQuery<ParseObject> inQuery = ParseQuery.getQuery("BossTimeTracker");
-                    // ParseQuery<ParseObject> inQuery = ParseQuery.getQuery(theName);
 
                     inQuery.getInBackground(objectID, new GetCallback<ParseObject>() {
                         @Override
                         public void done(ParseObject parseObject, com.parse.ParseException e) {
                             if (e == null) {
-                                // parseObject.increment("TotalHour", 0.01);
-                                parseObject.put("TotalHour", totalHourFormat);
+                                parseObject.put("eTotalHour", totalHourFormat);
                                 parseObject.saveInBackground();
                             }
                         }
@@ -750,8 +746,15 @@ public class MainActivity extends ActionBarActivity {
 
 
             DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat dfYear = new SimpleDateFormat("yyyy");
             DateFormat dfMonth = new SimpleDateFormat("MM");
             startingDate = new Date();
+
+            // Format the current year
+            String yearTest = dfYear.format(startingDate);
+
+            // Format the currnet month
+            String monthTest = dfMonth.format(startingDate);
 
             dateTest = Integer.parseInt(getDateString());
 
@@ -767,15 +770,14 @@ public class MainActivity extends ActionBarActivity {
 
             hourFormat = String.format("%.2f", totalHour);
 
-
+            // Create columns for Parse BossTimeTracker table
             if (countNumber == 0) {
-                timeTrack.put("Name", theName);
-                // timeTrack.put("Month", monthTest);
-                timeTrack.put("Date", dateTest);
-                // timeTrack.put("TotalHour", Double.parseDouble(hourFormat));
-                timeTrack.put("TotalHour", "0");
+                timeTrack.put("aName", theName);
+                timeTrack.put("bYear", yearTest);
+                timeTrack.put("cMonth", monthTest);
+                timeTrack.put("dDate", dateTest);
+                timeTrack.put("eTotalHour", "0");
                 timeTrack.saveInBackground();
-                // countNumber++;
             }
 
 
