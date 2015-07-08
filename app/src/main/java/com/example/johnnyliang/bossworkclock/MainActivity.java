@@ -27,6 +27,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,8 +69,7 @@ public class MainActivity extends ActionBarActivity {
     private String todaysDate;
     private int todaysWeek;
     private int todaysMonth;
-    private float dayHours;
-    private long dayHours2;
+    private double dayHours;
     private float weekHours;
     private float monthHours;
     private boolean alreadyPunchedIn = false;
@@ -124,9 +124,11 @@ public class MainActivity extends ActionBarActivity {
         //use the employee class
         employee = new Employee();
 
+        // Initialize SharePreferences
+        setting = getSharedPreferences(fileName, 0);
+
         //for name**********************************************
         name = (TextView) findViewById(R.id.name);
-        setting = getSharedPreferences(fileName, 0);
         theName = setting.getString("Name" , "");
         name.setText(theName);
         employee.setName(theName);
@@ -140,9 +142,9 @@ public class MainActivity extends ActionBarActivity {
         }
        // }while(nameCount < 3 || theName.equals(""));  //it says this is always true but it should depend on user input...?
 
+        // Set the reference for MainActivity and Employee for the TimeCount Class
         count.setActivity(this);
         count.setEmployeeActivity(employee);
-        //end of name stuff****************************************
 
 
         //Start of setting time table--------------------------------------------------------
@@ -160,7 +162,6 @@ public class MainActivity extends ActionBarActivity {
         // Is it still the same day that we started keeping track of with dayHours
         //if same day keep adding on to dayHours
         if (dateFormat.equals(todaysDate)) {
-            dayHours = setting.getLong("DayHours2", 0);
             dayHours = setting.getFloat("DayHours", 0);
             countNumber = setting.getInt("Count", 0);
         }
@@ -197,19 +198,28 @@ public class MainActivity extends ActionBarActivity {
 
         // If employee is still clocked in go to clock in screen
         if (employee.getPunchedIn() == true) {
-            Date myDate = new Date(setting.getLong("PunchInTime", 0));
-            employee.setClockInTime(myDate);
-
-           /* String inTime = setting.getString("PunchInTime", "");
-           DateFormat format = new SimpleDateFormat("HH:mm");//"MMMM d, yyyy", Locale.ENGLISH)
+            String inTime = setting.getString("PunchInTime", "");
+            DateFormat format = new SimpleDateFormat("HH:mm");//"MMMM d, yyyy", Locale.ENGLISH)
             try {
                 Date date1 = format.parse(inTime);//I think this is right?
                 System.out.println("date1 = " + date1);
                 System.out.println("employee clock in time= " + employee.getClockInTime());
                 employee.setClockInTime(date1);
+
+                // Get current time when user open app again
+                Date currentDate = new Date();
+                long timeDiff = currentDate.getTime() - setting.getLong("Milliseconds", 0);
+
+                System.out.println("TimesDiff: " + timeDiff);
+
+                int timesNumber = (int)timeDiff / 1000;
+                System.out.println("TimesNumber: " + timesNumber);
+
+                dayHours = (float)timesNumber * 0.01 + setting.getFloat("LastHour", 0);
+                
             } catch (ParseException e) {
                 e.printStackTrace();
-            }*/
+            }
             alreadyPunchedIn = true;
             employee.setPunchedIn(false);//so that we can call punchIn method
             //update day week and month hours......
@@ -220,7 +230,7 @@ public class MainActivity extends ActionBarActivity {
             Log.v(TAG2, "clock in time here:  " + employee.getClockInTime());
         }
 
-        employee.setDailyTotal(dayHours);
+        employee.setDailyTotal((float)dayHours);
         employee.setWeeklyTotal(weekHours);
         employee.setMonthlyTotal(monthHours);
 
@@ -688,6 +698,8 @@ public class MainActivity extends ActionBarActivity {
                     editor.putFloat("DayHours", employee.getDailyTotal());
                     editor.putFloat("WeekHours", employee.getWeeklyTotal());
                     editor.putFloat("MonthHours", employee.getMonthlyTotal());
+
+                    // Set SharePreferences variable to true when employee clocked in
                     editor.putBoolean("PunchedIn", employee.getPunchedIn());
 
                     //keeps track of which day it is
@@ -708,9 +720,7 @@ public class MainActivity extends ActionBarActivity {
                     editor.putInt("TodaysMonth", month);
 
                     //keeps track of clockInTime
-                    long inTime = employee.getClockInTime().getTime();
-                    editor.putLong("PunchInTime",inTime);
-                   // editor.putString("PunchInTime" , getTimeString());
+                    editor.putString("PunchInTime" , getTimeString());
 
                     editor.apply();
 
@@ -771,6 +781,9 @@ public class MainActivity extends ActionBarActivity {
             // Shared preference editor
             SharedPreferences.Editor editor = setting.edit();
 
+            // Store starting time millisecond
+            editor.putLong("Milliseconds", startingDate.getTime());
+
             todaysDate = df.format(startingDate);
             editor.putString("TodaysDate", todaysDate);
 
@@ -828,11 +841,14 @@ public class MainActivity extends ActionBarActivity {
 
             // Gets current time
             Date endingDate = new Date();
-            //String endTime = getTimeString();
+
             employee.setClockOutTime(endingDate);
 
             SharedPreferences.Editor editor = setting.edit();
             editor.putBoolean("PunchedIn", employee.getPunchedIn());
+
+            editor.putFloat("LastHour", (float)dayHours);
+
             editor.apply();
 
             //GPSCoord outLocation = new GPSCoord();
