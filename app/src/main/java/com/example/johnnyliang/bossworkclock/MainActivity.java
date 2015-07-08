@@ -414,7 +414,7 @@ public class MainActivity extends ActionBarActivity {
             textView.setTextColor(0xffff1410);
             textView.setText(status);
             //GPSCoord outLocation = new GPSCoord();
-            //employee.setClockInLocation(outLocation); //khlkjklj
+            //employee.setClockInLocation(outLocation); //khlkjkllknkljj
         }
     }
 
