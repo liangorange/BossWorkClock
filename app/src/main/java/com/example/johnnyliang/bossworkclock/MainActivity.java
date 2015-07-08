@@ -27,7 +27,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -200,30 +199,25 @@ public class MainActivity extends ActionBarActivity {
 
         // If employee is still clocked in go to clock in screen
         if (employee.getPunchedIn() == true) {
-            String inTime = setting.getString("PunchInTime", "");
-            DateFormat format = new SimpleDateFormat("HH:mm");//"MMMM d, yyyy", Locale.ENGLISH)
-            try {
-                Date date1 = format.parse(inTime);//I think this is right?
-                System.out.println("date1 = " + date1);
-                System.out.println("employee clock in time= " + employee.getClockInTime());
-                employee.setClockInTime(date1);
+            //****************************************
+            // I changed this for time since punched in
+            //**************************************
+            Date myDate = new Date(setting.getLong("PunchInTime", 0));
+            employee.setClockInTime(myDate);
 
-                // Get current time when user open app again
-                Date currentDate = new Date();
-                long timeDiff = currentDate.getTime() - setting.getLong("Milliseconds", 0);
+             // Get current time when user open app again
+            Date currentDate = new Date();
+            long timeDiff = currentDate.getTime() - setting.getLong("Milliseconds", 0);
 
-                System.out.println("Starting millisecond: " + setting.getLong("Milliseconds", 0));
-                System.out.println("Current millisecond: " + currentDate.getTime());
-                System.out.println("TimesDiff: " + timeDiff);
+            System.out.println("Starting millisecond: " + setting.getLong("Milliseconds", 0));
+            System.out.println("Current millisecond: " + currentDate.getTime());
+            System.out.println("TimesDiff: " + timeDiff);
 
-                int timesNumber = (int)timeDiff / 1000;
-                System.out.println("TimesNumber: " + timesNumber);
+            int timesNumber = (int)timeDiff / 1000;
+            System.out.println("TimesNumber: " + timesNumber);
 
-                dayHours = (float)timesNumber * 0.01 + setting.getFloat("LastHour", 0);
-                
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            dayHours = (float)timesNumber * 0.01 + setting.getFloat("LastHour", 0);
+
             alreadyPunchedIn = true;
             employee.setPunchedIn(false);//so that we can call punchIn method
             //update day week and month hours......
@@ -724,7 +718,12 @@ public class MainActivity extends ActionBarActivity {
                     editor.putInt("TodaysMonth", month);
 
                     //keeps track of clockInTime
-                    editor.putString("PunchInTime" , getTimeString());
+                    //****************************************************************
+                    ///DON'T CHAGE THIS!!!!
+                    //******************************************************************
+                    long inTime = employee.getClockInTime().getTime();
+                    editor.putLong("PunchInTime",inTime);
+                    //editor.putString("PunchInTime" , getTimeString());
 
                     editor.apply();
 
