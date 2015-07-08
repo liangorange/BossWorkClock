@@ -807,11 +807,9 @@ public class MainActivity extends ActionBarActivity {
                 timeTrack.saveInBackground();
             }
 
-
             countNumber++;
             editor.putInt("Count", countNumber);
             editor.commit();
-
 
 
             // Gets current time if you weren't already clocked in before
