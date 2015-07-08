@@ -49,7 +49,10 @@ public class MainActivity extends ActionBarActivity {
     private String dateFormat;
     private Date startingDate;
     private TimeCount count = new TimeCount();
+
+    // For the options menu
     private boolean twelveHourFormat = false;
+    private String curProject;
 
     // For the name
     private TextView name;
@@ -66,7 +69,7 @@ public class MainActivity extends ActionBarActivity {
     private String todaysDate;
     private int todaysWeek;
     private int todaysMonth;
-    private float dayHours;
+    private double dayHours;
     private float weekHours;
     private float monthHours;
     private boolean alreadyPunchedIn = false;
@@ -121,9 +124,11 @@ public class MainActivity extends ActionBarActivity {
         //use the employee class
         employee = new Employee();
 
+        // Initialize SharePreferences
+        setting = getSharedPreferences(fileName, 0);
+
         //for name**********************************************
         name = (TextView) findViewById(R.id.name);
-        setting = getSharedPreferences(fileName, 0);
         theName = setting.getString("Name" , "");
         name.setText(theName);
         employee.setName(theName);
@@ -137,9 +142,9 @@ public class MainActivity extends ActionBarActivity {
         }
        // }while(nameCount < 3 || theName.equals(""));  //it says this is always true but it should depend on user input...?
 
+        // Set the reference for MainActivity and Employee for the TimeCount Class
         count.setActivity(this);
         count.setEmployeeActivity(employee);
-        //end of name stuff****************************************
 
 
         //Start of setting time table--------------------------------------------------------
@@ -191,14 +196,31 @@ public class MainActivity extends ActionBarActivity {
         // Is employee still punched in
         employee.setPunchedIn(setting.getBoolean("PunchedIn", false));
 
+        setting.getBoolean("NewClock", false);
+
         // If employee is still clocked in go to clock in screen
         if (employee.getPunchedIn() == true) {
             String inTime = setting.getString("PunchInTime", "");
-           DateFormat format = new SimpleDateFormat("HH:mm");//"MMMM d, yyyy", Locale.ENGLISH)
-            try {  
+            DateFormat format = new SimpleDateFormat("HH:mm");//"MMMM d, yyyy", Locale.ENGLISH)
+            try {
                 Date date1 = format.parse(inTime);//I think this is right?
-                System.out.println("date1 =: " + date1);
+                System.out.println("date1 = " + date1);
+                System.out.println("employee clock in time= " + employee.getClockInTime());
                 employee.setClockInTime(date1);
+
+                // Get current time when user open app again
+                Date currentDate = new Date();
+                long timeDiff = currentDate.getTime() - setting.getLong("Milliseconds", 0);
+
+                System.out.println("Starting millisecond: " + setting.getLong("Milliseconds", 0));
+                System.out.println("Current millisecond: " + currentDate.getTime());
+                System.out.println("TimesDiff: " + timeDiff);
+
+                int timesNumber = (int)timeDiff / 1000;
+                System.out.println("TimesNumber: " + timesNumber);
+
+                dayHours = (float)timesNumber * 0.01 + setting.getFloat("LastHour", 0);
+                
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -212,7 +234,7 @@ public class MainActivity extends ActionBarActivity {
             Log.v(TAG2, "clock in time here:  " + employee.getClockInTime());
         }
 
-        employee.setDailyTotal(dayHours);
+        employee.setDailyTotal((float)dayHours);
         employee.setWeeklyTotal(weekHours);
         employee.setMonthlyTotal(monthHours);
 
@@ -257,7 +279,7 @@ public class MainActivity extends ActionBarActivity {
                 }
                 return true;
             case R.id.trackServices:
-                //trackService()
+                trackService();
                 return true;
             default:
                 return false;
@@ -327,22 +349,51 @@ public class MainActivity extends ActionBarActivity {
         //}while(theName.equals(""));
     }
 
+    /**
+     *  This method allow the user to track their services/projects.
+     *
+     *  When clicked an alert will pop up and propt the user to enter in the name of their current
+     *  project. This name will then be saved and displayed on the screen untill a new project is
+     *  assigned.
+     */
+    void trackService () {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Current Project");
+        alert.setMessage("Enter your current project");
+
+        final EditText input = new EditText(this);
+        alert.setView(input);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(MainActivity.this, "Project not saved", Toast.LENGTH_SHORT).show();
+                // Set curProject here and display it to the screen (probably above Status and below
+                // Punch in and Punch out buttons
+            }
+
+        });
+         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int whichButton) {
+         //Canceled.
+          }
+        });
+        alert.show();
+    }
 
     public void addTime(double timeSecond) {
-        // totalHour += timeSecond;
 
         dayHours += timeSecond;
 
-        //System.out.println("Total Hour double: " + totalHour);
         totalHourFormat = String.format("%.2f", dayHours);
         System.out.println("Total Hour: " + totalHourFormat);
 
         int parseDateTest = Integer.parseInt(getDateString());
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("BossTimeTracker");
-        // ParseQuery<ParseObject> query = ParseQuery.getQuery(theName);
-        query.whereEqualTo("Date", parseDateTest);
-        // System.out.println("Today's Date: " + parseDateTest);
+
+        query.whereEqualTo("aName", theName);
+        query.whereEqualTo("dDate", parseDateTest);
+
         query.getFirstInBackground(new GetCallback<ParseObject>() {
 
             MainActivity activity;
@@ -355,14 +406,12 @@ public class MainActivity extends ActionBarActivity {
                     String objectID = parseObject.getObjectId().toString();
 
                     ParseQuery<ParseObject> inQuery = ParseQuery.getQuery("BossTimeTracker");
-                    // ParseQuery<ParseObject> inQuery = ParseQuery.getQuery(theName);
 
                     inQuery.getInBackground(objectID, new GetCallback<ParseObject>() {
                         @Override
                         public void done(ParseObject parseObject, com.parse.ParseException e) {
                             if (e == null) {
-                                // parseObject.increment("TotalHour", 0.01);
-                                parseObject.put("TotalHour", totalHourFormat);
+                                parseObject.put("eTotalHour", totalHourFormat);
                                 parseObject.saveInBackground();
                             }
                         }
@@ -653,6 +702,8 @@ public class MainActivity extends ActionBarActivity {
                     editor.putFloat("DayHours", employee.getDailyTotal());
                     editor.putFloat("WeekHours", employee.getWeeklyTotal());
                     editor.putFloat("MonthHours", employee.getMonthlyTotal());
+
+                    // Set SharePreferences variable to true when employee clocked in
                     editor.putBoolean("PunchedIn", employee.getPunchedIn());
 
                     //keeps track of which day it is
@@ -715,8 +766,15 @@ public class MainActivity extends ActionBarActivity {
 
 
             DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat dfYear = new SimpleDateFormat("yyyy");
             DateFormat dfMonth = new SimpleDateFormat("MM");
             startingDate = new Date();
+
+            // Format the current year
+            String yearTest = dfYear.format(startingDate);
+
+            // Format the currnet month
+            String monthTest = dfMonth.format(startingDate);
 
             dateTest = Integer.parseInt(getDateString());
 
@@ -727,20 +785,26 @@ public class MainActivity extends ActionBarActivity {
             // Shared preference editor
             SharedPreferences.Editor editor = setting.edit();
 
+            if (!setting.getBoolean("NewClock", false)) {
+
+                // Store starting time millisecond
+                editor.putLong("Milliseconds", startingDate.getTime());
+                editor.putBoolean("NewClock", true);
+            }
+
             todaysDate = df.format(startingDate);
             editor.putString("TodaysDate", todaysDate);
 
             hourFormat = String.format("%.2f", totalHour);
 
-
+            // Create columns for Parse BossTimeTracker table
             if (countNumber == 0) {
-                timeTrack.put("Name", theName);
-                // timeTrack.put("Month", monthTest);
-                timeTrack.put("Date", dateTest);
-                // timeTrack.put("TotalHour", Double.parseDouble(hourFormat));
-                timeTrack.put("TotalHour", "0");
+                timeTrack.put("aName", theName);
+                timeTrack.put("bYear", yearTest);
+                timeTrack.put("cMonth", monthTest);
+                timeTrack.put("dDate", dateTest);
+                timeTrack.put("eTotalHour", "0");
                 timeTrack.saveInBackground();
-                // countNumber++;
             }
 
 
@@ -755,7 +819,7 @@ public class MainActivity extends ActionBarActivity {
                 startingDate = new Date();
                 employee.setClockInTime(startingDate);
             }
-            Toast.makeText(MainActivity.this, "Punched in", Toast.LENGTH_SHORT).show();
+
             Thread loadThread = new Thread(count);
             loadThread.start();
 
@@ -785,11 +849,16 @@ public class MainActivity extends ActionBarActivity {
 
             // Gets current time
             Date endingDate = new Date();
-            //String endTime = getTimeString();
+
             employee.setClockOutTime(endingDate);
 
             SharedPreferences.Editor editor = setting.edit();
             editor.putBoolean("PunchedIn", employee.getPunchedIn());
+
+            editor.putFloat("LastHour", (float)dayHours);
+
+            editor.putBoolean("NewClock", false);
+
             editor.apply();
 
             //GPSCoord outLocation = new GPSCoord();
