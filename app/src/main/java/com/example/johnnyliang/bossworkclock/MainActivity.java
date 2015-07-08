@@ -437,8 +437,8 @@ public class MainActivity extends ActionBarActivity {
      */
     public void editPunchIn(View view) {
         if(!employee.getPunchedIn()) {
-
-            //Toast.makeText(MainActivity.this, "Editing a Punched In", Toast.LENGTH_SHORT).show();
+            employee.setPunchedIn(true);
+            Toast.makeText(MainActivity.this, "Editing a Punched In", Toast.LENGTH_SHORT).show();
             setCurrentTime();
             setCurrentDate();
             showDialog(TIME_DIALOG_ID_IN);
@@ -452,13 +452,18 @@ public class MainActivity extends ActionBarActivity {
      */
     public void editPunchOut(View view) {
         if(employee.getPunchedIn()) {
-
-            //Toast.makeText(MainActivity.this, "Editing a Punched Out", Toast.LENGTH_SHORT).show();
+            employee.setPunchedIn(false);
+            Toast.makeText(MainActivity.this, "Editing a Punched Out", Toast.LENGTH_SHORT).show();
 
             showDialog(TIME_DIALOG_ID_OUT);
             showDialog(DATE_DIALOG_ID_OUT);
 
-
+            String status = "                Punched Out";
+            TextView textView = (TextView) findViewById(R.id.status);
+            textView.setTextColor(0xffff1410);
+            textView.setText(status);
+            //GPSCoord outLocation = new GPSCoord();
+            //employee.setClockInLocation(outLocation);
         }
     }
 
@@ -545,7 +550,6 @@ public class MainActivity extends ActionBarActivity {
             loadThread.start();
 
             employee.getClockInLocation();
-            employee.setPunchedIn(true);
             // employee.editClockIn();
         }
     };
@@ -563,14 +567,6 @@ public class MainActivity extends ActionBarActivity {
 
             // set current time into textview
             outTime = (pad(outHour)) + (":") + (pad(outMinute)) + (":") + (pad(outSecond));
-
-            String status = "                Punched Out";
-            TextView textView = (TextView) findViewById(R.id.status);
-            textView.setTextColor(0xffff1410);
-            textView.setText(status);
-            //GPSCoord outLocation = new GPSCoord();
-            //employee.setClockInLocation(outLocation);
-            employee.setPunchedIn(false);
         }
     };
 
@@ -790,7 +786,7 @@ public class MainActivity extends ActionBarActivity {
             SharedPreferences.Editor editor = setting.edit();
 
             if (!setting.getBoolean("NewClock", false)) {
-                
+
                 // Store starting time millisecond
                 editor.putLong("Milliseconds", startingDate.getTime());
                 editor.putBoolean("NewClock", true);
