@@ -27,7 +27,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,6 +69,7 @@ public class MainActivity extends ActionBarActivity {
     private int todaysWeek;
     private int todaysMonth;
     private float dayHours;
+    private long dayHours2;
     private float weekHours;
     private float monthHours;
     private boolean alreadyPunchedIn = false;
@@ -160,6 +160,7 @@ public class MainActivity extends ActionBarActivity {
         // Is it still the same day that we started keeping track of with dayHours
         //if same day keep adding on to dayHours
         if (dateFormat.equals(todaysDate)) {
+            dayHours = setting.getLong("DayHours2", 0);
             dayHours = setting.getFloat("DayHours", 0);
             countNumber = setting.getInt("Count", 0);
         }
@@ -196,7 +197,10 @@ public class MainActivity extends ActionBarActivity {
 
         // If employee is still clocked in go to clock in screen
         if (employee.getPunchedIn() == true) {
-            String inTime = setting.getString("PunchInTime", "");
+            Date myDate = new Date(setting.getLong("PunchInTime", 0));
+            employee.setClockInTime(myDate);
+
+           /* String inTime = setting.getString("PunchInTime", "");
            DateFormat format = new SimpleDateFormat("HH:mm");//"MMMM d, yyyy", Locale.ENGLISH)
             try {
                 Date date1 = format.parse(inTime);//I think this is right?
@@ -205,7 +209,7 @@ public class MainActivity extends ActionBarActivity {
                 employee.setClockInTime(date1);
             } catch (ParseException e) {
                 e.printStackTrace();
-            }
+            }*/
             alreadyPunchedIn = true;
             employee.setPunchedIn(false);//so that we can call punchIn method
             //update day week and month hours......
@@ -704,7 +708,9 @@ public class MainActivity extends ActionBarActivity {
                     editor.putInt("TodaysMonth", month);
 
                     //keeps track of clockInTime
-                    editor.putString("PunchInTime" , getTimeString());
+                    long inTime = employee.getClockInTime().getTime();
+                    editor.putLong("PunchInTime",inTime);
+                   // editor.putString("PunchInTime" , getTimeString());
 
                     editor.apply();
 
