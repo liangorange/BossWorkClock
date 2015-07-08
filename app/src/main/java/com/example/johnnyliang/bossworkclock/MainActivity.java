@@ -196,6 +196,8 @@ public class MainActivity extends ActionBarActivity {
         // Is employee still punched in
         employee.setPunchedIn(setting.getBoolean("PunchedIn", false));
 
+        setting.getBoolean("NewClock", false);
+
         // If employee is still clocked in go to clock in screen
         if (employee.getPunchedIn() == true) {
             String inTime = setting.getString("PunchInTime", "");
@@ -210,6 +212,8 @@ public class MainActivity extends ActionBarActivity {
                 Date currentDate = new Date();
                 long timeDiff = currentDate.getTime() - setting.getLong("Milliseconds", 0);
 
+                System.out.println("Starting millisecond: " + setting.getLong("Milliseconds", 0));
+                System.out.println("Current millisecond: " + currentDate.getTime());
                 System.out.println("TimesDiff: " + timeDiff);
 
                 int timesNumber = (int)timeDiff / 1000;
@@ -781,8 +785,12 @@ public class MainActivity extends ActionBarActivity {
             // Shared preference editor
             SharedPreferences.Editor editor = setting.edit();
 
-            // Store starting time millisecond
-            editor.putLong("Milliseconds", startingDate.getTime());
+            if (!setting.getBoolean("NewClock", false)) {
+                
+                // Store starting time millisecond
+                editor.putLong("Milliseconds", startingDate.getTime());
+                editor.putBoolean("NewClock", true);
+            }
 
             todaysDate = df.format(startingDate);
             editor.putString("TodaysDate", todaysDate);
@@ -848,6 +856,8 @@ public class MainActivity extends ActionBarActivity {
             editor.putBoolean("PunchedIn", employee.getPunchedIn());
 
             editor.putFloat("LastHour", (float)dayHours);
+
+            editor.putBoolean("NewClock", false);
 
             editor.apply();
 
