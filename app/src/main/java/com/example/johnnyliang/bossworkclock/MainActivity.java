@@ -28,6 +28,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 // import com.parse.ParseException;
 
@@ -430,15 +431,13 @@ public class MainActivity extends ActionBarActivity {
      */
     public void editPunchIn(View view) {
         if(!employee.getPunchedIn()) {
-            employee.setPunchedIn(true);
 
             showDialog(TIME_DIALOG_ID_IN);
             //showDialog(DATE_DIALOG_ID_IN);
 
-            //alreadyPunchedIn = true;
-            //View v = null;
-            //this.punchIn(v);
-            //Toast.makeText(MainActivity.this, "Edited Punched In time", Toast.LENGTH_SHORT).show();
+            alreadyPunchedIn = true;
+            View v = null;
+            this.punchIn(v);
         }
     }
 
@@ -535,39 +534,34 @@ public class MainActivity extends ActionBarActivity {
             }
             inMinute = selectedMinute;
 
-            // set current time into textview
-            inTime = (pad(inHour)) + (":") + (pad(inMinute)) + (":") + (pad(inSecond));
 
+            //something is weird here.......
             //convert in hour and in minute to date object
 
-            Calendar cal = Calendar.getInstance();
+            Calendar cal = Calendar.getInstance();//TimeZone.getTimeZone("MST"));
+
             cal.setTime(employee.getClockInTime());
+            cal.setTimeZone(TimeZone.getTimeZone("MDT"));
+            Date dt = new Date();
+            dt = employee.getClockInTime();
+
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             int weekDay = cal.get(Calendar.DAY_OF_WEEK);
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
             //below are to be fixed
-            Log.i(TAG2,"the time is here :::::::" + pad(inYear) + ':' + pad(inMonth) + ':' + pad(inDay) + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
+            //Log.i(TAG2,"the time is here :::::::" + pad(inYear) + ':' + pad(inMonth) + ':' + pad(inDay) + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
+            Log.i(TAG2,"the time is here :::::::" + year + ':' + month + ':' + day + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
+
             Date newStartingDate = new Date(year, month, day, inHour, inMinute);
             Log.i(TAG2, "the new date is here :::::" + newStartingDate);
             Log.i(TAG2, "the new employee date is here :::::" + employee.getClockInTime());
 
-
+            //this should work??????
             employee.setClockInTime(newStartingDate);
 
-           // employee.setEditInDate(startingDate);
-            //Thread loadThread = new Thread(count);
-            //loadThread.start();
-
-
-            alreadyPunchedIn = true;
-           // View v = null;
-            //MainActivity m = new MainActivity();
-            //m.punchIn(v);
             Toast.makeText(MainActivity.this, "Edited Punched In time", Toast.LENGTH_SHORT).show();
-            //employee.getClockInLocation();
-            // employee.editClockIn();
         }
     };
 
