@@ -447,18 +447,12 @@ public class MainActivity extends ActionBarActivity {
      */
     public void editPunchOut(View view) {
         if(employee.getPunchedIn()) {
-            employee.setPunchedIn(false);
-            Toast.makeText(MainActivity.this, "Editing a Punched Out", Toast.LENGTH_SHORT).show();
 
             showDialog(TIME_DIALOG_ID_OUT);
            // showDialog(DATE_DIALOG_ID_OUT);
 
-            String status = "                Punched Out";
-            TextView textView = (TextView) findViewById(R.id.status);
-            textView.setTextColor(0xffff1410);
-            textView.setText(status);
-            //GPSCoord outLocation = new GPSCoord();
-            //employee.setClockInLocation(outLocation); //khlkjkllknkljj
+            View v = null;
+            this.punchOut(v);
         }
     }
 
@@ -578,6 +572,10 @@ public class MainActivity extends ActionBarActivity {
 
             // set current time into textview
             outTime = (pad(outHour)) + (":") + (pad(outMinute)) + (":") + (pad(outSecond));
+
+            //recalculate hours worked....Idk if we need that stuff above.
+
+            Toast.makeText(MainActivity.this, "Edited Punched Out time", Toast.LENGTH_SHORT).show();
         }
     };
 
