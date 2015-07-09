@@ -1,7 +1,6 @@
 package com.example.johnnyliang.bossworkclock;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -220,12 +218,9 @@ public class MainActivity extends ActionBarActivity {
 
             alreadyPunchedIn = true;
             employee.setPunchedIn(false);//so that we can call punchIn method
-            //update day week and month hours......
 
             View v = null;
             this.punchIn(v);
-            //System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
-            Log.v(TAG2, "clock in time here:  " + employee.getClockInTime());
         }
 
         employee.setDailyTotal((float)dayHours);
@@ -374,6 +369,10 @@ public class MainActivity extends ActionBarActivity {
         alert.show();
     }
 
+    /**
+     *  Who made this???
+     * @param timeSecond
+     */
     public void addTime(double timeSecond) {
 
         dayHours += timeSecond;
@@ -432,11 +431,14 @@ public class MainActivity extends ActionBarActivity {
     public void editPunchIn(View view) {
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
-            Toast.makeText(MainActivity.this, "Editing a Punched In", Toast.LENGTH_SHORT).show();
-            setCurrentTime();
-            setCurrentDate();
+
             showDialog(TIME_DIALOG_ID_IN);
-            showDialog(DATE_DIALOG_ID_IN);
+            //showDialog(DATE_DIALOG_ID_IN);
+
+            //alreadyPunchedIn = true;
+            //View v = null;
+            //this.punchIn(v);
+            //Toast.makeText(MainActivity.this, "Edited Punched In time", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -450,7 +452,7 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(MainActivity.this, "Editing a Punched Out", Toast.LENGTH_SHORT).show();
 
             showDialog(TIME_DIALOG_ID_OUT);
-            showDialog(DATE_DIALOG_ID_OUT);
+           // showDialog(DATE_DIALOG_ID_OUT);
 
             String status = "                Punched Out";
             TextView textView = (TextView) findViewById(R.id.status);
@@ -499,18 +501,18 @@ public class MainActivity extends ActionBarActivity {
         setCurrentDate();
         setCurrentTime();
         switch (id) {
-            case DATE_DIALOG_ID_IN: {
+           /* case DATE_DIALOG_ID_IN: {
                 return new DatePickerDialog(this, datePickerListenerIn,
                         inYear, inMonth, inDay);
-            }
+            }*/
             case TIME_DIALOG_ID_IN: {
                 return new TimePickerDialog(this, timePickerListenerIn,
                         inHour, inMinute, false);
             }
-            case DATE_DIALOG_ID_OUT: {
+           /* case DATE_DIALOG_ID_OUT: {
                 return new DatePickerDialog(this, datePickerListenerOut,
                         outYear, outMonth, outDay);
-            }
+            }*/
             case TIME_DIALOG_ID_OUT: {
                 return new TimePickerDialog(this, timePickerListenerOut,
                         outHour, outMinute, false);
@@ -536,14 +538,35 @@ public class MainActivity extends ActionBarActivity {
             // set current time into textview
             inTime = (pad(inHour)) + (":") + (pad(inMinute)) + (":") + (pad(inSecond));
 
-            //below are to be fixed
-            System.out.println(pad(inYear) + ':' + pad(inMonth) + ':' + pad(inDay) + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
-            startingDate = new Date(inYear, inMonth, inDay, inHour, inMinute, inSecond);
-            employee.setEditInDate(startingDate);
-            Thread loadThread = new Thread(count);
-            loadThread.start();
+            //convert in hour and in minute to date object
 
-            employee.getClockInLocation();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(employee.getClockInTime());
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int weekDay = cal.get(Calendar.DAY_OF_WEEK);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+
+            //below are to be fixed
+            Log.i(TAG2,"the time is here :::::::" + pad(inYear) + ':' + pad(inMonth) + ':' + pad(inDay) + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
+            Date newStartingDate = new Date(year, month, day, inHour, inMinute);
+            Log.i(TAG2, "the new date is here :::::" + newStartingDate);
+            Log.i(TAG2, "the new employee date is here :::::" + employee.getClockInTime());
+
+
+            employee.setClockInTime(newStartingDate);
+
+           // employee.setEditInDate(startingDate);
+            //Thread loadThread = new Thread(count);
+            //loadThread.start();
+
+
+            alreadyPunchedIn = true;
+           // View v = null;
+            //MainActivity m = new MainActivity();
+            //m.punchIn(v);
+            Toast.makeText(MainActivity.this, "Edited Punched In time", Toast.LENGTH_SHORT).show();
+            //employee.getClockInLocation();
             // employee.editClockIn();
         }
     };
@@ -569,7 +592,7 @@ public class MainActivity extends ActionBarActivity {
      * Specifically this is the date part for Punch In. The Date part will be selected before the time part,
      * so the main processes can be found in the later time part.
      */
-    private DatePickerDialog.OnDateSetListener datePickerListenerIn
+    /*private DatePickerDialog.OnDateSetListener datePickerListenerIn
             = new DatePickerDialog.OnDateSetListener() {
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
@@ -581,14 +604,14 @@ public class MainActivity extends ActionBarActivity {
             // set selected date into textview
             inDate = (inMonth + 1) +  ("-") + (inDay) + ("-") + (inYear) + (" ");
         }
-    };
+    };*/
 
     /**
      * This function takes the values the user picks from the dialog, and assign them to local time variables.
      * Specifically this is the date part for Punch Out. The Date part will be selected before the time part,
      * so the main processes can be found in the later time part.
      */
-    private DatePickerDialog.OnDateSetListener datePickerListenerOut
+  /*  private DatePickerDialog.OnDateSetListener datePickerListenerOut
             = new DatePickerDialog.OnDateSetListener() {
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
@@ -600,7 +623,7 @@ public class MainActivity extends ActionBarActivity {
             // set selected date into textview
             outDate = (outMonth + 1) +  ("-") + (outDay) + ("-") + (outYear) + (" ");
         }
-    };
+    };*/
 
     /**
      * pad() convert integers like date, minutes, or seconds which is below 10 to 2 digit,
@@ -648,18 +671,14 @@ public class MainActivity extends ActionBarActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 try {
-                    //Toast.makeText(MainActivity.this, "in here", Toast.LENGTH_SHORT).show();
+
                     TextView statusView = (TextView) findViewById(R.id.status);
-                    //Toast.makeText(MainActivity.this, "in here2", Toast.LENGTH_SHORT).show();
                     Date dt = new Date();
-                    //Toast.makeText(MainActivity.this, "in here3", Toast.LENGTH_SHORT).show();
                     Date inDate;
-                    //Toast.makeText(MainActivity.this, "in here4", Toast.LENGTH_SHORT).show();
                     inDate = employee.getClockInTime();
 
-                    //Toast.makeText(MainActivity.this, "in here5", Toast.LENGTH_SHORT).show();
-                    long diff = dt.getTime() - inDate.getTime();//Time since punch in// startingDate.getTime();
-                    //Toast.makeText(MainActivity.this, "in here6", Toast.LENGTH_SHORT).show();
+                    long diff = dt.getTime() - inDate.getTime();//Time since punch in
+
                     long seconds = diff / 1000 % 60;
                     long minutes = diff / (60 * 1000) % 60;
                     long hours = diff / (60 * 60 * 1000) % 60;
@@ -762,7 +781,6 @@ public class MainActivity extends ActionBarActivity {
         // Can't punch in if you already are punched in
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
-
 
             DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
             DateFormat dfYear = new SimpleDateFormat("yyyy");
