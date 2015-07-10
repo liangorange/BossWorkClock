@@ -47,18 +47,23 @@ public class MainActivity extends ActionBarActivity {
     private String dateFormat;
     private Date startingDate;
     private TimeCount count = new TimeCount();
+    private SharedPreferences setting;
+    public static final String fileName = "nameFile";
 
     // For the options menu
     private boolean twelveHourFormat = true;
-    private String curProject;
+    //private String curProject;
 
     // For the name
     private TextView name;
     private String theName = "";
     boolean goodName = false;
-    private SharedPreferences setting;
-    public static final String fileName = "nameFile";
 
+
+    //For project
+    private TextView project;
+    String currentProject;
+ ;
     // For time table
     private int countNumber;                    // For counting Clock in time
     private TextView todayHour;
@@ -139,6 +144,13 @@ public class MainActivity extends ActionBarActivity {
             System.out.println("here2");
         }
        // }while(nameCount < 3 || theName.equals(""));  //it says this is always true but it should depend on user input...?
+        //end name***********************************************************
+
+
+        //for current project
+        project = (TextView) findViewById(R.id.projectLabel);
+        currentProject = setting.getString("Project", "");
+        project.setText(currentProject);
 
         // Set the reference for MainActivity and Employee for the TimeCount Class
         count.setActivity(this);
@@ -206,9 +218,7 @@ public class MainActivity extends ActionBarActivity {
 
         // If employee is still clocked in go to clock in screen
         if (employee.getPunchedIn() == true) {
-            //****************************************
-            // I changed this for time since punched in
-            //**************************************
+            // Get punch in time
             Date myDate = new Date(setting.getLong("PunchInTime", 0));
             employee.setClockInTime(myDate);
 
@@ -366,12 +376,23 @@ public class MainActivity extends ActionBarActivity {
         alert.setView(input);
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Toast.makeText(MainActivity.this, "Project not saved", Toast.LENGTH_SHORT).show();
+
                 // Set curProject here and display it to the screen (probably above Status and below
                 // Punch in and Punch out buttons
-            }
+                String s1 = "Project: ";
+                currentProject = input.getText().toString();
+                project = (TextView) findViewById(R.id.projectLabel);
+                project.setText(s1 + currentProject);
 
-        });
+                SharedPreferences.Editor editor = setting.edit();
+                editor.putString("Project", s1 + currentProject);
+
+                // Commit edit
+                editor.apply();
+                Toast.makeText(MainActivity.this, "Project set", Toast.LENGTH_SHORT).show();
+            }
+         });
+
          alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
          //Canceled.
@@ -709,13 +730,6 @@ public class MainActivity extends ActionBarActivity {
                     statusView.setTextColor(0xff18ff1a);
                     statusView.setText(s3);
 
-
-                    //if you close app it doesn't keep track of how long app was closed for
-                    //to fix this take employee.getClockInTime() and subtract it from current time
-                    // then set today hour to old value pluse this new one. or something close to this..
-                    //aslo update weekHours and monthHours
-                   //  employee.setDailyTotal();
-
                     //I don't know why the Today string needs more spaces to align correctly
                     todayHour.setText("Today:         " + String.format("%.2f", employee.getDailyTotal()));
                     weekHour.setText("This Week:   " + String.format("%.2f", employee.getWeeklyTotal()));
@@ -748,12 +762,8 @@ public class MainActivity extends ActionBarActivity {
                     editor.putInt("TodaysMonth", month);
 
                     //keeps track of clockInTime
-                    //****************************************************************
-                    ///DON'T CHAGE THIS!!!!
-                    //******************************************************************
                     long inTime = employee.getClockInTime().getTime();
                     editor.putLong("PunchInTime",inTime);
-                    //editor.putString("PunchInTime" , getTimeString());
 
                     editor.apply();
 
@@ -831,9 +841,10 @@ public class MainActivity extends ActionBarActivity {
                 timeTrack.put("bYear", yearTest);
                 timeTrack.put("cMonth", monthTest);
                 timeTrack.put("dDate", dateTest);
-                timeTrack.put("eDailyHour", "0");
-                timeTrack.put("fWeeklyHour", "0");
-                timeTrack.put("gMonthlyHour", "0");
+                timeTrack.put("eProject", currentProject);
+                timeTrack.put("fDailyHour", "0");
+                timeTrack.put("gWeeklyHour", "0");
+                timeTrack.put("hMonthlyHour", "0");
                 timeTrack.saveInBackground();
             }
 
@@ -883,7 +894,7 @@ public class MainActivity extends ActionBarActivity {
             SharedPreferences.Editor editor = setting.edit();
             editor.putBoolean("PunchedIn", employee.getPunchedIn());
 
-            editor.putFloat("LastHour", (float)dayHours);
+            editor.putFloat("LastHour", (float) dayHours);
             editor.putFloat("LastWeek", weekHours);
             editor.putFloat("LastMonth", monthHours);
 
