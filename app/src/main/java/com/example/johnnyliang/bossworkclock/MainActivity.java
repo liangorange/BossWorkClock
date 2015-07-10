@@ -33,8 +33,6 @@ import java.util.TimeZone;
 // import com.parse.ParseException;
 
 
-//7 1/2 hrs
-
 /**
  * Main Activity where everything is tied together
  *
@@ -62,8 +60,9 @@ public class MainActivity extends ActionBarActivity {
 
     //For project
     private TextView project;
+    private TextView projectName;
     String currentProject;
- ;
+
     // For time table
     private int countNumber;                    // For counting Clock in time
     private TextView todayHour;
@@ -117,12 +116,9 @@ public class MainActivity extends ActionBarActivity {
 
         dateTest = 0;
 
-
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
-
         Parse.initialize(this, "ovwOZZiEF5hVNnxP2W9UpZtcsPPm4rZJdmelkF3q", "LqEZAeaK4sVkTHOymW7MPKaxG2P3zLxkpqgFVGP4");
-
 
         //use the employee class
         employee = new Employee();
@@ -130,34 +126,60 @@ public class MainActivity extends ActionBarActivity {
         // Initialize SharePreferences
         setting = getSharedPreferences(fileName, 0);
 
-        //for name**********************************************
+        setUpName();
+        setUpProject();
+        setUpTable();
+
+        Log.v(TAG2, "Finishing onCreate");
+    }
+
+    /**
+     *  This method is called to set up the name during the onCreate.
+     */
+    void setUpName() {
         name = (TextView) findViewById(R.id.name);
         theName = setting.getString("Name" , "");
         name.setText(theName);
         employee.setName(theName);
-       // int nameCount = 0;
+        // int nameCount = 0;
         //do {
-       if(theName.equals("")) {
-        //    nameCount++;
+        if(theName.equals("")) {
+            //    nameCount++;
             System.out.println("here");
             setName();
             System.out.println("here2");
         }
-       // }while(nameCount < 3 || theName.equals(""));  //it says this is always true but it should depend on user input...?
-        //end name***********************************************************
+        // }while(nameCount < 3 || theName.equals(""));  //it says this is always true but it should depend on user input...?
+    }
 
-
-        //for current project
+    /**
+     *  This method is called to set up the project/services display during the onCreate.
+     */
+    void setUpProject() {
+        projectName = (TextView) findViewById(R.id.projectName);
         project = (TextView) findViewById(R.id.projectLabel);
-        currentProject = setting.getString("Project", "");
-        project.setText(currentProject);
+        currentProject = setting.getString("ProjectName", "");
+        String s1 = setting.getString("Project", "");
+        if (currentProject.equals("")) {
+            project.setText("");
+        }
+        else {
+            project.setText(s1);
+        }
+        projectName.setText("                  " + currentProject);
 
         // Set the reference for MainActivity and Employee for the TimeCount Class
         count.setActivity(this);
         count.setEmployeeActivity(employee);
+    }
 
-
-        //Start of setting time table--------------------------------------------------------
+    /**
+     *  This method sets up the table during the onCreate.
+     *
+     *  If there are times that have been saved they will be set here. This method basically
+     *  sets up the app with all the employees previous hours.
+     */
+    void setUpTable() {
         todayHour = (TextView) findViewById(R.id.todaysHours);
         weekHour = (TextView) findViewById(R.id.thisWeeksHours);
         monthHour = (TextView) findViewById(R.id.thisMonthsHours);
@@ -180,7 +202,6 @@ public class MainActivity extends ActionBarActivity {
             dayHours = 0;
             countNumber = 0;
         }
-
 
         // Declare SharePreferences Editor
         SharedPreferences.Editor editor = setting.edit();
@@ -222,7 +243,7 @@ public class MainActivity extends ActionBarActivity {
             Date myDate = new Date(setting.getLong("PunchInTime", 0));
             employee.setClockInTime(myDate);
 
-             // Get current time when user open app again
+            // Get current time when user open app again
             Date currentDate = new Date();
             long timeDiff = currentDate.getTime() - setting.getLong("Milliseconds", 0);
 
@@ -252,9 +273,6 @@ public class MainActivity extends ActionBarActivity {
         todayHour.setText("Today:         " + String.format("%.2f", employee.getDailyTotal()));
         weekHour.setText ("This Week:   " + String.format("%.2f", employee.getWeeklyTotal()));
         monthHour.setText("This Month:  " + String.format("%.2f", employee.getMonthlyTotal()));
-        //End of setting time table--------------------------------------------------------------
-
-        Log.v(TAG2, "Finishing onCreate");
     }
 
     @Override
@@ -265,7 +283,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * This is where we can add settings
+     * This is where we can add settings.
      *
      * Any setting that we want to add on the settings menu are made here.
      *
@@ -304,59 +322,48 @@ public class MainActivity extends ActionBarActivity {
      */
     public void setName() {
         Log.i(TAG2, "setName started");
-        //Makes sure a name is entered
-        //final boolean goodName = false;
-        //do {
-        //final boolean goodName = false;
-        int i = 0;
-       // do {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-            alert.setTitle("Employee Name");
-            alert.setMessage("Enter your name");
-       // do {
-            // Set an EditText view to get user input
-            final EditText input = new EditText(this);
-            alert.setView(input);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-                i++;
-           // if (alert.isShowing())
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Log.i(TAG2, "Start processing OK button");
+        alert.setTitle("Employee Name");
+        alert.setMessage("Enter your name");
 
-                        theName = input.getText().toString();
-                        if (theName.equals("")) {
-                            Log.i(TAG2, "name = \"\" ");
-                            name.setText("I don't have a name");
-                            Toast.makeText(MainActivity.this, "Must enter a name", Toast.LENGTH_SHORT).show();
-                        } else {
-                            goodName = true;
-                            name.setText(theName);
-                            Log.i(TAG2, " name = " + theName);
-                        }
-                            SharedPreferences.Editor editor = setting.edit();
-                            editor.putString("Name", theName);
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
 
-                            // Commit edit
-                            editor.apply();
-                            employee.setName(theName);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Log.i(TAG2, "Start processing OK button");
 
-                        Log.i(TAG2, "End of Ok button");
-                    }
+                theName = input.getText().toString();
+                if (theName.equals("")) {
+                    Log.i(TAG2, "name = \"\" ");
+                    name.setText("I don't have a name");
+                    Toast.makeText(MainActivity.this, "Must enter a name", Toast.LENGTH_SHORT).show();
+                } else {
+                    goodName = true;
+                    name.setText(theName);
+                    Log.i(TAG2, " name = " + theName);
+                }
+                SharedPreferences.Editor editor = setting.edit();
+                editor.putString("Name", theName);
 
-                });
+                // Commit edit
+                editor.apply();
+                employee.setName(theName);
 
+                Log.i(TAG2, "End of Ok button");
+            }
 
-            // alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            //  public void onClick(DialogInterface dialog, int whichButton) {
-            // Canceled.
-            //  }
-            //});
-            alert.show();
-       // }while (!theName.equals(""));
-        System.out.println("here9");
-        //}while(theName.equals(""));
+        });
+
+        // alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        //  public void onClick(DialogInterface dialog, int whichButton) {
+        // Canceled.
+        //  }
+        //});
+        alert.show();
     }
 
     /**
@@ -382,12 +389,20 @@ public class MainActivity extends ActionBarActivity {
                 String s1 = "Project: ";
                 currentProject = input.getText().toString();
                 project = (TextView) findViewById(R.id.projectLabel);
-                project.setText(s1 + currentProject);
+                projectName = (TextView) findViewById(R.id.projectName);
+
+                if (currentProject.equals("") ) {
+                    project.setText("");
+                }
+                else {
+                    project.setText(s1);
+                }
+                projectName.setText("                  " + currentProject);
 
                 SharedPreferences.Editor editor = setting.edit();
-                editor.putString("Project", s1 + currentProject);
+                editor.putString("Project", s1);
+                editor.putString("ProjectName", currentProject);
 
-                // Commit edit
                 editor.apply();
                 Toast.makeText(MainActivity.this, "Project set", Toast.LENGTH_SHORT).show();
             }
