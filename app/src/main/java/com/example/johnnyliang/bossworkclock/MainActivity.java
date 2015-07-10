@@ -543,12 +543,12 @@ public class MainActivity extends ActionBarActivity {
             int month = cal.get(Calendar.MONTH);
             int weekDay = cal.get(Calendar.DAY_OF_WEEK);
             int day = cal.get(Calendar.DAY_OF_MONTH);
-            cal.set(Calendar.YEAR, 2014);
+            cal.set(Calendar.YEAR, 15);
             //below are to be fixed
             //Log.i(TAG2,"the time is here :::::::" + pad(inYear) + ':' + pad(inMonth) + ':' + pad(inDay) + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
             Log.i(TAG2,"the time is here :::::::" + year + ':' + month + ':' + day + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
 
-            Date newStartingDate = new Date(2014, month, day, inHour, inMinute);
+            Date newStartingDate = new Date(year, month, day, inHour, inMinute);
             //newStartingDate.se
             Log.i(TAG2, "the new date is here :::::" + newStartingDate);
             Log.i(TAG2, "the OLD employee date is here :::::" + employee.getClockInTime());
