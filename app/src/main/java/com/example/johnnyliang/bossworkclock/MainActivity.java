@@ -169,6 +169,10 @@ public class MainActivity extends ActionBarActivity {
             countNumber = 0;
         }
 
+
+        // Declare SharePreferences Editor
+        SharedPreferences.Editor editor = setting.edit();
+
         // Gets current week
         Calendar c = Calendar.getInstance();
         c.setTime(dayDate);
@@ -178,8 +182,10 @@ public class MainActivity extends ActionBarActivity {
         // Is it still the same week
         if (week == todaysWeek)
             weekHours = setting.getFloat("WeekHours", 0);
-        else
+        else {
             weekHours = 0;
+            editor.putFloat("LastWeek", weekHours);
+        }
 
         // Gets current month
         int month = c.get(Calendar.MONTH);
@@ -188,8 +194,10 @@ public class MainActivity extends ActionBarActivity {
         //Is it still the same month
         if(month == todaysMonth)
             monthHours = setting.getFloat("MonthHours", 0);
-        else
+        else {
             monthHours = 0;
+            editor.putFloat("LastMonth", monthHours);
+        }
 
         // Is employee still punched in
         employee.setPunchedIn(setting.getBoolean("PunchedIn", false));
@@ -216,6 +224,8 @@ public class MainActivity extends ActionBarActivity {
             System.out.println("TimesNumber: " + timesNumber);
 
             dayHours = (float)timesNumber * 0.01 + setting.getFloat("LastHour", 0);
+            weekHours = (float)0.01 * timesNumber + setting.getFloat("LastWeek", 0);
+            monthHours = (float)0.01 * timesNumber + setting.getFloat("LastMonth", 0);
 
             alreadyPunchedIn = true;
             employee.setPunchedIn(false);//so that we can call punchIn method
@@ -376,7 +386,14 @@ public class MainActivity extends ActionBarActivity {
      */
     public void addTime(double timeSecond) {
 
+        DateFormat dfMonth = new SimpleDateFormat("MM");
+
+        // Format the currnet month
+        String monthTest = dfMonth.format(startingDate);
+
         dayHours += timeSecond;
+        weekHours += timeSecond;
+        monthHours += timeSecond;
 
         totalHourFormat = String.format("%.2f", dayHours);
         System.out.println("Total Hour: " + totalHourFormat);
@@ -387,6 +404,7 @@ public class MainActivity extends ActionBarActivity {
 
         query.whereEqualTo("aName", theName);
         query.whereEqualTo("dDate", parseDateTest);
+        query.whereEqualTo("cMonth", monthTest);
 
         query.getFirstInBackground(new GetCallback<ParseObject>() {
 
@@ -813,7 +831,9 @@ public class MainActivity extends ActionBarActivity {
                 timeTrack.put("bYear", yearTest);
                 timeTrack.put("cMonth", monthTest);
                 timeTrack.put("dDate", dateTest);
-                timeTrack.put("eTotalHour", "0");
+                timeTrack.put("eDailyHour", "0");
+                timeTrack.put("fWeeklyHour", "0");
+                timeTrack.put("gMonthlyHour", "0");
                 timeTrack.saveInBackground();
             }
 
@@ -864,6 +884,8 @@ public class MainActivity extends ActionBarActivity {
             editor.putBoolean("PunchedIn", employee.getPunchedIn());
 
             editor.putFloat("LastHour", (float)dayHours);
+            editor.putFloat("LastWeek", weekHours);
+            editor.putFloat("LastMonth", monthHours);
 
             editor.putBoolean("NewClock", false);
 
