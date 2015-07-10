@@ -536,25 +536,26 @@ public class MainActivity extends ActionBarActivity {
 
             cal.setTime(employee.getClockInTime());
             cal.setTimeZone(TimeZone.getTimeZone("MDT"));
-            Date dt = new Date();
-            dt = employee.getClockInTime();
+           // Date dt = new Date();
+            //dt = employee.getClockInTime();
 
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             int weekDay = cal.get(Calendar.DAY_OF_WEEK);
             int day = cal.get(Calendar.DAY_OF_MONTH);
-
+            cal.set(Calendar.YEAR, 2014);
             //below are to be fixed
             //Log.i(TAG2,"the time is here :::::::" + pad(inYear) + ':' + pad(inMonth) + ':' + pad(inDay) + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
             Log.i(TAG2,"the time is here :::::::" + year + ':' + month + ':' + day + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
 
-            Date newStartingDate = new Date(year, month, day, inHour, inMinute);
+            Date newStartingDate = new Date(2014, month, day, inHour, inMinute);
+            //newStartingDate.se
             Log.i(TAG2, "the new date is here :::::" + newStartingDate);
-            Log.i(TAG2, "the new employee date is here :::::" + employee.getClockInTime());
+            Log.i(TAG2, "the OLD employee date is here :::::" + employee.getClockInTime());
 
             //this should work??????
             employee.setClockInTime(newStartingDate);
-
+            Log.i(TAG2, "the NEW employee date is here :::::" + employee.getClockInTime());
             Toast.makeText(MainActivity.this, "Edited Punched In time", Toast.LENGTH_SHORT).show();
         }
     };
@@ -573,7 +574,7 @@ public class MainActivity extends ActionBarActivity {
             // set current time into textview
             outTime = (pad(outHour)) + (":") + (pad(outMinute)) + (":") + (pad(outSecond));
 
-            //recalculate hours worked....Idk if we need that stuff above.
+            //recalculate hours worked today, this week, and this month....Idk if we need that stuff above.
 
             Toast.makeText(MainActivity.this, "Edited Punched Out time", Toast.LENGTH_SHORT).show();
         }
