@@ -49,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
     private TimeCount count = new TimeCount();
 
     // For the options menu
-    private boolean twelveHourFormat = false;
+    private boolean twelveHourFormat = true;
     private String curProject;
 
     // For the name
@@ -770,7 +770,7 @@ public class MainActivity extends ActionBarActivity {
      */
     public String getTimeString() {
         if (twelveHourFormat) {
-            DateFormat df = new SimpleDateFormat("K:mm");
+            DateFormat df = new SimpleDateFormat("K:mm a");
             dateFormat = df.format(employee.getClockInTime());
         } else {
             DateFormat df = new SimpleDateFormat("HH:mm");
