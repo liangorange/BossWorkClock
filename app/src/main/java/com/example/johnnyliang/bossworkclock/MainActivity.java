@@ -384,8 +384,7 @@ public class MainActivity extends ActionBarActivity {
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
-                // Set curProject here and display it to the screen (probably above Status and below
-                // Punch in and Punch out buttons
+                // Set curProject here and display it to the screen
                 String s1 = "Project: ";
                 currentProject = input.getText().toString();
                 project = (TextView) findViewById(R.id.projectLabel);
@@ -590,8 +589,8 @@ public class MainActivity extends ActionBarActivity {
 
             cal.setTime(employee.getClockInTime());
             cal.setTimeZone(TimeZone.getTimeZone("MDT"));
-           // Date dt = new Date();
-            //dt = employee.getClockInTime();
+            Date dt = new Date();
+            dt = employee.getClockInTime();
 
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
@@ -600,16 +599,18 @@ public class MainActivity extends ActionBarActivity {
             cal.set(Calendar.YEAR, 15);
             //below are to be fixed
             //Log.i(TAG2,"the time is here :::::::" + pad(inYear) + ':' + pad(inMonth) + ':' + pad(inDay) + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
-            Log.i(TAG2,"the time is here :::::::" + year + ':' + month + ':' + day + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
+            Log.i(TAG2, "the time is here :::::::::::::::::::" + year + ':' + month + ':' + day + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
 
             Date newStartingDate = new Date(year, month, day, inHour, inMinute);
             //newStartingDate.se
-            Log.i(TAG2, "the new date is here :::::" + newStartingDate);
+            Log.i(TAG2, "the new date is here ::::::::::::::" + newStartingDate);
             Log.i(TAG2, "the OLD employee date is here :::::" + employee.getClockInTime());
 
             //this should work??????
             employee.setClockInTime(newStartingDate);
             Log.i(TAG2, "the NEW employee date is here :::::" + employee.getClockInTime());
+            Date testDate = new Date();
+            Log.i(TAG2, "the TEST date is here :::::::::::::" + testDate);
             Toast.makeText(MainActivity.this, "Edited Punched In time", Toast.LENGTH_SHORT).show();
         }
     };

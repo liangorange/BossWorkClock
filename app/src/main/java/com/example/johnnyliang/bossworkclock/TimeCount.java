@@ -41,8 +41,7 @@ public class TimeCount implements Runnable {
             try {
                 activity.doWork();
                 activity.addTime(0.01);
-                //employee.setDailyTotal();
-                Thread.sleep(1000); // Pause of 1 Second
+                Thread.sleep(36000); // Pause of 1 Second
                 employee.incDailyTotal(0.01);
                 employee.incWeeklyTotal(0.01);
                 employee.incMonthlyTotal(0.01);

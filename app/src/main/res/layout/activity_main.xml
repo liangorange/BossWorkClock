@@ -63,11 +63,39 @@
         android:background="#ffff2117"
         android:textSize="@dimen/abc_text_size_display_1_material" />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/projectLabel"
+        android:layout_below="@+id/button3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text=""
+        android:textSize="@dimen/abc_text_size_headline_material"
+        style="@style/Base.TextAppearance.AppCompat.SearchResult.Title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/projectName"
+        android:text=""
+        style="@style/Base.TextAppearance.AppCompat"
+        android:fontFamily="@string/abc_searchview_description_clear"
+        android:textColor="#ffb9b9b9"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:layout_below="@+id/button3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/statusLabel"
-        android:layout_below="@+id/button3"
+        android:layout_below="@+id/projectLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:text="Status: "
@@ -83,7 +111,7 @@
         android:fontFamily="@string/abc_searchview_description_clear"
         android:textColor="#ffff1410"
         android:textSize="@dimen/abc_text_size_large_material"
-        android:layout_below="@+id/button3"
+        android:layout_below="@+id/projectLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
