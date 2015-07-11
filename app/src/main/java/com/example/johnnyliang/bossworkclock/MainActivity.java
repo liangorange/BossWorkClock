@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -80,15 +79,8 @@ public class MainActivity extends ActionBarActivity {
     private String hourFormat;
     private double totalHour;
 
-    //Jonathan's time/datepicker parts
-    private String inTime;
+    //For editPunchIn and editPunchOut
     private String outTime;
-    private String inDate;
-    private String outDate;
-    private String resultIn;
-    private String resultOut;
-    private Button addInTime;
-    private Button addOutTime;
     private int inYear;
     private int inMonth;
     private int inDay;
@@ -242,7 +234,7 @@ public class MainActivity extends ActionBarActivity {
             Date myDate = new Date(setting.getLong("PunchInTime", 0));
             employee.setClockInTime(myDate);
 
-            // Get current time when user open app again
+            // Get current time when user opens the app again
             Date currentDate = new Date();
             long timeDiff = currentDate.getTime() - setting.getLong("Milliseconds", 0);
 
@@ -478,7 +470,7 @@ public class MainActivity extends ActionBarActivity {
 
 
     /**
-     * Kwok - This function response to the Edit Punch In button, and call the showDialog() functions
+     * This function response to the Edit Punch In button, and call the showDialog() functions
      * @param view
      */
     public void editPunchIn(View view) {
@@ -494,7 +486,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Kwok - editPunchOut() is still under construction, right now it acts like punchOut()
+     * editPunchOut() is still under construction, right now it acts like punchOut()
      * @param view
      */
     public void editPunchOut(View view) {
@@ -503,6 +495,7 @@ public class MainActivity extends ActionBarActivity {
             showDialog(TIME_DIALOG_ID_OUT);
            // showDialog(DATE_DIALOG_ID_OUT);
 
+            // Ideally this wouldn't happen untill after the above thread is complete
             View v = null;
             this.punchOut(v);
         }
@@ -580,51 +573,35 @@ public class MainActivity extends ActionBarActivity {
             }
             inMinute = selectedMinute;
 
-
-            //something is weird here.......
-            //convert in hour and in minute to date object
-
-            //Date dt = new Date();
-            //dt = employee.getClockInTime();
-
+            //convert inHour and inMinute to date object
             Calendar cal = Calendar.getInstance();
-           // cal2.set(Calendar.YEAR, )
             cal.setTime(employee.getClockInTime());
             cal.set(Calendar.HOUR_OF_DAY,inHour);
             cal.set(Calendar.MINUTE,inMinute);
-            //cal2.set(Calendar.SECOND,0);
-            //cal2.set(Calendar.MILLISECOND,0);
 
             Date newStartingDate = cal.getTime();
-
-
-            /*Calendar cal = Calendar.getInstance();//TimeZone.getTimeZone("MST"));
-
-            cal.setTime(employee.getClockInTime());
-            cal.setTimeZone(TimeZone.getTimeZone("MDT"));
-
-
-            //set hours and minutes.
-
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int weekDay = cal.get(Calendar.DAY_OF_WEEK);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-            cal.set(Calendar.YEAR, 15);
-            //below are to be fixed
-            Log.i(TAG2,"the newest time is here :::::::::::::" + d);
-            Log.i(TAG2, "the time is here :::::::::::::::::::" + year + ':' + month + ':' + day + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
-
-            Date newStartingDate = new Date(year, month, day, inHour, inMinute);
-            //newStartingDate.se
-            Log.i(TAG2, "the new date is here ::::::::::::::" + newStartingDate);
-            Log.i(TAG2, "the OLD employee date is here :::::" + employee.getClockInTime());
-*/
-            //this should work??????
             employee.setClockInTime(newStartingDate);
-            Log.i(TAG2, "the NEW employee date is here :::::" + employee.getClockInTime());
-            Date testDate = new Date();
-            Log.i(TAG2, "the TEST date is here :::::::::::::" + testDate);
+
+
+
+            // Get current time when user opens the app again
+            Date currentDate = new Date();
+            long timeDiff = currentDate.getTime() - employee.getClockInTime().getTime();//setting.getLong("Milliseconds", 0);
+
+            System.out.println("Starting millisecond: " + setting.getLong("Milliseconds", 0));
+            System.out.println("Current millisecond: " + currentDate.getTime());
+            System.out.println("TimesDiff: " + timeDiff);
+
+            int timesNumber = (int)timeDiff / 1000;
+            System.out.println("TimesNumber: " + timesNumber);
+
+            float f = timeDiff / 16000;
+            employee.incDailyTotal(f);
+            //Long changeToLong = (Long) employee.getClockInTime();
+            //dayHours = (float)timesNumber * 0.01 + employee.getClockInTime().getTime();//setting.getFloat("LastHour", 0);
+            //weekHours = (float)0.01 * timesNumber + setting.getFloat("LastWeek", 0);
+            //monthHours = (float)0.01 * timesNumber + setting.getFloat("LastMonth", 0);
+
             Toast.makeText(MainActivity.this, "Edited Punched In time", Toast.LENGTH_SHORT).show();
         }
     };
