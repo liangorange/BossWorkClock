@@ -28,7 +28,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 // import com.parse.ParseException;
 
@@ -585,12 +584,27 @@ public class MainActivity extends ActionBarActivity {
             //something is weird here.......
             //convert in hour and in minute to date object
 
-            Calendar cal = Calendar.getInstance();//TimeZone.getTimeZone("MST"));
+            //Date dt = new Date();
+            //dt = employee.getClockInTime();
+
+            Calendar cal = Calendar.getInstance();
+           // cal2.set(Calendar.YEAR, )
+            cal.setTime(employee.getClockInTime());
+            cal.set(Calendar.HOUR_OF_DAY,inHour);
+            cal.set(Calendar.MINUTE,inMinute);
+            //cal2.set(Calendar.SECOND,0);
+            //cal2.set(Calendar.MILLISECOND,0);
+
+            Date newStartingDate = cal.getTime();
+
+
+            /*Calendar cal = Calendar.getInstance();//TimeZone.getTimeZone("MST"));
 
             cal.setTime(employee.getClockInTime());
             cal.setTimeZone(TimeZone.getTimeZone("MDT"));
-            Date dt = new Date();
-            dt = employee.getClockInTime();
+
+
+            //set hours and minutes.
 
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
@@ -598,14 +612,14 @@ public class MainActivity extends ActionBarActivity {
             int day = cal.get(Calendar.DAY_OF_MONTH);
             cal.set(Calendar.YEAR, 15);
             //below are to be fixed
-            //Log.i(TAG2,"the time is here :::::::" + pad(inYear) + ':' + pad(inMonth) + ':' + pad(inDay) + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
+            Log.i(TAG2,"the newest time is here :::::::::::::" + d);
             Log.i(TAG2, "the time is here :::::::::::::::::::" + year + ':' + month + ':' + day + ':' + pad(inHour) + ':' + pad(inMinute) + ':' + pad(inSecond));
 
             Date newStartingDate = new Date(year, month, day, inHour, inMinute);
             //newStartingDate.se
             Log.i(TAG2, "the new date is here ::::::::::::::" + newStartingDate);
             Log.i(TAG2, "the OLD employee date is here :::::" + employee.getClockInTime());
-
+*/
             //this should work??????
             employee.setClockInTime(newStartingDate);
             Log.i(TAG2, "the NEW employee date is here :::::" + employee.getClockInTime());
@@ -796,7 +810,7 @@ public class MainActivity extends ActionBarActivity {
      */
     public String getTimeString() {
         if (twelveHourFormat) {
-            DateFormat df = new SimpleDateFormat("K:mm a");
+            DateFormat df = new SimpleDateFormat("hh:mm a");
             dateFormat = df.format(employee.getClockInTime());
         } else {
             DateFormat df = new SimpleDateFormat("HH:mm");
