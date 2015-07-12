@@ -470,7 +470,7 @@ public class MainActivity extends ActionBarActivity {
 
 
     /**
-     * This function response to the Edit Punch In button, and call the showDialog() functions
+     * This function responds to the Edit Punch In button, and calls the showDialog() functions.
      * @param view
      */
     public void editPunchIn(View view) {
@@ -484,6 +484,8 @@ public class MainActivity extends ActionBarActivity {
             showDialog(TIME_DIALOG_ID_IN);
             //showDialog(DATE_DIALOG_ID_IN);
 
+            /* Ideally this wouldn't happen until after the above thread is complete,
+               Doing this would get rid of the 16 sec lag time after the new time is entered. */
             alreadyPunchedIn = true;
             View v = null;
             this.punchIn(v);
@@ -491,7 +493,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * editPunchOut() is still under construction, right now it acts like punchOut()
+     * This function responds to the Edit Punch Out button, and calls the showDialog() functions.
      * @param view
      */
     public void editPunchOut(View view) {
@@ -500,8 +502,6 @@ public class MainActivity extends ActionBarActivity {
             showDialog(TIME_DIALOG_ID_OUT);
            // showDialog(DATE_DIALOG_ID_OUT);
 
-            /* Ideally this wouldn't happen until after the above thread is complete,
-               Doing this would get rid of the 16 sec lag time after the new time is entered. */
             View v = null;
             this.punchOut(v);
         }
@@ -601,7 +601,7 @@ public class MainActivity extends ActionBarActivity {
             employee.incMonthlyTotal(timesNumber);
 
             //It can take up to 16 seconds for the times to be updated
-            Toast.makeText(MainActivity.this, "Punched In time will update shortly", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Punched In time will update shortly", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -616,10 +616,42 @@ public class MainActivity extends ActionBarActivity {
             outHour = selectedHour;
             outMinute = selectedMinute;
 
-            // set current time into textview
-            outTime = (pad(outHour)) + (":") + (pad(outMinute)) + (":") + (pad(outSecond));
+            Date oldClockOutTime = new Date();
 
-            //recalculate hours worked today, this week, and this month....Idk if we need that stuff above.
+            //convert outHour and outMinute to date object
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(oldClockOutTime);
+            cal.set(Calendar.HOUR_OF_DAY,outHour);
+            cal.set(Calendar.MINUTE,outMinute);
+
+            // Sets new clockOutDate
+            Date newClockOutTime = cal.getTime();
+
+            // Updates total hours.
+            long timeDiff = oldClockOutTime.getTime() - newClockOutTime.getTime();// - employee.getClockInTime().getTime();
+            int timesNumber = (int)timeDiff / 36000;
+            timesNumber *= .01;
+
+            Log.i(TAG2, "oldClockOutTime: " + oldClockOutTime);
+            Log.i(TAG2, "newClockOutTime: " + newClockOutTime);
+
+            // Subtracts the need time
+            employee.incDailyTotal(-timesNumber);
+            employee.incWeeklyTotal(-timesNumber);
+            employee.incMonthlyTotal(-timesNumber);
+
+            //I don't know why the Today string needs more spaces to align correctly
+            todayHour.setText("Today:         " + String.format("%.2f", employee.getDailyTotal()));
+            weekHour.setText("This Week:   " + String.format("%.2f", employee.getWeeklyTotal()));
+            monthHour.setText("This Month:  " + String.format("%.2f", employee.getMonthlyTotal()));
+
+            // Saves the stuff we just changed
+            SharedPreferences.Editor editor = setting.edit();
+            editor.putFloat("DayHours", employee.getDailyTotal());
+            editor.putFloat("WeekHours", employee.getWeeklyTotal());
+            editor.putFloat("MonthHours", employee.getMonthlyTotal());
+
+            editor.apply();
 
             Toast.makeText(MainActivity.this, "Edited Punched Out time", Toast.LENGTH_SHORT).show();
         }
@@ -678,7 +710,7 @@ public class MainActivity extends ActionBarActivity {
 
 
 
-    Handler startHandler = new Handler() {
+     Handler startHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             getTimeString();
