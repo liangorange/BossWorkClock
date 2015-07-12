@@ -573,34 +573,39 @@ public class MainActivity extends ActionBarActivity {
             }
             inMinute = selectedMinute;
 
+            System.out.println("employee millisecond12312123121121211112121212132121232123132123132123123132: " + employee.getClockInTime().getTime());
+
+           // Date oldClockInTime = employee.getClockInTime();
+
+
             //convert inHour and inMinute to date object
             Calendar cal = Calendar.getInstance();
             cal.setTime(employee.getClockInTime());
             cal.set(Calendar.HOUR_OF_DAY,inHour);
             cal.set(Calendar.MINUTE,inMinute);
 
+            // Sets new startingDate
             Date newStartingDate = cal.getTime();
             employee.setClockInTime(newStartingDate);
 
 
-
-            // Get current time when user opens the app again
+            // Updates total hours.
             Date currentDate = new Date();
-            long timeDiff = currentDate.getTime() - employee.getClockInTime().getTime();//setting.getLong("Milliseconds", 0);
+            long timeDiff = currentDate.getTime() - employee.getClockInTime().getTime();
 
-            System.out.println("Starting millisecond: " + setting.getLong("Milliseconds", 0));
-            System.out.println("Current millisecond: " + currentDate.getTime());
-            System.out.println("TimesDiff: " + timeDiff);
+            //System.out.println("currentTime millisecond: " + currentDate.getTime());
+            //System.out.println("employee millisecond: " + employee.getClockInTime().getTime());
+            //System.out.println("oldclockin millisecond: " + oldClockInTime.getTime());
+            //System.out.println("TimesDiff: " + timeDiff);
 
-            int timesNumber = (int)timeDiff / 1000;
-            System.out.println("TimesNumber: " + timesNumber);
+            int timesNumber = (int)timeDiff / 36000;
+            //System.out.println("TimesNumber: " + timesNumber);
 
-            float f = timeDiff / 16000;
-            employee.incDailyTotal(f);
-            //Long changeToLong = (Long) employee.getClockInTime();
-            //dayHours = (float)timesNumber * 0.01 + employee.getClockInTime().getTime();//setting.getFloat("LastHour", 0);
-            //weekHours = (float)0.01 * timesNumber + setting.getFloat("LastWeek", 0);
-            //monthHours = (float)0.01 * timesNumber + setting.getFloat("LastMonth", 0);
+            timesNumber *= .01;
+
+            employee.incDailyTotal(timesNumber);
+            employee.incWeeklyTotal(timesNumber);
+            employee.incMonthlyTotal(timesNumber);
 
             Toast.makeText(MainActivity.this, "Edited Punched In time", Toast.LENGTH_SHORT).show();
         }
