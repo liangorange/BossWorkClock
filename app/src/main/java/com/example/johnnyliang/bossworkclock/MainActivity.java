@@ -300,6 +300,8 @@ public class MainActivity extends ActionBarActivity {
             case R.id.trackServices:
                 trackService();
                 return true;
+            case R.id.calendarView:
+                calendarView();
             default:
                 return false;
         }
@@ -404,6 +406,15 @@ public class MainActivity extends ActionBarActivity {
           }
         });
         alert.show();
+    }
+
+    /**
+     * This method displays the employees total hours in a calendar view.
+     * 
+     *  It is not written yet.
+     */
+    void calendarView() {
+        Toast.makeText(MainActivity.this, "This feature is not available yet", Toast.LENGTH_SHORT).show();
     }
 
     /**
