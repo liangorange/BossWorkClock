@@ -475,6 +475,11 @@ public class MainActivity extends ActionBarActivity {
      */
     public void editPunchIn(View view) {
         if(!employee.getPunchedIn()) {
+            // If there isn't already a employee clockInTime
+            if (!alreadyPunchedIn) {
+                startingDate = new Date();
+                employee.setClockInTime(startingDate);
+            }
 
             showDialog(TIME_DIALOG_ID_IN);
             //showDialog(DATE_DIALOG_ID_IN);
@@ -495,7 +500,8 @@ public class MainActivity extends ActionBarActivity {
             showDialog(TIME_DIALOG_ID_OUT);
            // showDialog(DATE_DIALOG_ID_OUT);
 
-            // Ideally this wouldn't happen untill after the above thread is complete
+            /* Ideally this wouldn't happen until after the above thread is complete,
+               Doing this would get rid of the 16 sec lag time after the new time is entered. */
             View v = null;
             this.punchOut(v);
         }
@@ -573,11 +579,6 @@ public class MainActivity extends ActionBarActivity {
             }
             inMinute = selectedMinute;
 
-            System.out.println("employee millisecond12312123121121211112121212132121232123132123132123123132: " + employee.getClockInTime().getTime());
-
-           // Date oldClockInTime = employee.getClockInTime();
-
-
             //convert inHour and inMinute to date object
             Calendar cal = Calendar.getInstance();
             cal.setTime(employee.getClockInTime());
@@ -592,22 +593,15 @@ public class MainActivity extends ActionBarActivity {
             // Updates total hours.
             Date currentDate = new Date();
             long timeDiff = currentDate.getTime() - employee.getClockInTime().getTime();
-
-            //System.out.println("currentTime millisecond: " + currentDate.getTime());
-            //System.out.println("employee millisecond: " + employee.getClockInTime().getTime());
-            //System.out.println("oldclockin millisecond: " + oldClockInTime.getTime());
-            //System.out.println("TimesDiff: " + timeDiff);
-
             int timesNumber = (int)timeDiff / 36000;
-            //System.out.println("TimesNumber: " + timesNumber);
-
             timesNumber *= .01;
 
             employee.incDailyTotal(timesNumber);
             employee.incWeeklyTotal(timesNumber);
             employee.incMonthlyTotal(timesNumber);
 
-            Toast.makeText(MainActivity.this, "Edited Punched In time", Toast.LENGTH_SHORT).show();
+            //It can take up to 16 seconds for the times to be updated
+            Toast.makeText(MainActivity.this, "Punched In time will update shortly", Toast.LENGTH_SHORT).show();
         }
     };
 
