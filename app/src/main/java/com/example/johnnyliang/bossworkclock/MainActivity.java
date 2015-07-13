@@ -2,6 +2,7 @@ package com.example.johnnyliang.bossworkclock;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -398,12 +399,12 @@ public class MainActivity extends ActionBarActivity {
                 editor.apply();
                 Toast.makeText(MainActivity.this, "Project set", Toast.LENGTH_SHORT).show();
             }
-         });
+        });
 
-         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int whichButton) {
-         //Canceled.
-          }
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //Canceled.
+            }
         });
         alert.show();
     }
@@ -511,7 +512,7 @@ public class MainActivity extends ActionBarActivity {
         if(employee.getPunchedIn()) {
 
             showDialog(TIME_DIALOG_ID_OUT);
-           // showDialog(DATE_DIALOG_ID_OUT);
+            // showDialog(DATE_DIALOG_ID_OUT);
 
             View v = null;
             this.punchOut(v);
@@ -561,16 +562,34 @@ public class MainActivity extends ActionBarActivity {
                         inYear, inMonth, inDay);
             }*/
             case TIME_DIALOG_ID_IN: {
-                return new TimePickerDialog(this, timePickerListenerIn,
+                TimePickerDialog tpd = new TimePickerDialog(this, timePickerListenerIn,
                         inHour, inMinute, false);
+                tpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        //cancel code
+                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                        alreadyPunchedIn = false;
+                    }
+                });
+                return tpd;
             }
            /* case DATE_DIALOG_ID_OUT: {
                 return new DatePickerDialog(this, datePickerListenerOut,
                         outYear, outMonth, outDay);
             }*/
             case TIME_DIALOG_ID_OUT: {
-                return new TimePickerDialog(this, timePickerListenerOut,
-                        outHour, outMinute, false);
+                TimePickerDialog tpd = new TimePickerDialog(this, timePickerListenerOut,
+                        inHour, inMinute, false);
+                tpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        //cancel code
+                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                        alreadyPunchedIn = true;
+                    }
+                });
+                return tpd;
             }
         }
         return null;
@@ -770,7 +789,7 @@ public class MainActivity extends ActionBarActivity {
 
                     String curTime = hourFormat + ":" + minuteFormat;// + ":" + secondFormat;
 
-                  //  Toast.makeText(MainActivity.this, "in do work", Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(MainActivity.this, "in do work", Toast.LENGTH_SHORT).show();
                     String status = "                Punched In";
                     String s = "Work start time: " + getTimeString();// employee.getClockInTime(); change to see actual time after app closed
                     String s2 = "Time since punch in: " + curTime;
@@ -798,7 +817,7 @@ public class MainActivity extends ActionBarActivity {
                     DateFormat dt2 = new SimpleDateFormat("MM/dd/yyyy");
                     dateFormat = dt2.format(dayDate);
                     editor.putString("TodaysDate", dateFormat);
-                   //System.out.println("date formate22222: " + dateFormat );
+                    //System.out.println("date formate22222: " + dateFormat );
 
                     //keeps track of which week it is
                     Calendar c = Calendar.getInstance();
