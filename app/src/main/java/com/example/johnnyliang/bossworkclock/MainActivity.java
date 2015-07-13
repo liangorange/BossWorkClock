@@ -410,7 +410,7 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * This method displays the employees total hours in a calendar view.
-     * 
+     *
      *  It is not written yet.
      */
     void calendarView() {
