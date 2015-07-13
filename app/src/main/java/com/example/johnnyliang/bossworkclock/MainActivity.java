@@ -568,6 +568,8 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         //cancel code
+                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                        alreadyPunchedIn = false;
                     }
                 });
                 return tpd;
@@ -583,6 +585,8 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         //cancel code
+                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                        alreadyPunchedIn = true;
                     }
                 });
                 return tpd;
