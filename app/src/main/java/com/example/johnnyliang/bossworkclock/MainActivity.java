@@ -38,6 +38,7 @@ import java.util.Date;
  * This activity is used to tie all other classes in the app together.
  */
 public class MainActivity extends ActionBarActivity {
+    public static final String EXTRA = "extra";
     public final static String TAG2 = "MAIN_ACTIVITY";
     private Employee employee;
     private String dateFormat;
@@ -112,6 +113,10 @@ public class MainActivity extends ActionBarActivity {
         
 
         Parse.initialize(this, "ovwOZZiEF5hVNnxP2W9UpZtcsPPm4rZJdmelkF3q", "LqEZAeaK4sVkTHOymW7MPKaxG2P3zLxkpqgFVGP4");
+
+
+        Parse.initialize(this, "YuTd2MEdXK9M3hnxDPMXr2o4UAN2P3P1UoAeRVcV", "9TNC9THjdIrh0V1s2WCOY1VrqzqzKunWJlczrs46");
+
 
         //use the employee class
         employee = new Employee();
@@ -244,7 +249,7 @@ public class MainActivity extends ActionBarActivity {
             System.out.println("Current millisecond: " + currentDate.getTime());
             System.out.println("TimesDiff: " + timeDiff);
 
-            int timesNumber = (int)timeDiff / 1000;
+            int timesNumber = (int)timeDiff / 16000;
             System.out.println("TimesNumber: " + timesNumber);
 
             dayHours = (float)timesNumber * 0.01 + setting.getFloat("LastHour", 0);
@@ -417,6 +422,23 @@ public class MainActivity extends ActionBarActivity {
      */
     void calendarView() {
         Toast.makeText(MainActivity.this, "This feature is not available yet", Toast.LENGTH_SHORT).show();
+
+        // Makes bridge between the two activities
+        //Intent intent = new Intent(this, calendar.class);
+
+        //showDialog();
+        // Gets the text from the activity
+        //TextView book = (TextView) findViewById(R.id.status);
+        //EditText chapter = (EditText) findViewById(R.id.editText2);
+        //EditText verse = (EditText) findViewById(R.id.editText3);
+
+        // Makes string to display to screen
+        //String myScripture = "Your favorite scripture is: " + book.getText().toString();
+          //      + " " + chapter.getText().toString() + ":" + verse.getText().toString();
+
+        // Passes myScripture to scripture printer through intent
+        //intent.putExtra(EXTRA, "myScripture");
+        //startActivity(intent);
     }
 
     /**
@@ -499,9 +521,11 @@ public class MainActivity extends ActionBarActivity {
 
             /* Ideally this wouldn't happen until after the above thread is complete,
                Doing this would get rid of the 16-32 sec lag time after the new time is entered. */
-           // alreadyPunchedIn = true;
-           //View v = null;
-           // this.punchIn(v);
+           // if( editPunchin == true ) {
+                alreadyPunchedIn = true;
+                View v = null;
+                this.punchIn(v);
+           // }
         }
     }
 
@@ -515,8 +539,8 @@ public class MainActivity extends ActionBarActivity {
             showDialog(TIME_DIALOG_ID_OUT);
             // showDialog(DATE_DIALOG_ID_OUT);
 
-          //  View v = null;
-           // this.punchOut(v);
+            View v = null;
+            this.punchOut(v);
         }
     }
 
@@ -610,7 +634,7 @@ public class MainActivity extends ActionBarActivity {
             }
             inMinute = selectedMinute;
 
-          /*  //convert inHour and inMinute to date object
+            //convert inHour and inMinute to date object
             Calendar cal = Calendar.getInstance();
             cal.setTime(employee.getClockInTime());
             cal.set(Calendar.HOUR_OF_DAY,inHour);
@@ -630,7 +654,7 @@ public class MainActivity extends ActionBarActivity {
             employee.incDailyTotal(timesNumber);
             employee.incWeeklyTotal(timesNumber);
             employee.incMonthlyTotal(timesNumber);
-*/
+
             //It can take up to 16 seconds for the times to be updated
             Toast.makeText(MainActivity.this, "Punched In time will update shortly", Toast.LENGTH_LONG).show();
         }
@@ -648,7 +672,7 @@ public class MainActivity extends ActionBarActivity {
             outMinute = selectedMinute;
 
             Date oldClockOutTime = new Date();
-/*
+
             //convert outHour and outMinute to date object
             Calendar cal = Calendar.getInstance();
             cal.setTime(oldClockOutTime);
@@ -682,7 +706,7 @@ public class MainActivity extends ActionBarActivity {
             editor.putFloat("WeekHours", employee.getWeeklyTotal());
             editor.putFloat("MonthHours", employee.getMonthlyTotal());
 
-            editor.apply();*/
+            editor.apply();
 
             Toast.makeText(MainActivity.this, "Edited Punched Out time", Toast.LENGTH_SHORT).show();
         }

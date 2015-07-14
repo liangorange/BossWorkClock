@@ -40,8 +40,9 @@ public class TimeCount implements Runnable {
         while(!Thread.currentThread().isInterrupted() && employee.getPunchedIn()){
             try {
                 activity.doWork();
+
+                Thread.sleep(16000); // Pause of 1 Second
                 activity.addTime(0.01);
-                Thread.sleep(1000); // Pause of 1 Second
                 employee.incDailyTotal(0.01);
                 employee.incWeeklyTotal(0.01);
                 employee.incMonthlyTotal(0.01);
