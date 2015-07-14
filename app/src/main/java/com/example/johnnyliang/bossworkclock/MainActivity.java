@@ -929,6 +929,7 @@ public class MainActivity extends ActionBarActivity {
             Thread loadThread = new Thread(count);
             loadThread.start();
 
+            
             //GPSCoord inLocation = new GPSCoord();
             //employee.setClockInLocation(inLocation);
         }
