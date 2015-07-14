@@ -109,6 +109,8 @@ public class MainActivity extends ActionBarActivity {
 
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
+        
+
         Parse.initialize(this, "ovwOZZiEF5hVNnxP2W9UpZtcsPPm4rZJdmelkF3q", "LqEZAeaK4sVkTHOymW7MPKaxG2P3zLxkpqgFVGP4");
 
         //use the employee class
@@ -929,7 +931,7 @@ public class MainActivity extends ActionBarActivity {
             Thread loadThread = new Thread(count);
             loadThread.start();
 
-            
+
             //GPSCoord inLocation = new GPSCoord();
             //employee.setClockInLocation(inLocation);
         }
