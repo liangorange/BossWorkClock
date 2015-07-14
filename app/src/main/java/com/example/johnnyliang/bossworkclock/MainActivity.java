@@ -2,7 +2,6 @@ package com.example.johnnyliang.bossworkclock;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -497,10 +496,10 @@ public class MainActivity extends ActionBarActivity {
             //showDialog(DATE_DIALOG_ID_IN);
 
             /* Ideally this wouldn't happen until after the above thread is complete,
-               Doing this would get rid of the 16 sec lag time after the new time is entered. */
-            alreadyPunchedIn = true;
-            View v = null;
-            this.punchIn(v);
+               Doing this would get rid of the 16-32 sec lag time after the new time is entered. */
+           // alreadyPunchedIn = true;
+           //View v = null;
+           // this.punchIn(v);
         }
     }
 
@@ -514,8 +513,8 @@ public class MainActivity extends ActionBarActivity {
             showDialog(TIME_DIALOG_ID_OUT);
             // showDialog(DATE_DIALOG_ID_OUT);
 
-            View v = null;
-            this.punchOut(v);
+          //  View v = null;
+           // this.punchOut(v);
         }
     }
 
@@ -609,7 +608,7 @@ public class MainActivity extends ActionBarActivity {
             }
             inMinute = selectedMinute;
 
-            //convert inHour and inMinute to date object
+          /*  //convert inHour and inMinute to date object
             Calendar cal = Calendar.getInstance();
             cal.setTime(employee.getClockInTime());
             cal.set(Calendar.HOUR_OF_DAY,inHour);
@@ -629,7 +628,7 @@ public class MainActivity extends ActionBarActivity {
             employee.incDailyTotal(timesNumber);
             employee.incWeeklyTotal(timesNumber);
             employee.incMonthlyTotal(timesNumber);
-
+*/
             //It can take up to 16 seconds for the times to be updated
             Toast.makeText(MainActivity.this, "Punched In time will update shortly", Toast.LENGTH_LONG).show();
         }
@@ -647,7 +646,7 @@ public class MainActivity extends ActionBarActivity {
             outMinute = selectedMinute;
 
             Date oldClockOutTime = new Date();
-
+/*
             //convert outHour and outMinute to date object
             Calendar cal = Calendar.getInstance();
             cal.setTime(oldClockOutTime);
@@ -658,7 +657,7 @@ public class MainActivity extends ActionBarActivity {
             Date newClockOutTime = cal.getTime();
 
             // Updates total hours.
-            long timeDiff = oldClockOutTime.getTime() - newClockOutTime.getTime();// - employee.getClockInTime().getTime();
+            long timeDiff = oldClockOutTime.getTime() - newClockOutTime.getTime();
             int timesNumber = (int)timeDiff / 36000;
             timesNumber *= .01;
 
@@ -681,7 +680,7 @@ public class MainActivity extends ActionBarActivity {
             editor.putFloat("WeekHours", employee.getWeeklyTotal());
             editor.putFloat("MonthHours", employee.getMonthlyTotal());
 
-            editor.apply();
+            editor.apply();*/
 
             Toast.makeText(MainActivity.this, "Edited Punched Out time", Toast.LENGTH_SHORT).show();
         }
