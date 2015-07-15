@@ -24,9 +24,10 @@
         android:layout_marginTop="40dp" />
 
     <EditText
-        android:layout_width="100dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/password"
+        android:hint="Default password is: '0000'"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp" />
