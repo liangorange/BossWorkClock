@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
     private TimeCount count = new TimeCount();
     private SharedPreferences setting;
     public static final String fileName = "nameFile";
-
+    public boolean showDialogDone = false;
     // For the options menu
     private boolean twelveHourFormat = true;
     //private String curProject;
@@ -529,9 +529,11 @@ public class MainActivity extends ActionBarActivity {
             /* Ideally this wouldn't happen until after the above thread is complete,
                Doing this would get rid of the 16-32 sec lag time after the new time is entered. */
            // if( editPunchin == true ) {
+            //while (!showDialogDone) {};
                 alreadyPunchedIn = true;
                 View v = null;
                 this.punchIn(v);
+            //showDialogDone = false;
            // }
         }
     }
@@ -546,8 +548,10 @@ public class MainActivity extends ActionBarActivity {
             showDialog(TIME_DIALOG_ID_OUT);
             // showDialog(DATE_DIALOG_ID_OUT);
 
+            //while(!showDialogDone){};
             View v = null;
             this.punchOut(v);
+            //showDialogDone = false;
         }
     }
 
@@ -601,9 +605,10 @@ public class MainActivity extends ActionBarActivity {
                     public void onCancel(DialogInterface dialog) {
                         //cancel code
                         Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                        alreadyPunchedIn = false;
+                        //alreadyPunchedIn = false;
                     }
                 });
+                //showDialogDone = true;
                 return tpd;
             }
            /* case DATE_DIALOG_ID_OUT: {
@@ -618,9 +623,10 @@ public class MainActivity extends ActionBarActivity {
                     public void onCancel(DialogInterface dialog) {
                         //cancel code
                         Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                        alreadyPunchedIn = true;
+                        //alreadyPunchedIn = true;
                     }
                 });
+                //showDialogDone = true;
                 return tpd;
             }
         }
@@ -661,6 +667,7 @@ public class MainActivity extends ActionBarActivity {
             employee.incDailyTotal(timesNumber);
             employee.incWeeklyTotal(timesNumber);
             employee.incMonthlyTotal(timesNumber);
+
 
             //It can take up to 16 seconds for the times to be updated
             Toast.makeText(MainActivity.this, "Punched In time will update shortly", Toast.LENGTH_LONG).show();
@@ -714,6 +721,7 @@ public class MainActivity extends ActionBarActivity {
             editor.putFloat("MonthHours", employee.getMonthlyTotal());
 
             editor.apply();
+
 
             Toast.makeText(MainActivity.this, "Edited Punched Out time", Toast.LENGTH_SHORT).show();
         }

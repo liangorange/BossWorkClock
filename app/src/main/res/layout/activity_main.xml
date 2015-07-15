@@ -156,8 +156,8 @@
         </TableRow>
 
         <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -167,7 +167,7 @@
                 android:layout_column="0"
                 android:textSize="@dimen/abc_text_size_medium_material"
                 android:textColor="#ff000000" />
-            </TableRow>
+        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
