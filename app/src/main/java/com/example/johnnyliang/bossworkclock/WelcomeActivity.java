@@ -16,6 +16,10 @@ public class WelcomeActivity extends Activity {
     // EditText passWord = (EditText)findViewById(R.id.password);
     public EditText passWord;
 
+    // public String enteredPassword;
+
+    public static String enteredPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +37,9 @@ public class WelcomeActivity extends Activity {
             public void onClick(View v) {
                 // Starts an intent of the log in activity
 
-                if (passWord.getText().toString().equals("5678")) {
+                enteredPassword = passWord.getText().toString();
+
+                if (passWord.getText().toString().equals("5678") || enteredPassword.equals("0000") || enteredPassword.equals("Gerald")) {
                     // startActivity(new Intent(WelcomeActivity.this, MyActivity.class));
 
                     IntentLauncher launcher = new IntentLauncher();

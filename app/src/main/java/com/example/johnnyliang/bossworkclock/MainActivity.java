@@ -110,12 +110,16 @@ public class MainActivity extends ActionBarActivity {
 
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
-        
-
-        Parse.initialize(this, "ovwOZZiEF5hVNnxP2W9UpZtcsPPm4rZJdmelkF3q", "LqEZAeaK4sVkTHOymW7MPKaxG2P3zLxkpqgFVGP4");
 
 
-        Parse.initialize(this, "YuTd2MEdXK9M3hnxDPMXr2o4UAN2P3P1UoAeRVcV", "9TNC9THjdIrh0V1s2WCOY1VrqzqzKunWJlczrs46");
+        if (WelcomeActivity.enteredPassword.equals("5678")) {
+            System.out.println("Goes to Johnny's parse account");
+            Parse.initialize(this, "ovwOZZiEF5hVNnxP2W9UpZtcsPPm4rZJdmelkF3q", "LqEZAeaK4sVkTHOymW7MPKaxG2P3zLxkpqgFVGP4");
+        }
+        if (WelcomeActivity.enteredPassword.equals("Gerald")) {
+            System.out.println("Goes to Gerald's parse account");
+            Parse.initialize(this, "YuTd2MEdXK9M3hnxDPMXr2o4UAN2P3P1UoAeRVcV", "9TNC9THjdIrh0V1s2WCOY1VrqzqzKunWJlczrs46");
+        }
 
 
         //use the employee class
@@ -249,7 +253,7 @@ public class MainActivity extends ActionBarActivity {
             System.out.println("Current millisecond: " + currentDate.getTime());
             System.out.println("TimesDiff: " + timeDiff);
 
-            int timesNumber = (int)timeDiff / 16000;
+            int timesNumber = (int)timeDiff / 36000;
             System.out.println("TimesNumber: " + timesNumber);
 
             dayHours = (float)timesNumber * 0.01 + setting.getFloat("LastHour", 0);
@@ -486,6 +490,9 @@ public class MainActivity extends ActionBarActivity {
                             if (e == null) {
                                 parseObject.put("eTotalHour", totalHourFormat);
                                 parseObject.saveInBackground();
+                            }
+                            else {
+                                Log.d("score", "The updateClass request failed");
                             }
                         }
                     });
@@ -910,6 +917,7 @@ public class MainActivity extends ActionBarActivity {
             dateTest = Integer.parseInt(getDateString());
 
             if (todaysDate == "" || todaysDate != df.format(startingDate)) {
+                System.out.println("Create new parse object");
                 timeTrack = new ParseObject("BossTimeTracker");
             }
 
