@@ -1,4 +1,4 @@
-package com.example.johnnyliang.bossworkclock;
+package comWorkClock.WorkClock.johnnyliang.bossworkclock;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,6 +27,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+
 
 // import com.parse.ParseException;
 

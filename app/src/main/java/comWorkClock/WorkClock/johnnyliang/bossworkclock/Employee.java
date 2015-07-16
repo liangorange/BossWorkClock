@@ -1,4 +1,4 @@
-package com.example.johnnyliang.bossworkclock;
+package comWorkClock.WorkClock.johnnyliang.bossworkclock;
 
 import java.util.Date;
 

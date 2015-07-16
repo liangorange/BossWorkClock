@@ -1,4 +1,4 @@
-package com.example.johnnyliang.bossworkclock;
+package comWorkClock.WorkClock.johnnyliang.bossworkclock;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.example.johnnyliang.bossworkclock;
+package comWorkClock.WorkClock.johnnyliang.bossworkclock;
 
 import android.content.Context;
 import android.location.Location;
