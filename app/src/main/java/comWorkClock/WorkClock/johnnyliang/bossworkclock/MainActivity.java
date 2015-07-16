@@ -49,6 +49,7 @@ public class MainActivity extends ActionBarActivity {
     private SharedPreferences setting;
     public static final String fileName = "nameFile";
     public boolean showDialogDone = false;
+
     // For the options menu
     private boolean twelveHourFormat = true;
     //private String curProject;
@@ -116,17 +117,32 @@ public class MainActivity extends ActionBarActivity {
         // Initialize SharePreferences
         setting = getSharedPreferences(fileName, 0);
 
-        if (WelcomeActivity.enteredPassword.equals("5678")) {
-            System.out.println("Goes to Johnny's parse account");
-            Parse.initialize(this, "ovwOZZiEF5hVNnxP2W9UpZtcsPPm4rZJdmelkF3q", "LqEZAeaK4sVkTHOymW7MPKaxG2P3zLxkpqgFVGP4");
-        }
-        if (WelcomeActivity.enteredPassword.equals("Gerald")) {
-            System.out.println("Goes to Gerald's parse account");
-            Parse.initialize(this, "YuTd2MEdXK9M3hnxDPMXr2o4UAN2P3P1UoAeRVcV", "9TNC9THjdIrh0V1s2WCOY1VrqzqzKunWJlczrs46");
-        }
-        if (WelcomeActivity.enteredPassword.equals("Gerald2")) {
-            System.out.println("Goes to Gerald's 2nd parse account");
-            Parse.initialize(this, "FfgWRQCND4dXxjYufUwZJ0IIpy9D3xwMtswDjt9E", "6ZltYpYHmN82p0BLu5a2r13AjwFGNUEznKgb0ykn");
+        // Makes it so that the employee doesn't have to enter in the company code more than once.
+        // This is used together with the shared preferences in the WelcomeActivity
+        String employerPass = setting.getString("EmployerCode", "");
+        Log.i(TAG2, "employerPass is : " + employerPass);
+
+        // *****     WHEN YOU ADD AN NEW EMPLOYER, PUT THEIR PASSWORD HERE             *****
+        // ***** ALSO INCLUDE THEIR PARSE KEYS AND SAVE PASSWORD IN SHARED PREFERENCES *****
+        //Checks if employee already entered in employer password
+        if (employerPass.equals("")){
+            SharedPreferences.Editor editor = setting.edit();
+            if (WelcomeActivity.enteredPassword.equals("5678")) {
+                editor.putString("EmployerCode", "5678");
+                System.out.println("Goes to Johnny's parse account");
+                Parse.initialize(this, "ovwOZZiEF5hVNnxP2W9UpZtcsPPm4rZJdmelkF3q", "LqEZAeaK4sVkTHOymW7MPKaxG2P3zLxkpqgFVGP4");
+            }
+            if (WelcomeActivity.enteredPassword.equals("Gerald")) {
+                editor.putString("EmployerCode", "Gerald");
+                System.out.println("Goes to Gerald's parse account");
+                Parse.initialize(this, "YuTd2MEdXK9M3hnxDPMXr2o4UAN2P3P1UoAeRVcV", "9TNC9THjdIrh0V1s2WCOY1VrqzqzKunWJlczrs46");
+            }
+            if (WelcomeActivity.enteredPassword.equals("Gerald2")) {
+                editor.putString("EmployerCode", "Gerald2");
+                System.out.println("Goes to Gerald's 2nd parse account");
+                Parse.initialize(this, "FfgWRQCND4dXxjYufUwZJ0IIpy9D3xwMtswDjt9E", "6ZltYpYHmN82p0BLu5a2r13AjwFGNUEznKgb0ykn");
+            }
+            editor.apply();
         }
 
         //use the employee class
