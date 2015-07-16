@@ -39,7 +39,14 @@ public class WelcomeActivity extends Activity {
 
                 enteredPassword = passWord.getText().toString();
 
-                if (passWord.getText().toString().equals("5678") || enteredPassword.equals("0000") || enteredPassword.equals("Gerald")) {
+                //attempted to make it so that you only had to enter password once
+                /*
+                setting = getSharedPreferences(fileName, 0);
+                SharedPreferences.Editor editor = setting.edit();
+                editor.putString("EmployerCode", enteredPassword);
+                editor.apply();*/
+
+                if (passWord.getText().toString().equals("5678") || enteredPassword.equals("0000") || enteredPassword.equals("Gerald") || enteredPassword.equals("Gerald2")) {
                     // startActivity(new Intent(WelcomeActivity.this, MyActivity.class));
 
                     IntentLauncher launcher = new IntentLauncher();

@@ -40,8 +40,8 @@
         android:onClick="editPunchOut"/>
 
     <Button
-        android:layout_width="160dp"
-        android:layout_height="175dp"
+        android:layout_width="155dp"
+        android:layout_height="170dp"
         android:text="Punch    In"
         android:id="@+id/button3"
         android:layout_below="@+id/button"
@@ -52,8 +52,8 @@
         android:textSize="@dimen/abc_text_size_display_1_material" />
 
     <Button
-        android:layout_width="160dp"
-        android:layout_height="175dp"
+        android:layout_width="155dp"
+        android:layout_height="170dp"
         android:text="Punch Out"
         android:id="@+id/button4"
         android:layout_alignTop="@+id/button3"

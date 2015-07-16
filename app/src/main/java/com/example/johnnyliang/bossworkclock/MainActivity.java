@@ -111,6 +111,8 @@ public class MainActivity extends ActionBarActivity {
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
 
+        // Initialize SharePreferences
+        setting = getSharedPreferences(fileName, 0);
 
         if (WelcomeActivity.enteredPassword.equals("5678")) {
             System.out.println("Goes to Johnny's parse account");
@@ -120,14 +122,15 @@ public class MainActivity extends ActionBarActivity {
             System.out.println("Goes to Gerald's parse account");
             Parse.initialize(this, "YuTd2MEdXK9M3hnxDPMXr2o4UAN2P3P1UoAeRVcV", "9TNC9THjdIrh0V1s2WCOY1VrqzqzKunWJlczrs46");
         }
-
+        if (WelcomeActivity.enteredPassword.equals("Gerald2")) {
+            System.out.println("Goes to Gerald's 2nd parse account");
+            Parse.initialize(this, "FfgWRQCND4dXxjYufUwZJ0IIpy9D3xwMtswDjt9E", "6ZltYpYHmN82p0BLu5a2r13AjwFGNUEznKgb0ykn");
+        }
 
         //use the employee class
         employee = new Employee();
 
-        // Initialize SharePreferences
-        setting = getSharedPreferences(fileName, 0);
-
+        //set up the rest of the app
         setUpName();
         setUpProject();
         setUpTable();
