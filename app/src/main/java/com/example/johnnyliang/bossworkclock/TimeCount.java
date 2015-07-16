@@ -34,7 +34,7 @@ public class TimeCount implements Runnable {
      */
     @Override
     public void run() {
-       // Toast.makeText(TimeCount.this, "Punched in", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(TimeCount.this, "Punched in", Toast.LENGTH_SHORT).show();
 
 
         while(!Thread.currentThread().isInterrupted() && employee.getPunchedIn()){
