@@ -2,7 +2,9 @@ package comWorkClock.WorkClock.johnnyliang.bossworkclock;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,50 +15,59 @@ import android.widget.Toast;
  */
 public class WelcomeActivity extends Activity {
 
-    // EditText passWord = (EditText)findViewById(R.id.password);
     public EditText passWord;
-
-    // public String enteredPassword;
+    private SharedPreferences setting;
+    public static final String fileName = "nameFile";
+    public final static String TAG3 = "WELCOME_ACTIVITY";
+    private String employerCode;
 
     public static String enteredPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.welcome_screen);
 
-        // Log in button click handler
-        Button loginButton = (Button) findViewById(R.id.button);
+        // Makes it so that the employee doesn't have to enter in the company code more than once.
+        // This is used together with the shared preferences in the MainActivity
+        setting = getSharedPreferences(fileName, 0);
+        employerCode = setting.getString("EmployerCode", "");
+        Log.i(TAG3, "employerCode is : " + employerCode);
 
-        passWord = (EditText)findViewById(R.id.password);
+        // Checks if employee already entered in employer password
+        if (employerCode.equals("")) {
+            setContentView(R.layout.welcome_screen);
+            // Log in button click handler
+            Button loginButton = (Button) findViewById(R.id.button);
+
+            passWord = (EditText) findViewById(R.id.password);
 
 
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Starts an intent of the log in activity
 
+                    enteredPassword = passWord.getText().toString();
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Starts an intent of the log in activity
+                    // Saves if you already entered in a password
+                    setting = getSharedPreferences(fileName, 0);
+                    SharedPreferences.Editor editor = setting.edit();
+                    editor.putString("EmployerCode", enteredPassword);
+                    editor.apply();
 
-                enteredPassword = passWord.getText().toString();
+                    // *****WHEN YOU ADD AN NEW EMPLOYER, PUT THEIR PASSWORD HERE*****
+                    if (passWord.getText().toString().equals("5678") || enteredPassword.equals("0000") || enteredPassword.equals("Gerald") || enteredPassword.equals("Gerald2")) {
 
-                //attempted to make it so that you only had to enter password once
-                /*
-                setting = getSharedPreferences(fileName, 0);
-                SharedPreferences.Editor editor = setting.edit();
-                editor.putString("EmployerCode", enteredPassword);
-                editor.apply();*/
-
-                if (passWord.getText().toString().equals("5678") || enteredPassword.equals("0000") || enteredPassword.equals("Gerald") || enteredPassword.equals("Gerald2")) {
-                    // startActivity(new Intent(WelcomeActivity.this, MyActivity.class));
-
-                    IntentLauncher launcher = new IntentLauncher();
-                    launcher.start();
+                        IntentLauncher launcher = new IntentLauncher();
+                        launcher.start();
+                    } else
+                        Toast.makeText(getApplicationContext(), "Sorry, the company code does not exist =)",
+                                Toast.LENGTH_SHORT).show();
                 }
-                else
-                    Toast.makeText(getApplicationContext(), "Sorry, the company code does not exist =)",
-                            Toast.LENGTH_SHORT).show();
-            }
-        });
+            });
+        }else {
+            IntentLauncher launcher = new IntentLauncher();
+            launcher.start();
+        }
     }
 
     private class IntentLauncher extends Thread {
