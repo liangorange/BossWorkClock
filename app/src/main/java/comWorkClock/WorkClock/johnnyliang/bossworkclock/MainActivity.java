@@ -172,6 +172,7 @@ public class MainActivity extends ActionBarActivity {
             setName();
             System.out.println("here2");
         }
+        
         // }while(nameCount < 3 || theName.equals(""));  //it says this is always true but it should depend on user input...?
     }
 
