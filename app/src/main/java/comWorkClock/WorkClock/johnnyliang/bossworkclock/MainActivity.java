@@ -142,7 +142,7 @@ public class MainActivity extends ActionBarActivity {
                 System.out.println("Goes to Gerald's 2nd parse account");
                 Parse.initialize(this, "FfgWRQCND4dXxjYufUwZJ0IIpy9D3xwMtswDjt9E", "6ZltYpYHmN82p0BLu5a2r13AjwFGNUEznKgb0ykn");
             }
-            editor.apply();  
+            editor.apply();
         }
 
         //use the employee class
