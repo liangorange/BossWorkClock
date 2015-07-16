@@ -13,5 +13,6 @@ public class EmployeeTest extends InstrumentationTestCase {
         assertEquals("Awesome", misterAwesome.getName());
     }
 
+    //public void clockInHour
 
 }
