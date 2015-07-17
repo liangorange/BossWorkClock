@@ -66,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
     private String todaysDate;
     private int todaysWeek;
     private int todaysMonth;
-    private double dayHours;
+    private float dayHours;
     private float weekHours;
     private float monthHours;
     private boolean alreadyPunchedIn = false;
@@ -287,18 +287,19 @@ public class MainActivity extends ActionBarActivity {
             int timesNumber = (int)timeDiff / 36000;
             System.out.println("TimesNumber: " + timesNumber);
 
-            dayHours = (float)timesNumber * 0.01 + setting.getFloat("LastHour", 0);
+            dayHours = (float)0.01 * timesNumber + setting.getFloat("LastHour", 0);
             weekHours = (float)0.01 * timesNumber + setting.getFloat("LastWeek", 0);
             monthHours = (float)0.01 * timesNumber + setting.getFloat("LastMonth", 0);
 
+            //so that we can call punchIn method
             alreadyPunchedIn = true;
-            employee.setPunchedIn(false);//so that we can call punchIn method
+            employee.setPunchedIn(false);
 
             View v = null;
             this.punchIn(v);
         }
 
-        employee.setDailyTotal((float)dayHours);
+        employee.setDailyTotal(dayHours);
         employee.setWeeklyTotal(weekHours);
         employee.setMonthlyTotal(monthHours);
 
@@ -464,7 +465,7 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * ADDTIME function
-     * This function will adding hours to dayHours, weekHours and MonthlyHours to
+     * This function will add hours to dayHours, weekHours and MonthlyHours to
      * keep track of their total hours.
      * In additional, when these hours are updated, it also update the value in our
      * remote database Parse.com to keep it update to date.
@@ -475,7 +476,7 @@ public class MainActivity extends ActionBarActivity {
 
         DateFormat dfMonth = new SimpleDateFormat("MM");
 
-        // Format the currnet month
+        // Format the current month
         String monthTest = dfMonth.format(startingDate);
 
         dayHours += timeSecond;
@@ -872,7 +873,6 @@ public class MainActivity extends ActionBarActivity {
                     DateFormat dt2 = new SimpleDateFormat("MM/dd/yyyy");
                     dateFormat = dt2.format(dayDate);
                     editor.putString("TodaysDate", dateFormat);
-                    //System.out.println("date formate22222: " + dateFormat );
 
                     //keeps track of which week it is
                     Calendar c = Calendar.getInstance();
@@ -1018,7 +1018,7 @@ public class MainActivity extends ActionBarActivity {
             SharedPreferences.Editor editor = setting.edit();
             editor.putBoolean("PunchedIn", employee.getPunchedIn());
 
-            editor.putFloat("LastHour", (float) dayHours);
+            editor.putFloat("LastHour", dayHours);
             editor.putFloat("LastWeek", weekHours);
             editor.putFloat("LastMonth", monthHours);
 
