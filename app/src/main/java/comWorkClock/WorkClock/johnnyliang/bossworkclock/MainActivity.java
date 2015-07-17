@@ -128,7 +128,7 @@ public class MainActivity extends ActionBarActivity {
         // *****     WHEN YOU ADD AN NEW EMPLOYER, PUT THEIR PASSWORD HERE             *****
         // ***** ALSO INCLUDE THEIR PARSE KEYS AND SAVE PASSWORD IN SHARED PREFERENCES *****
         //Checks if employee already entered in employer password
-        if (employerPass.equals("")){
+        if (employerPass.equals("") ){//|| employerPass.equals("Gerald") || employerPass.equals("Gerald2")){
             SharedPreferences.Editor editor = setting.edit();
             if (WelcomeActivity.enteredPassword.equals("Gerald")) {
                 editor.putString("EmployerCode", "Gerald");
@@ -141,6 +141,12 @@ public class MainActivity extends ActionBarActivity {
                 Parse.initialize(this, "FfgWRQCND4dXxjYufUwZJ0IIpy9D3xwMtswDjt9E", "6ZltYpYHmN82p0BLu5a2r13AjwFGNUEznKgb0ykn");
             }
             editor.apply();
+        }
+
+        if (employerPass.equals("Gerald")) {
+            Parse.initialize(this, "YuTd2MEdXK9M3hnxDPMXr2o4UAN2P3P1UoAeRVcV", "9TNC9THjdIrh0V1s2WCOY1VrqzqzKunWJlczrs46");
+        } else if(employerPass.equals("Gerald")) {
+            Parse.initialize(this, "FfgWRQCND4dXxjYufUwZJ0IIpy9D3xwMtswDjt9E", "6ZltYpYHmN82p0BLu5a2r13AjwFGNUEznKgb0ykn");
         }
 
         //use the employee class
@@ -553,7 +559,7 @@ public class MainActivity extends ActionBarActivity {
             //showDialog(DATE_DIALOG_ID_IN);
 
             /* Ideally this wouldn't happen until after the above thread is complete,
-               Doing this would get rid of the 16-32 sec lag time after the new time is entered. */
+               Doing this would get rid of the 36 sec lag time after the new time is entered. */
                 alreadyPunchedIn = true;
                 View v = null;
                 this.punchIn(v);
@@ -685,7 +691,7 @@ public class MainActivity extends ActionBarActivity {
             employee.incWeeklyTotal(timesNumber);
             employee.incMonthlyTotal(timesNumber);
 
-            //It can take up to 32 seconds for the times to be updated
+            //It can take up to 36 seconds for the times to be updated
             Toast.makeText(MainActivity.this, "Punched In time will update shortly", Toast.LENGTH_LONG).show();
         }
     };
