@@ -8,18 +8,18 @@ import java.util.Date;
  * Created by YH Jonathan Kwok on 11/6/2015.
  */
 public class EmployeeTest extends InstrumentationTestCase {
-    public void nameTester() {
-        Employee misterAwesome = new Employee();
-        misterAwesome.setName("Awesome");
-
-        assertEquals("Awesome", misterAwesome.getName());
-    }
+    Employee myEmployee = new Employee();
 
     public void testClockInHour() {
-        Date date;
-        Employee myEmployee = new Employee();
-       // myEmployee.setClockInTime();
+        Date date = new Date();
+        myEmployee.setClockInTime(date);
+
+        assertEquals(date, myEmployee.getClockInTime());
 
     }
 
+    public void testDailyTotal() {
+        float total= 256;
+
+    }
 }
