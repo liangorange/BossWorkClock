@@ -77,7 +77,11 @@ public class MainActivity extends ActionBarActivity {
     private float weekHours;
     private float monthHours;
     private boolean alreadyPunchedIn = false;
+
     public String totalHourFormat;
+    public String totalWeekFormat;
+    public String totalMonthFormat;
+
     private int dateTest;
     private ParseObject timeTrack;              // For Parse object to store data online
     private String hourFormat;
@@ -482,9 +486,12 @@ public class MainActivity extends ActionBarActivity {
         monthHours += timeSecond;
 
         totalHourFormat = String.format("%.2f", dayHours);
+        totalWeekFormat = String.format("%.2f", weekHours);
+        totalMonthFormat = String.format("%.2f", monthHours);
+
         System.out.println("Total Hour: " + totalHourFormat);
 
-        int parseDateTest = Integer.parseInt(getDateString());
+        final int parseDateTest = Integer.parseInt(getDateString());
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("BossTimeTracker");
 
@@ -509,7 +516,10 @@ public class MainActivity extends ActionBarActivity {
                         @Override
                         public void done(ParseObject parseObject, com.parse.ParseException e) {
                             if (e == null) {
-                                parseObject.put("eTotalHour", totalHourFormat);
+                                parseObject.put("fDailyHour", totalHourFormat);
+                                parseObject.put("gWeeklyHour", totalWeekFormat);
+                                parseObject.put("hMonthlyHour", totalMonthFormat);
+                                // parseObject.put("eTotalHour", totalHourFormat);
                                 parseObject.saveInBackground();
                             }
                             else {
