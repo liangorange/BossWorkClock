@@ -5,6 +5,8 @@ import android.util.Log;
 /**
  * This class keeps track of time.
  *
+ * The do work thread is called from here. This is how we keep track of the time that is updated
+ * on the time table tha is displayed on the screen.
  * Created by JohnnyLiang on 6/15/15.
  */
 public class TimeCount implements Runnable {
@@ -34,14 +36,12 @@ public class TimeCount implements Runnable {
      */
     @Override
     public void run() {
-        // Toast.makeText(TimeCount.this, "Punched in", Toast.LENGTH_SHORT).show();
-
 
         while(!Thread.currentThread().isInterrupted() && employee.getPunchedIn()){
             try {
                 activity.doWork();
 
-                Thread.sleep(36000); // Pause of 1 Second
+                Thread.sleep(36000);
                 activity.addTime(0.01);
                 employee.incDailyTotal(0.01);
                 employee.incWeeklyTotal(0.01);

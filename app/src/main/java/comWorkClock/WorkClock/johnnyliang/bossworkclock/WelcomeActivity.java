@@ -11,6 +11,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
+ * This is where the employee enters the employer password.
+ *
+ * This is the first screen that shows up when the app is downloaded. The employee
+ * can then enter in a password that was provided by their employer of enter the
+ * default password to use the app without storing their data. When a new employers
+ * password is added to the app it needs to be updated in this class as well as in the
+ * main activity.
  * Created by liangorange on 7/14/15.
  */
 public class WelcomeActivity extends Activity {
@@ -23,6 +30,10 @@ public class WelcomeActivity extends Activity {
 
     public static String enteredPassword;
 
+    /**
+     * This meathod sets up the class.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +52,6 @@ public class WelcomeActivity extends Activity {
 
             passWord = (EditText) findViewById(R.id.password);
 
-
             loginButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Starts an intent of the log in activity
@@ -55,7 +65,7 @@ public class WelcomeActivity extends Activity {
                     editor.apply();
 
                     // *****WHEN YOU ADD AN NEW EMPLOYER, PUT THEIR PASSWORD HERE*****
-                    if (passWord.getText().toString().equals("5678") || enteredPassword.equals("0000") || enteredPassword.equals("Gerald") || enteredPassword.equals("Gerald2")) {
+                    if (enteredPassword.equals("0000") || enteredPassword.equals("Gerald") || enteredPassword.equals("Gerald2")) {
 
                         IntentLauncher launcher = new IntentLauncher();
                         launcher.start();
@@ -70,6 +80,9 @@ public class WelcomeActivity extends Activity {
         }
     }
 
+    /**
+     * Launches the app after the pasword is entered.
+     */
     private class IntentLauncher extends Thread {
         @Override
         /**

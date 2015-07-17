@@ -5,6 +5,9 @@ import android.test.InstrumentationTestCase;
 import java.util.Date;
 
 /**
+ * Test class used to test the Employee class.
+ *
+ * Our other test ended up not being valid so we got rid of them.
  * Created by YH Jonathan Kwok on 11/6/2015.
  */
 public class EmployeeTest extends InstrumentationTestCase {

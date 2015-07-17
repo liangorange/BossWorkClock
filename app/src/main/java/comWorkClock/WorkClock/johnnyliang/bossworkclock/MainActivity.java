@@ -143,6 +143,7 @@ public class MainActivity extends ActionBarActivity {
             editor.apply();
         }
 
+        // This needs to be here for the parse to work without entering a password every time
         if (employerPass.equals("Gerald")) {
             Parse.initialize(this, "YuTd2MEdXK9M3hnxDPMXr2o4UAN2P3P1UoAeRVcV", "9TNC9THjdIrh0V1s2WCOY1VrqzqzKunWJlczrs46");
         } else if(employerPass.equals("Gerald")) {

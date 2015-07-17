@@ -9,6 +9,10 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 /**
+ * This class gets GPS coordinates.
+ *
+ * The mobile devise location is used to find its location. The longitude and
+ * latitude are returned which can then be used to mark a spot on a map.
  * Created by Gerald on 6/12/2015.
  */
 public class GPSCoord extends FragmentActivity implements LocationListener {
@@ -22,6 +26,9 @@ public class GPSCoord extends FragmentActivity implements LocationListener {
         /* Use the LocationManager class to obtain GPS locations */
         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        /**
+         * Sets the longitude and latitude.
+         */
         LocationListener mlocListener = new LocationListener() {
             int i = 1;
             public void  mine(Location location) {
@@ -34,17 +41,23 @@ public class GPSCoord extends FragmentActivity implements LocationListener {
                     mine(location);
                     i = 2;
                 }
-                System.out.println(" should only see this once");
             }
 
+            //not used but necessary to compile
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {  }
 
+            /**
+             * Enables GPS
+             */
             @Override
             public void onProviderEnabled(String provider) {
                 Toast.makeText(getApplicationContext(), "GPS Enabled", Toast.LENGTH_SHORT).show();
             }
 
+            /**
+             * Disables GPS
+             */
             @Override
             public void onProviderDisabled(String provider) {
                 Toast.makeText(getApplicationContext(), "GPS Disabled", Toast.LENGTH_SHORT).show();

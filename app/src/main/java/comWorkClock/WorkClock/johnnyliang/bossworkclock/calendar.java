@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 /**
+ * This class is still being developed.
+ *
+ * This class will produce a calendar that shows the amount of hours that
+ * an employees worked each day.
  * Created by Gerald on 7/14/2015.
  */
 public class calendar extends AppCompatActivity {
