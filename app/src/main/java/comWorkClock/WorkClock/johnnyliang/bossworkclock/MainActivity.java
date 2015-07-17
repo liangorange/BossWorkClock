@@ -471,7 +471,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     *  Who made this???
+     * ADDTIME function
+     * This function will adding hours to dayHours, weekHours and MonthlyHours to
+     * keep track of their total hours.
+     * In additional, when these hours are updated, it also update the value in our
+     * remote database Parse.com to keep it update to date.
+     * By Johnny Liang
      * @param timeSecond
      */
     public void addTime(double timeSecond) {
