@@ -15,11 +15,19 @@ public class EmployeeTest extends InstrumentationTestCase {
         myEmployee.setClockInTime(date);
 
         assertEquals(date, myEmployee.getClockInTime());
-
     }
 
     public void testDailyTotal() {
         float total= 256;
+        myEmployee.setDailyTotal(total);
 
+        assertEquals(256, myEmployee.getDailyTotal());
+    }
+
+    public void testMonthlyTotal() {
+        float total= 354;
+        myEmployee.setMonthlyTotal(total);
+
+        assertEquals(354, myEmployee.getDailyTotal());
     }
 }

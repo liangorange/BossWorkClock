@@ -72,10 +72,6 @@ public class Employee {
     }
 
     public String getName() {
-
-        //setContentView(R.layout.activity_main);
-        //EditText theName = (EditText) findViewById(R.id.name);
-      //  String name = theName.getText().toString();
         return name;
     }
 

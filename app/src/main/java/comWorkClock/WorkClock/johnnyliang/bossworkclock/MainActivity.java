@@ -28,11 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
-
-// import com.parse.ParseException;
-
-
 /**
  * Main Activity where everything is tied together
  *
@@ -52,13 +47,11 @@ public class MainActivity extends ActionBarActivity {
 
     // For the options menu
     private boolean twelveHourFormat = true;
-    //private String curProject;
 
     // For the name
     private TextView name;
     private String theName = "";
     boolean goodName = false;
-
 
     //For project
     private TextView project;
@@ -82,8 +75,9 @@ public class MainActivity extends ActionBarActivity {
     public String totalWeekFormat;
     public String totalMonthFormat;
 
+    // For Parse object to store data online
     private int dateTest;
-    private ParseObject timeTrack;              // For Parse object to store data online
+    private ParseObject timeTrack;
     private String hourFormat;
     private double totalHour;
 
@@ -106,7 +100,12 @@ public class MainActivity extends ActionBarActivity {
     static final int DATE_DIALOG_ID_OUT = 997;
     static final int TIME_DIALOG_ID_OUT = 996;
 
-
+    /**
+     * This is the onCreate method for our MainActivity.
+     *
+     * Several startup functions are called during this method to set up the app correctly.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG2, "Starting onCreate");
@@ -131,11 +130,6 @@ public class MainActivity extends ActionBarActivity {
         //Checks if employee already entered in employer password
         if (employerPass.equals("")){
             SharedPreferences.Editor editor = setting.edit();
-            if (WelcomeActivity.enteredPassword.equals("5678")) {
-                editor.putString("EmployerCode", "5678");
-                System.out.println("Goes to Johnny's parse account");
-                Parse.initialize(this, "ovwOZZiEF5hVNnxP2W9UpZtcsPPm4rZJdmelkF3q", "LqEZAeaK4sVkTHOymW7MPKaxG2P3zLxkpqgFVGP4");
-            }
             if (WelcomeActivity.enteredPassword.equals("Gerald")) {
                 editor.putString("EmployerCode", "Gerald");
                 System.out.println("Goes to Gerald's parse account");
@@ -168,25 +162,26 @@ public class MainActivity extends ActionBarActivity {
         theName = setting.getString("Name" , "");
         name.setText(theName);
         employee.setName(theName);
-        // int nameCount = 0;
-        //do {
+
         if(theName.equals("")) {
-            //    nameCount++;
             System.out.println("here");
             setName();
             System.out.println("here2");
         }
-        // }while(nameCount < 3 || theName.equals(""));  //it says this is always true but it should depend on user input...?
     }
 
     /**
      *  This method is called to set up the project/services display during the onCreate.
+     *
+     *  If there is not a project set, nothing will be displayed, but if there is a project,
+     *  the word "Project: " will be displayed followed by the project name.
      */
     void setUpProject() {
         projectName = (TextView) findViewById(R.id.projectName);
         project = (TextView) findViewById(R.id.projectLabel);
         currentProject = setting.getString("ProjectName", "");
         String s1 = setting.getString("Project", "");
+
         if (currentProject.equals("")) {
             project.setText("");
         }
@@ -201,7 +196,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     *  This method sets up the table during the onCreate.
+     *  This method sets up the time table during the onCreate.
      *
      *  If there are times that have been saved they will be set here. This method basically
      *  sets up the app with all the employees previous hours.
@@ -219,7 +214,7 @@ public class MainActivity extends ActionBarActivity {
         todaysDate = setting.getString("TodaysDate", "");
 
         // Is it still the same day that we started keeping track of with dayHours
-        //if same day keep adding on to dayHours
+        // if same day keep adding on to dayHours
         if (dateFormat.equals(todaysDate)) {
             dayHours = setting.getFloat("DayHours", 0);
             countNumber = setting.getInt("Count", 0);
@@ -240,8 +235,10 @@ public class MainActivity extends ActionBarActivity {
         todaysWeek = setting.getInt("TodaysWeek", 0);
 
         // Is it still the same week
-        if (week == todaysWeek)
+        if (week == todaysWeek) {
             weekHours = setting.getFloat("WeekHours", 0);
+        }
+        //otherwise it is a new week so start back at 0
         else {
             weekHours = 0;
             editor.putFloat("LastWeek", weekHours);
@@ -252,8 +249,10 @@ public class MainActivity extends ActionBarActivity {
         todaysMonth = setting.getInt("TodaysMonth" , 0);
 
         //Is it still the same month
-        if(month == todaysMonth)
+        if(month == todaysMonth) {
             monthHours = setting.getFloat("MonthHours", 0);
+        }
+        //otherwise it is a new month so start back at 0
         else {
             monthHours = 0;
             editor.putFloat("LastMonth", monthHours);
@@ -310,7 +309,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * This is where we can add settings.
+     * This is where we can add settings to the options menu.
      *
      * Any setting that we want to add on the settings menu are made here.
      *
@@ -323,6 +322,7 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
+        // Settings from menu are taken care of here.
         switch (item.getItemId()) {
             case R.id.TwelveHour:
                 if(item.isChecked()){
@@ -387,6 +387,7 @@ public class MainActivity extends ActionBarActivity {
 
         });
 
+        // I left this here for future reference
         // alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
         //  public void onClick(DialogInterface dialog, int whichButton) {
         // Canceled.
@@ -447,27 +448,11 @@ public class MainActivity extends ActionBarActivity {
     /**
      * This method displays the employees total hours in a calendar view.
      *
-     *  It is not written yet.
+     *  It is not written yet, but is here to be completed in the future.
      */
     void calendarView() {
         Toast.makeText(MainActivity.this, "This feature is not available yet", Toast.LENGTH_SHORT).show();
 
-        // Makes bridge between the two activities
-        //Intent intent = new Intent(this, calendar.class);
-
-        //showDialog();
-        // Gets the text from the activity
-        //TextView book = (TextView) findViewById(R.id.status);
-        //EditText chapter = (EditText) findViewById(R.id.editText2);
-        //EditText verse = (EditText) findViewById(R.id.editText3);
-
-        // Makes string to display to screen
-        //String myScripture = "Your favorite scripture is: " + book.getText().toString();
-          //      + " " + chapter.getText().toString() + ":" + verse.getText().toString();
-
-        // Passes myScripture to scripture printer through intent
-        //intent.putExtra(EXTRA, "myScripture");
-        //startActivity(intent);
     }
 
     /**
@@ -532,7 +517,10 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-
+    /**
+     * Johnny is this your function??????????????????????????????????????????????????????????????????????
+     * @return
+     */
     public String getDateString() {
         DateFormat df = new SimpleDateFormat("dd");
 
@@ -543,7 +531,9 @@ public class MainActivity extends ActionBarActivity {
 
 
     /**
-     * This function responds to the Edit Punch In button, and calls the showDialog() functions.
+     * This method responds to the Edit Punch In button, and calls the showDialog() functions.
+     *
+     * Date dialog is left in but commented out for future use.
      * @param view
      */
     public void editPunchIn(View view) {
@@ -559,18 +549,16 @@ public class MainActivity extends ActionBarActivity {
 
             /* Ideally this wouldn't happen until after the above thread is complete,
                Doing this would get rid of the 16-32 sec lag time after the new time is entered. */
-           // if( editPunchin == true ) {
-            //while (!showDialogDone) {};
                 alreadyPunchedIn = true;
                 View v = null;
                 this.punchIn(v);
-            //showDialogDone = false;
-           // }
         }
     }
 
     /**
-     * This function responds to the Edit Punch Out button, and calls the showDialog() functions.
+     * This method responds to the Edit Punch Out button, and calls the showDialog() functions.
+     *
+     * Date dialog is left in but commented out for future use.
      * @param view
      */
     public void editPunchOut(View view) {
@@ -579,10 +567,8 @@ public class MainActivity extends ActionBarActivity {
             showDialog(TIME_DIALOG_ID_OUT);
             // showDialog(DATE_DIALOG_ID_OUT);
 
-            //while(!showDialogDone){};
             View v = null;
             this.punchOut(v);
-            //showDialogDone = false;
         }
     }
 
@@ -614,7 +600,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * This function takes the dialog id (999-996) and switch between dialogs to be showed and executed.
+     * This method takes the dialog id (999-996) and switch between dialogs to be showed and executed.
+     *
+     * Date dialog stuff is left in but commented out for future use.
      * @param id
      * @return void
      */
@@ -634,12 +622,9 @@ public class MainActivity extends ActionBarActivity {
                 tpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        //cancel code
                         Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                        //alreadyPunchedIn = false;
                     }
                 });
-                //showDialogDone = true;
                 return tpd;
             }
            /* case DATE_DIALOG_ID_OUT: {
@@ -652,12 +637,9 @@ public class MainActivity extends ActionBarActivity {
                 tpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        //cancel code
                         Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                        //alreadyPunchedIn = true;
                     }
                 });
-                //showDialogDone = true;
                 return tpd;
             }
         }
@@ -678,7 +660,7 @@ public class MainActivity extends ActionBarActivity {
             }
             inMinute = selectedMinute;
 
-            //convert inHour and inMinute to date object
+            // Convert inHour and inMinute to date object
             Calendar cal = Calendar.getInstance();
             cal.setTime(employee.getClockInTime());
             cal.set(Calendar.HOUR_OF_DAY,inHour);
@@ -687,7 +669,6 @@ public class MainActivity extends ActionBarActivity {
             // Sets new startingDate
             Date newStartingDate = cal.getTime();
             employee.setClockInTime(newStartingDate);
-
 
             // Updates total hours.
             Date currentDate = new Date();
@@ -699,8 +680,7 @@ public class MainActivity extends ActionBarActivity {
             employee.incWeeklyTotal(timesNumber);
             employee.incMonthlyTotal(timesNumber);
 
-
-            //It can take up to 16 seconds for the times to be updated
+            //It can take up to 32 seconds for the times to be updated
             Toast.makeText(MainActivity.this, "Punched In time will update shortly", Toast.LENGTH_LONG).show();
         }
     };
@@ -718,7 +698,7 @@ public class MainActivity extends ActionBarActivity {
 
             Date oldClockOutTime = new Date();
 
-            //convert outHour and outMinute to date object
+            // Convert outHour and outMinute to date object
             Calendar cal = Calendar.getInstance();
             cal.setTime(oldClockOutTime);
             cal.set(Calendar.HOUR_OF_DAY,outHour);
@@ -753,15 +733,14 @@ public class MainActivity extends ActionBarActivity {
 
             editor.apply();
 
-
             Toast.makeText(MainActivity.this, "Edited Punched Out time", Toast.LENGTH_SHORT).show();
         }
     };
 
     /**
-     * This function takes the values the user picks from the dialog, and assign them to local time variables.
+     * This Method will take the values the user picks from the dialog, and assign them to local time variables.
      * Specifically this is the date part for Punch In. The Date part will be selected before the time part,
-     * so the main processes can be found in the later time part.
+     * so the main processes can be found in the later time part. This is here for future use.
      */
     /*private DatePickerDialog.OnDateSetListener datePickerListenerIn
             = new DatePickerDialog.OnDateSetListener() {
@@ -771,16 +750,13 @@ public class MainActivity extends ActionBarActivity {
             inYear = selectedYear;
             inMonth = selectedMonth;
             inDay = selectedDay;
-
-            // set selected date into textview
-            inDate = (inMonth + 1) +  ("-") + (inDay) + ("-") + (inYear) + (" ");
         }
     };*/
 
     /**
-     * This function takes the values the user picks from the dialog, and assign them to local time variables.
+     * This function will take the values the user picks from the dialog, and assign them to local time variables.
      * Specifically this is the date part for Punch Out. The Date part will be selected before the time part,
-     * so the main processes can be found in the later time part.
+     * so the main processes can be found in the later time part. This is here for future use.
      */
   /*  private DatePickerDialog.OnDateSetListener datePickerListenerOut
             = new DatePickerDialog.OnDateSetListener() {
@@ -790,9 +766,6 @@ public class MainActivity extends ActionBarActivity {
             outYear = selectedYear;
             outMonth = selectedMonth;
             outDay = selectedDay;
-
-            // set selected date into textview
-            outDate = (outMonth + 1) +  ("-") + (outDay) + ("-") + (outYear) + (" ");
         }
     };*/
 
@@ -810,30 +783,29 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-
+    /**
+     * Johnny didi you write this??????????????????????????????????????????????????????????????????????????????????????????????????
+     */
      Handler startHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             getTimeString();
-            //displayStart();
             System.out.println("Call handler");
         }
     };
 
     /**
-     * Johnny
-     *
-     * This function will display the total hour format on the text view
-     * It will update every 36 seconds
+     * This method will display the total hour format on the text view.
+     * It will update every 36 seconds.
      */
     public void displayStartTotal() {
         startHandler.sendEmptyMessage(0);
     }
 
     /**
-     * Johnny
+     * This method is were the time tracking work is done.
      *
-     * do work function will get the current time, and calculate the time difference
+     * Do work method will get the current time, and calculate the time difference
      * between current time and the time when user clocked in.
      * Format the time difference, and convert to hours
      */
@@ -858,11 +830,11 @@ public class MainActivity extends ActionBarActivity {
                     String minuteFormat = String.format("%02d", minutes);
                     String hourFormat = String.format("%02d", hours);
 
+                    //SecondFormat left intentionally
                     String curTime = hourFormat + ":" + minuteFormat;// + ":" + secondFormat;
 
-                    //  Toast.makeText(MainActivity.this, "in do work", Toast.LENGTH_SHORT).show();
                     String status = "                Punched In";
-                    String s = "Work start time: " + getTimeString();// employee.getClockInTime(); change to see actual time after app closed
+                    String s = "Work start time: " + getTimeString();
                     String s2 = "Time since punch in: " + curTime;
 
                     String s3 = status + "\n" + s + "\n" + s2;
@@ -914,8 +886,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Johnny
-     * This function help to format the time correctly for display.
+     * This method helps to format the time correctly for display.
      */
     public String getTimeString() {
         if (twelveHourFormat) {
@@ -1002,7 +973,7 @@ public class MainActivity extends ActionBarActivity {
             Thread loadThread = new Thread(count);
             loadThread.start();
 
-
+            /*Left for future updates*/
             //GPSCoord inLocation = new GPSCoord();
             //employee.setClockInLocation(inLocation);
         }
@@ -1043,6 +1014,7 @@ public class MainActivity extends ActionBarActivity {
 
             editor.apply();
 
+            /*Left for future updates*/
             //GPSCoord outLocation = new GPSCoord();
             //employee.setClockInLocation(outLocation);
         }
