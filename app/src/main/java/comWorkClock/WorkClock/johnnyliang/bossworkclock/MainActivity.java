@@ -6,8 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -220,6 +218,9 @@ public class MainActivity extends ActionBarActivity {
         //gets day that we started keeping track of dayHours
         todaysDate = setting.getString("TodaysDate", "");
 
+        // Declare SharePreferences Editor
+        SharedPreferences.Editor editor = setting.edit();
+
         // Is it still the same day that we started keeping track of with dayHours
         // if same day keep adding on to dayHours
         if (dateFormat.equals(todaysDate)) {
@@ -229,11 +230,9 @@ public class MainActivity extends ActionBarActivity {
         //otherwise it is a new day so start back at 0
         else {
             dayHours = 0;
+            editor.putFloat("LastHour", dayHours);
             countNumber = 0;
         }
-
-        // Declare SharePreferences Editor
-        SharedPreferences.Editor editor = setting.edit();
 
         // Gets current week
         Calendar c = Calendar.getInstance();
@@ -285,8 +284,12 @@ public class MainActivity extends ActionBarActivity {
             System.out.println("TimesDiff: " + timeDiff);
 
             int timesNumber = (int)timeDiff / 36000;
-            System.out.println("TimesNumber: " + timesNumber);
+            Log.v(TAG2, "TimesNumber: " + timesNumber);
+            Log.v(TAG2, "last hour: " + setting.getFloat("LastHour", 0));
+            Log.v(TAG2, "last week: " + setting.getFloat("LastWeek", 0));
+            Log.v(TAG2, "last month: " + setting.getFloat("LastMonth", 0));
 
+            // Updates time in table
             dayHours = (float)0.01 * timesNumber + setting.getFloat("LastHour", 0);
             weekHours = (float)0.01 * timesNumber + setting.getFloat("LastWeek", 0);
             monthHours = (float)0.01 * timesNumber + setting.getFloat("LastMonth", 0);
@@ -299,6 +302,7 @@ public class MainActivity extends ActionBarActivity {
             this.punchIn(v);
         }
 
+        // Update employee
         employee.setDailyTotal(dayHours);
         employee.setWeeklyTotal(weekHours);
         employee.setMonthlyTotal(monthHours);
