@@ -169,9 +169,7 @@ public class MainActivity extends ActionBarActivity {
         employee.setName(theName);
 
         if(theName.equals("")) {
-            System.out.println("here");
             setName();
-            System.out.println("here2");
         }
     }
 
@@ -284,10 +282,10 @@ public class MainActivity extends ActionBarActivity {
             System.out.println("TimesDiff: " + timeDiff);
 
             int timesNumber = (int)timeDiff / 36000;
-            Log.v(TAG2, "TimesNumber: " + timesNumber);
-            Log.v(TAG2, "last hour: " + setting.getFloat("LastHour", 0));
-            Log.v(TAG2, "last week: " + setting.getFloat("LastWeek", 0));
-            Log.v(TAG2, "last month: " + setting.getFloat("LastMonth", 0));
+            Log.i(TAG2, "TimesNumber: " + timesNumber);
+            Log.i(TAG2, "last hour: " + setting.getFloat("LastHour", 0));
+            Log.i(TAG2, "last week: " + setting.getFloat("LastWeek", 0));
+            Log.i(TAG2, "last month: " + setting.getFloat("LastMonth", 0));
 
             // Updates time in table
             dayHours = (float)0.01 * timesNumber + setting.getFloat("LastHour", 0);
@@ -521,7 +519,6 @@ public class MainActivity extends ActionBarActivity {
                                 parseObject.put("fDailyHour", totalHourFormat);
                                 parseObject.put("gWeeklyHour", totalWeekFormat);
                                 parseObject.put("hMonthlyHour", totalMonthFormat);
-                                // parseObject.put("eTotalHour", totalHourFormat);
                                 parseObject.saveInBackground();
                             }
                             else {
@@ -841,6 +838,20 @@ public class MainActivity extends ActionBarActivity {
                     statusView.setTextColor(0xff18ff1a);
                     statusView.setText(s3);
 
+                    Log.i(TAG2, "before stuff i added :************************** ");
+                    Date currentDate = new Date();
+                    long timeDiff = currentDate.getTime() - setting.getLong("Milliseconds", 0);
+                    int timesNumber = (int)timeDiff / 36000;
+
+                    // Updates time in table
+                    dayHours = (float)0.01 * timesNumber + setting.getFloat("LastHour", 0);
+                    weekHours = (float)0.01 * timesNumber + setting.getFloat("LastWeek", 0);
+                    monthHours = (float)0.01 * timesNumber + setting.getFloat("LastMonth", 0);
+
+                    employee.setDailyTotal(dayHours);
+                    employee.setWeeklyTotal(weekHours);
+                    employee.setMonthlyTotal(monthHours);
+
                     //I don't know why the Today string needs more spaces to align correctly
                     todayHour.setText("Today:         " + String.format("%.2f", employee.getDailyTotal()));
                     weekHour.setText("This Week:   " + String.format("%.2f", employee.getWeeklyTotal()));
@@ -912,6 +923,8 @@ public class MainActivity extends ActionBarActivity {
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
 
+            Log.i(TAG2, "starting punch in :************************** ");
+
             DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
             DateFormat dfYear = new SimpleDateFormat("yyyy");
             DateFormat dfMonth = new SimpleDateFormat("MM");
@@ -926,7 +939,7 @@ public class MainActivity extends ActionBarActivity {
             dateTest = Integer.parseInt(getDateString());
 
             if (todaysDate == "" || todaysDate != df.format(startingDate)) {
-                System.out.println("Create new parse object");
+                // Create new parse object
                 timeTrack = new ParseObject("BossTimeTracker");
             }
 
@@ -969,6 +982,7 @@ public class MainActivity extends ActionBarActivity {
                 employee.setClockInTime(startingDate);
             }
 
+            Log.i(TAG2, "about to leave punch in :************************** ");
             Thread loadThread = new Thread(count);
             loadThread.start();
 
