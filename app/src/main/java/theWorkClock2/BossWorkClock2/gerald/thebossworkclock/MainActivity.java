@@ -1,4 +1,4 @@
-package comWorkClock.WorkClock.johnnyliang.bossworkclock;
+package theWorkClock2.BossWorkClock2.gerald.thebossworkclock;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -138,6 +138,12 @@ public class MainActivity extends ActionBarActivity {
                 System.out.println("Goes to Gerald's 2nd parse account");
                 Parse.initialize(this, "FfgWRQCND4dXxjYufUwZJ0IIpy9D3xwMtswDjt9E", "6ZltYpYHmN82p0BLu5a2r13AjwFGNUEznKgb0ykn");
             }
+            if (WelcomeActivity.enteredPassword.equals("stonecreek")) {
+                editor.putString("EmployerCode", "stonecreek");
+                System.out.println("Goes to stonecreek's account");
+                Parse.initialize(this, "aqrcIBAYS6ranB8G3znOYRDOqpkhFzEfl8r8yaFi", "5OL6N6b0RIKZOfLPdBitTZNG35OzWIPUeuyS9jHQ");
+            }
+
             editor.apply();
         }
 
@@ -146,6 +152,8 @@ public class MainActivity extends ActionBarActivity {
             Parse.initialize(this, "YuTd2MEdXK9M3hnxDPMXr2o4UAN2P3P1UoAeRVcV", "9TNC9THjdIrh0V1s2WCOY1VrqzqzKunWJlczrs46");
         } else if(employerPass.equals("Gerald")) {
             Parse.initialize(this, "FfgWRQCND4dXxjYufUwZJ0IIpy9D3xwMtswDjt9E", "6ZltYpYHmN82p0BLu5a2r13AjwFGNUEznKgb0ykn");
+        } else if (employerPass.equals("stonecreek")) {
+            Parse.initialize(this, "aqrcIBAYS6ranB8G3znOYRDOqpkhFzEfl8r8yaFi", "5OL6N6b0RIKZOfLPdBitTZNG35OzWIPUeuyS9jHQ");
         }
 
         //use the employee class
@@ -737,6 +745,15 @@ public class MainActivity extends ActionBarActivity {
             employee.incWeeklyTotal(-timesNumber);
             employee.incMonthlyTotal(-timesNumber);
 
+            //added this stuff to try to fix it but im not sure if it is correct......
+            dayHours = (float)0.01 * timesNumber + setting.getFloat("LastHour", 0);
+            weekHours = (float) 0.01 * timesNumber + setting.getFloat("LastWeek", 0);
+            monthHours = (float)0.01 * timesNumber + setting.getFloat("LastMonth", 0);
+
+            employee.setDailyTotal(dayHours);
+            employee.setWeeklyTotal(weekHours);
+            employee.setMonthlyTotal(monthHours);
+
             //I don't know why the Today string needs more spaces to align correctly
             todayHour.setText("Today:         " + String.format("%.2f", employee.getDailyTotal()));
             weekHour.setText("This Week:   " + String.format("%.2f", employee.getWeeklyTotal()));
@@ -750,7 +767,6 @@ public class MainActivity extends ActionBarActivity {
 
             editor.apply();
 
-            Toast.makeText(MainActivity.this, "Edited Punched Out time", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -838,7 +854,6 @@ public class MainActivity extends ActionBarActivity {
                     statusView.setTextColor(0xff18ff1a);
                     statusView.setText(s3);
 
-                    Log.i(TAG2, "before stuff i added :************************** ");
                     Date currentDate = new Date();
                     long timeDiff = currentDate.getTime() - setting.getLong("Milliseconds", 0);
                     int timesNumber = (int)timeDiff / 36000;
@@ -909,7 +924,6 @@ public class MainActivity extends ActionBarActivity {
         return dateFormat;
     }
 
-
     /**
      * Method called when Punch In button is pressed.
      *
@@ -922,8 +936,6 @@ public class MainActivity extends ActionBarActivity {
         // Can't punch in if you already are punched in
         if(!employee.getPunchedIn()) {
             employee.setPunchedIn(true);
-
-            Log.i(TAG2, "starting punch in :************************** ");
 
             DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
             DateFormat dfYear = new SimpleDateFormat("yyyy");
@@ -982,7 +994,6 @@ public class MainActivity extends ActionBarActivity {
                 employee.setClockInTime(startingDate);
             }
 
-            Log.i(TAG2, "about to leave punch in :************************** ");
             Thread loadThread = new Thread(count);
             loadThread.start();
 

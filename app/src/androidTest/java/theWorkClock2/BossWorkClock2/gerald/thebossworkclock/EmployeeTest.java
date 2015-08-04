@@ -1,4 +1,4 @@
-package comWorkClock.WorkClock.johnnyliang.bossworkclock;
+package theWorkClock2.BossWorkClock2.gerald.thebossworkclock;
 
 import android.test.InstrumentationTestCase;
 

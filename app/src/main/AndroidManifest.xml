@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="comWorkClock.WorkClock.johnnyliang.bossworkclock" >
+    package="theWorkClock2.BossWorkClock2.gerald.thebossworkclock" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="comWorkClock.WorkClock.johnnyliang.bossworkclock.WelcomeActivity"
+            android:name="theWorkClock2.BossWorkClock2.gerald.thebossworkclock.WelcomeActivity"
             android:screenOrientation="portrait">
             android:label="@string/app_name" >
             <intent-filter>
@@ -32,7 +32,7 @@
 
 
         <activity
-            android:name="comWorkClock.WorkClock.johnnyliang.bossworkclock.MainActivity"
+            android:name="theWorkClock2.BossWorkClock2.gerald.thebossworkclock.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>

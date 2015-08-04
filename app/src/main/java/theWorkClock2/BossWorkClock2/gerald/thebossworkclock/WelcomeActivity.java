@@ -1,4 +1,4 @@
-package comWorkClock.WorkClock.johnnyliang.bossworkclock;
+package theWorkClock2.BossWorkClock2.gerald.thebossworkclock;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -65,7 +65,7 @@ public class WelcomeActivity extends Activity {
                     editor.apply();
 
                     // *****WHEN YOU ADD AN NEW EMPLOYER, PUT THEIR PASSWORD HERE*****
-                    if (enteredPassword.equals("0000") || enteredPassword.equals("Gerald") || enteredPassword.equals("Gerald2")) {
+                    if (enteredPassword.equals("0000") || enteredPassword.equals("Gerald") || enteredPassword.equals("Gerald2") || enteredPassword.equals("stonecreek")) {
 
                         IntentLauncher launcher = new IntentLauncher();
                         launcher.start();
