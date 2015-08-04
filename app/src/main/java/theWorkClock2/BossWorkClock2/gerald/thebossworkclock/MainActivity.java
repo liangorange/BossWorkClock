@@ -768,7 +768,7 @@ public class MainActivity extends ActionBarActivity {
             editor.apply();
 
         }
-    };
+    };  
 
     /**
      * This Method will take the values the user picks from the dialog, and assign them to local time variables.
