@@ -156,6 +156,11 @@ public class MainActivity extends ActionBarActivity {
             Parse.initialize(this, "aqrcIBAYS6ranB8G3znOYRDOqpkhFzEfl8r8yaFi", "5OL6N6b0RIKZOfLPdBitTZNG35OzWIPUeuyS9jHQ");
         }
 
+        //ads
+        AdBuddiz.setPublisherKey("864b0946-dc65-4847-aace-a0cf9cf15eab");
+        AdBuddiz.cacheAds(this); // this = current Activity
+        AdBuddiz.showAd(this); // this = current Activity
+
         //use the employee class
         employee = new Employee();
 
@@ -163,6 +168,8 @@ public class MainActivity extends ActionBarActivity {
         setUpName();
         setUpProject();
         setUpTable();
+
+
 
         Log.v(TAG2, "Finishing onCreate");
     }
@@ -768,7 +775,7 @@ public class MainActivity extends ActionBarActivity {
             editor.apply();
 
         }
-    };  
+    };
 
     /**
      * This Method will take the values the user picks from the dialog, and assign them to local time variables.
