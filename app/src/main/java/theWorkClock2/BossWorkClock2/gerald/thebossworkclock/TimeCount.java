@@ -42,10 +42,10 @@ public class TimeCount implements Runnable {
                 activity.doWork();
 
                 Thread.sleep(36000);
-                activity.addTime(0.01);
-                employee.incDailyTotal(0.01);
-                employee.incWeeklyTotal(0.01);
-                employee.incMonthlyTotal(0.01);
+                activity.updateParseTimes();///updates parse time
+               // employee.incDailyTotal(0.01);
+               // employee.incWeeklyTotal(0.01);
+                //employee.incMonthlyTotal(0.01);
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
